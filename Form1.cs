@@ -80,5 +80,17 @@ namespace Impar
 
           
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Agenda form2 = new Agenda();  // Instancia o novo formulário
+            form2.ShowDialog();        // Abre o novo formulário como uma janela modal
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            GoogleAgenda form2 = new GoogleAgenda();  // Instancia o novo formulário
+            form2.ShowDialog();        // Abre o novo formulário como uma janela modal
+        }
     }
 }
