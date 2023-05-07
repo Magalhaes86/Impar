@@ -26,9 +26,25 @@ namespace Impar
         {
             InitializeComponent();
             dataGridView1.CellFormatting += DataGridView1_CellFormatting;
+
+
+            //dataGridView2.CellFormatting += dataGridView2_CellFormatting;
+            //dataGridView2.CellPainting += dataGridView2_CellPainting;
+
+            //DataGridViewButtonColumn agendarColumn = new DataGridViewButtonColumn();
+            //agendarColumn.HeaderText = "Agendar";
+
+            //dataGridView2.Columns.Add(agendarColumn);
+            //agendarColumn.DisplayIndex = 7; // Defina a posição da coluna para 7
+
+            //dataGridView2.CellContentClick += dataGridView2_CellContentClick;
+
+
+
+
         }
 
-      
+
 
 
         private void DataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -1121,35 +1137,44 @@ namespace Impar
             }
 
             DataTable dt = new DataTable();
-            dt.Columns.Add("EventId"); // Adicionando a coluna "EventId"
-            dt.Columns.Add("Horário");
-        //    dt.Columns.Add("Status");
-            dt.Columns.Add("Título"); // Adicionando a coluna "Título"
-            dt.Columns.Add("Descrição"); // Adicionando a coluna "Descrição"
+            // Adicione colunas adicionais
 
-        
 
             foreach (Agendamento agendamento in agendamentos)
             {
                 // Obtendo o evento correspondente ao agendamento
                 var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
 
+                int? codigoCliente = GetClientIdByGoogleEventId(agendamento.EventId);
+
                 if (eventItem != null)
                 {
                     string titulo = eventItem.Summary;
                     string descricao = eventItem.Description;
 
-                    // Remova "Ocupado" da linha abaixo
-                    dt.Rows.Add(agendamento.EventId, agendamento.Inicio.ToString("HH:mm") + " - " + agendamento.Fim.ToString("HH:mm"), titulo, descricao);
+                    dt.Rows.Add(agendamento.Inicio.ToString("dd/MM/yyyy"), agendamento.Inicio.ToString("HH:mm"), agendamento.Fim.ToString("HH:mm"), agendamento.EventId, titulo, descricao, codigoCliente);
                 }
                 else
                 {
-                    // Remova "Ocupado" da linha abaixo
-                    dt.Rows.Add(agendamento.EventId, agendamento.Inicio.ToString("HH:mm") + " - " + agendamento.Fim.ToString("HH:mm"), "", "");
+                    dt.Rows.Add(agendamento.Inicio.ToString("dd/MM/yyyy"), agendamento.Inicio.ToString("HH:mm"), agendamento.Fim.ToString("HH:mm"), agendamento.EventId, "", "", codigoCliente);
                 }
             }
 
+
+
             dataGridView2.DataSource = dt;
+
+
+            dataGridView2.CellFormatting += dataGridView2_CellFormatting;
+            dataGridView2.CellPainting += dataGridView2_CellPainting;
+
+            DataGridViewButtonColumn agendarColumn = new DataGridViewButtonColumn();
+            agendarColumn.HeaderText = "Agendar";
+
+            dataGridView2.Columns.Add(agendarColumn);
+
+            dataGridView2.CellContentClick += dataGridView2_CellContentClick;
+
         }
 
         private void button10_Click(object sender, EventArgs e)
@@ -1280,6 +1305,10 @@ namespace Impar
 
         }
 
+
+        private bool agendarColumnAdded = false;
+        private bool eventsAttached = false;
+        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
         private void button9_Click(object sender, EventArgs e)
         {
             // Criando uma nova instância do Google Credential
@@ -1380,14 +1409,41 @@ namespace Impar
 
             dataGridView2.CellFormatting += dataGridView2_CellFormatting;
             dataGridView2.CellPainting += dataGridView2_CellPainting;
-           
+
             DataGridViewButtonColumn agendarColumn = new DataGridViewButtonColumn();
             agendarColumn.HeaderText = "Agendar";
-           
+
             dataGridView2.Columns.Add(agendarColumn);
 
             dataGridView2.CellContentClick += dataGridView2_CellContentClick;
+
+
         }
+    
+
+    //private bool agendarColumnAdded = false;
+    private bool editarColumnAdded = false;
+
+    private void dataGridView2_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            DataGridViewRow row = dataGridView2.Rows[e.RowIndex];
+            object codigoCliente = row.Cells["Código Cliente"].Value;
+
+            // Verifique se o código do cliente está presente
+            if (codigoCliente != null && codigoCliente != DBNull.Value)
+            {
+                // Mude o texto do botão para "Editar"
+                row.Cells[dataGridView2.Columns.Count - 1].Value = "Editar";
+            }
+            else
+            {
+                // Mude o texto do botão para "Agendar"
+                row.Cells[dataGridView2.Columns.Count - 1].Value = "Agendar";
+            }
+        }
+
+
+        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
         private void dataGridView2_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (e.ColumnIndex == 7) // Verifique se a coluna é a coluna do botão
@@ -1408,7 +1464,7 @@ namespace Impar
                 }
             }
         }
-
+        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
         private void dataGridView2_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.ColumnIndex == 7 && e.RowIndex >= 0)
@@ -1451,6 +1507,7 @@ namespace Impar
         }
 
 
+        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
         private int? GetClientIdByGoogleEventId(string googleEventId)
         {
             int? clientId = null;
@@ -1485,18 +1542,21 @@ namespace Impar
             return clientId;
         }
 
+        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
         private void button8_Click(object sender, EventArgs e)
         {
             // Aplicando o filtro para mostrar apenas os resultados com a coluna 7 vazia
     (dataGridView2.DataSource as DataTable).DefaultView.RowFilter = "[Código Cliente] IS NULL";
         }
 
+        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
         private void button11_Click(object sender, EventArgs e)
         {
             // Aplicando o filtro para mostrar apenas os resultados com a coluna 7 não vazia
             (dataGridView2.DataSource as DataTable).DefaultView.RowFilter = "[Código Cliente] IS NOT NULL";
         }
 
+        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
         private void button12_Click(object sender, EventArgs e)
         {
             // Removendo o filtro para mostrar todos os resultados

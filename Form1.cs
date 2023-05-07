@@ -98,5 +98,15 @@ namespace Impar
             pacientes form2 = new pacientes();  // Instancia o novo formulário
             form2.ShowDialog();        // Abre o novo formulário como uma janela modal
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+
+            // Abre o FormAdicionarEvento sem passar nenhum parâmetro
+            Marcacoes form = new Marcacoes();
+            form.Show();
+
+
+        }
     }
 }

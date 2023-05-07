@@ -31,10 +31,10 @@ namespace Impar
         {
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tbIdMarcacao = new System.Windows.Forms.TextBox();
             this.tbcodcliente = new System.Windows.Forms.TextBox();
             this.tbidgoogle = new System.Windows.Forms.TextBox();
-            this.tbhorario = new System.Windows.Forms.TextBox();
+            this.tbhorario2 = new System.Windows.Forms.TextBox();
             this.tbdescricao = new System.Windows.Forms.TextBox();
             this.tbtipotratamento = new System.Windows.Forms.TextBox();
             this.tbobs = new System.Windows.Forms.TextBox();
@@ -47,10 +47,14 @@ namespace Impar
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.tbhorainicio = new System.Windows.Forms.TextBox();
+            this.tbhorainicio2 = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.tbhorafim = new System.Windows.Forms.TextBox();
+            this.tbhorafim2 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.btatualizar = new System.Windows.Forms.Button();
+            this.tbhorario = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
+            this.tbhorafim = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
+            this.tbhorainicio = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
             this.SuspendLayout();
             // 
             // button1
@@ -73,12 +77,12 @@ namespace Impar
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // textBox1
+            // tbIdMarcacao
             // 
-            this.textBox1.Location = new System.Drawing.Point(55, 26);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(76, 20);
-            this.textBox1.TabIndex = 2;
+            this.tbIdMarcacao.Location = new System.Drawing.Point(55, 26);
+            this.tbIdMarcacao.Name = "tbIdMarcacao";
+            this.tbIdMarcacao.Size = new System.Drawing.Size(76, 20);
+            this.tbIdMarcacao.TabIndex = 2;
             // 
             // tbcodcliente
             // 
@@ -94,12 +98,12 @@ namespace Impar
             this.tbidgoogle.Size = new System.Drawing.Size(134, 20);
             this.tbidgoogle.TabIndex = 2;
             // 
-            // tbhorario
+            // tbhorario2
             // 
-            this.tbhorario.Location = new System.Drawing.Point(139, 221);
-            this.tbhorario.Name = "tbhorario";
-            this.tbhorario.Size = new System.Drawing.Size(134, 20);
-            this.tbhorario.TabIndex = 2;
+            this.tbhorario2.Location = new System.Drawing.Point(139, 221);
+            this.tbhorario2.Name = "tbhorario2";
+            this.tbhorario2.Size = new System.Drawing.Size(62, 20);
+            this.tbhorario2.TabIndex = 2;
             // 
             // tbdescricao
             // 
@@ -201,12 +205,12 @@ namespace Impar
             this.label8.TabIndex = 3;
             this.label8.Text = "TituloGoogle";
             // 
-            // tbhorainicio
+            // tbhorainicio2
             // 
-            this.tbhorainicio.Location = new System.Drawing.Point(139, 250);
-            this.tbhorainicio.Name = "tbhorainicio";
-            this.tbhorainicio.Size = new System.Drawing.Size(134, 20);
-            this.tbhorainicio.TabIndex = 2;
+            this.tbhorainicio2.Location = new System.Drawing.Point(139, 250);
+            this.tbhorainicio2.Name = "tbhorainicio2";
+            this.tbhorainicio2.Size = new System.Drawing.Size(62, 20);
+            this.tbhorainicio2.TabIndex = 2;
             // 
             // label9
             // 
@@ -217,12 +221,12 @@ namespace Impar
             this.label9.TabIndex = 3;
             this.label9.Text = "Hora Inicio";
             // 
-            // tbhorafim
+            // tbhorafim2
             // 
-            this.tbhorafim.Location = new System.Drawing.Point(139, 276);
-            this.tbhorafim.Name = "tbhorafim";
-            this.tbhorafim.Size = new System.Drawing.Size(134, 20);
-            this.tbhorafim.TabIndex = 2;
+            this.tbhorafim2.Location = new System.Drawing.Point(139, 276);
+            this.tbhorafim2.Name = "tbhorafim2";
+            this.tbhorafim2.Size = new System.Drawing.Size(62, 20);
+            this.tbhorafim2.TabIndex = 2;
             // 
             // label10
             // 
@@ -233,11 +237,54 @@ namespace Impar
             this.label10.TabIndex = 3;
             this.label10.Text = "Hora Fim";
             // 
+            // btatualizar
+            // 
+            this.btatualizar.Enabled = false;
+            this.btatualizar.Location = new System.Drawing.Point(533, 399);
+            this.btatualizar.Name = "btatualizar";
+            this.btatualizar.Size = new System.Drawing.Size(226, 68);
+            this.btatualizar.TabIndex = 4;
+            this.btatualizar.Text = "atualizar";
+            this.btatualizar.UseVisualStyleBackColor = true;
+            // 
+            // tbhorario
+            // 
+            this.tbhorario.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.tbhorario.Location = new System.Drawing.Point(207, 221);
+            this.tbhorario.Name = "tbhorario";
+            this.tbhorario.Size = new System.Drawing.Size(168, 21);
+            this.tbhorario.TabIndex = 5;
+            this.tbhorario.ValueNullable = new System.DateTime(2023, 5, 6, 0, 0, 0, 0);
+            // 
+            // tbhorafim
+            // 
+            this.tbhorafim.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.tbhorafim.Location = new System.Drawing.Point(208, 276);
+            this.tbhorafim.Name = "tbhorafim";
+            this.tbhorafim.ShowUpDown = true;
+            this.tbhorafim.Size = new System.Drawing.Size(86, 21);
+            this.tbhorafim.TabIndex = 6;
+            this.tbhorafim.ValueNullable = new System.DateTime(2023, 5, 6, 12, 30, 0, 0);
+            // 
+            // tbhorainicio
+            // 
+            this.tbhorainicio.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.tbhorainicio.Location = new System.Drawing.Point(207, 250);
+            this.tbhorainicio.Name = "tbhorainicio";
+            this.tbhorainicio.ShowUpDown = true;
+            this.tbhorainicio.Size = new System.Drawing.Size(87, 21);
+            this.tbhorainicio.TabIndex = 7;
+            this.tbhorainicio.ValueNullable = new System.DateTime(2023, 5, 6, 8, 0, 0, 0);
+            // 
             // FormAdicionarEvento
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(894, 566);
+            this.Controls.Add(this.tbhorario);
+            this.Controls.Add(this.tbhorafim);
+            this.Controls.Add(this.tbhorainicio);
+            this.Controls.Add(this.btatualizar);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
@@ -250,14 +297,14 @@ namespace Impar
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbtitulogoogle);
             this.Controls.Add(this.tbobs);
-            this.Controls.Add(this.tbhorafim);
-            this.Controls.Add(this.tbhorainicio);
-            this.Controls.Add(this.tbhorario);
+            this.Controls.Add(this.tbhorafim2);
+            this.Controls.Add(this.tbhorainicio2);
+            this.Controls.Add(this.tbhorario2);
             this.Controls.Add(this.tbtipotratamento);
             this.Controls.Add(this.tbidgoogle);
             this.Controls.Add(this.tbdescricao);
             this.Controls.Add(this.tbcodcliente);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.tbIdMarcacao);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "FormAdicionarEvento";
@@ -272,10 +319,10 @@ namespace Impar
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tbIdMarcacao;
         private System.Windows.Forms.TextBox tbcodcliente;
         private System.Windows.Forms.TextBox tbidgoogle;
-        private System.Windows.Forms.TextBox tbhorario;
+        private System.Windows.Forms.TextBox tbhorario2;
         private System.Windows.Forms.TextBox tbdescricao;
         private System.Windows.Forms.TextBox tbtipotratamento;
         private System.Windows.Forms.TextBox tbobs;
@@ -288,9 +335,13 @@ namespace Impar
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox tbhorainicio;
+        private System.Windows.Forms.TextBox tbhorainicio2;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox tbhorafim;
+        private System.Windows.Forms.TextBox tbhorafim2;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button btatualizar;
+        private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker tbhorario;
+        private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker tbhorafim;
+        private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker tbhorainicio;
     }
 }

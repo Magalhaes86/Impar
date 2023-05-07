@@ -888,6 +888,12 @@
     <Compile Include="GoogleAgenda.Designer.cs">
       <DependentUpon>GoogleAgenda.cs</DependentUpon>
     </Compile>
+    <Compile Include="Marcacoes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Marcacoes.Designer.cs">
+      <DependentUpon>Marcacoes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Microsoft\Office\Interop\Outlook\OlItemsExportOption.cs" />
     <Compile Include="pacientes.cs">
       <SubType>Form</SubType>
@@ -911,6 +917,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GoogleAgenda.resx">
       <DependentUpon>GoogleAgenda.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Marcacoes.resx">
+      <DependentUpon>Marcacoes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="pacientes.resx">
       <DependentUpon>pacientes.cs</DependentUpon>
