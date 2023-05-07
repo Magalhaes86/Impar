@@ -92,5 +92,11 @@ namespace Impar
             GoogleAgenda form2 = new GoogleAgenda();  // Instancia o novo formulário
             form2.ShowDialog();        // Abre o novo formulário como uma janela modal
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            pacientes form2 = new pacientes();  // Instancia o novo formulário
+            form2.ShowDialog();        // Abre o novo formulário como uma janela modal
+        }
     }
 }

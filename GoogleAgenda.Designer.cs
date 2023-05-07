@@ -42,20 +42,27 @@ namespace Impar
             this.DtHoraFimManha = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
             this.DtHoraInicioTarde = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
             this.kryptonWrapLabel3 = new ComponentFactory.Krypton.Toolkit.KryptonWrapLabel();
-            this.kryptonWrapLabel4 = new ComponentFactory.Krypton.Toolkit.KryptonWrapLabel();
             this.kryptonWrapLabel5 = new ComponentFactory.Krypton.Toolkit.KryptonWrapLabel();
-            this.kryptonDataGridView2 = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
             this.kryptonWrapLabel6 = new ComponentFactory.Krypton.Toolkit.KryptonWrapLabel();
             this.DtDataFim = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
             this.DtHoraFimTarde = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
+            this.button12 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonDataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonDataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // kryptonMonthCalendar1
@@ -76,7 +83,7 @@ namespace Impar
             // 
             // kryptonButton1
             // 
-            this.kryptonButton1.Location = new System.Drawing.Point(531, 165);
+            this.kryptonButton1.Location = new System.Drawing.Point(365, 50);
             this.kryptonButton1.Name = "kryptonButton1";
             this.kryptonButton1.Size = new System.Drawing.Size(220, 36);
             this.kryptonButton1.TabIndex = 5;
@@ -86,9 +93,9 @@ namespace Impar
             // kryptonDataGridView1
             // 
             this.kryptonDataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.kryptonDataGridView1.Location = new System.Drawing.Point(393, 207);
+            this.kryptonDataGridView1.Location = new System.Drawing.Point(356, 137);
             this.kryptonDataGridView1.Name = "kryptonDataGridView1";
-            this.kryptonDataGridView1.Size = new System.Drawing.Size(755, 177);
+            this.kryptonDataGridView1.Size = new System.Drawing.Size(755, 159);
             this.kryptonDataGridView1.TabIndex = 6;
             // 
             // kryptonTextBox1
@@ -103,7 +110,7 @@ namespace Impar
             // 
             this.kryptonWrapLabel1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.kryptonWrapLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(57)))), ((int)(((byte)(91)))));
-            this.kryptonWrapLabel1.Location = new System.Drawing.Point(393, 189);
+            this.kryptonWrapLabel1.Location = new System.Drawing.Point(458, 119);
             this.kryptonWrapLabel1.Name = "kryptonWrapLabel1";
             this.kryptonWrapLabel1.Size = new System.Drawing.Size(116, 15);
             this.kryptonWrapLabel1.Text = "Apos data hora atual";
@@ -111,7 +118,7 @@ namespace Impar
             // 
             // kryptonButton2
             // 
-            this.kryptonButton2.Location = new System.Drawing.Point(771, 165);
+            this.kryptonButton2.Location = new System.Drawing.Point(601, 50);
             this.kryptonButton2.Name = "kryptonButton2";
             this.kryptonButton2.Size = new System.Drawing.Size(216, 36);
             this.kryptonButton2.TabIndex = 14;
@@ -131,17 +138,18 @@ namespace Impar
             // DtDataInicio
             // 
             this.DtDataInicio.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DtDataInicio.Location = new System.Drawing.Point(544, 403);
+            this.DtDataInicio.Location = new System.Drawing.Point(128, 242);
             this.DtDataInicio.Name = "DtDataInicio";
-            this.DtDataInicio.Size = new System.Drawing.Size(168, 21);
+            this.DtDataInicio.Size = new System.Drawing.Size(91, 21);
             this.DtDataInicio.TabIndex = 1;
             this.DtDataInicio.ValueNullable = new System.DateTime(2023, 5, 6, 0, 0, 0, 0);
             // 
             // DtHoraInicioManha
             // 
             this.DtHoraInicioManha.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.DtHoraInicioManha.Location = new System.Drawing.Point(393, 458);
+            this.DtHoraInicioManha.Location = new System.Drawing.Point(105, 275);
             this.DtHoraInicioManha.Name = "DtHoraInicioManha";
+            this.DtHoraInicioManha.ShowUpDown = true;
             this.DtHoraInicioManha.Size = new System.Drawing.Size(87, 21);
             this.DtHoraInicioManha.TabIndex = 1;
             this.DtHoraInicioManha.ValueNullable = new System.DateTime(2023, 5, 6, 8, 0, 0, 0);
@@ -149,8 +157,9 @@ namespace Impar
             // DtHoraFimManha
             // 
             this.DtHoraFimManha.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.DtHoraFimManha.Location = new System.Drawing.Point(486, 458);
+            this.DtHoraFimManha.Location = new System.Drawing.Point(207, 275);
             this.DtHoraFimManha.Name = "DtHoraFimManha";
+            this.DtHoraFimManha.ShowUpDown = true;
             this.DtHoraFimManha.Size = new System.Drawing.Size(86, 21);
             this.DtHoraFimManha.TabIndex = 1;
             this.DtHoraFimManha.ValueNullable = new System.DateTime(2023, 5, 6, 12, 30, 0, 0);
@@ -158,9 +167,10 @@ namespace Impar
             // DtHoraInicioTarde
             // 
             this.DtHoraInicioTarde.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.DtHoraInicioTarde.Location = new System.Drawing.Point(729, 458);
+            this.DtHoraInicioTarde.Location = new System.Drawing.Point(105, 308);
             this.DtHoraInicioTarde.Name = "DtHoraInicioTarde";
-            this.DtHoraInicioTarde.Size = new System.Drawing.Size(102, 21);
+            this.DtHoraInicioTarde.ShowUpDown = true;
+            this.DtHoraInicioTarde.Size = new System.Drawing.Size(87, 21);
             this.DtHoraInicioTarde.TabIndex = 1;
             this.DtHoraInicioTarde.ValueNullable = new System.DateTime(2023, 5, 6, 14, 0, 0, 0);
             // 
@@ -168,45 +178,27 @@ namespace Impar
             // 
             this.kryptonWrapLabel3.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.kryptonWrapLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(57)))), ((int)(((byte)(91)))));
-            this.kryptonWrapLabel3.Location = new System.Drawing.Point(399, 409);
+            this.kryptonWrapLabel3.Location = new System.Drawing.Point(12, 248);
             this.kryptonWrapLabel3.Name = "kryptonWrapLabel3";
             this.kryptonWrapLabel3.Size = new System.Drawing.Size(110, 15);
             this.kryptonWrapLabel3.Text = "Horario de trabalho";
             this.kryptonWrapLabel3.Click += new System.EventHandler(this.kryptonWrapLabel1_Click);
             // 
-            // kryptonWrapLabel4
-            // 
-            this.kryptonWrapLabel4.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.kryptonWrapLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(57)))), ((int)(((byte)(91)))));
-            this.kryptonWrapLabel4.Location = new System.Drawing.Point(193, 438);
-            this.kryptonWrapLabel4.Name = "kryptonWrapLabel4";
-            this.kryptonWrapLabel4.Size = new System.Drawing.Size(87, 15);
-            this.kryptonWrapLabel4.Text = "Horario Manhã";
-            this.kryptonWrapLabel4.Click += new System.EventHandler(this.kryptonWrapLabel1_Click);
-            // 
             // kryptonWrapLabel5
             // 
             this.kryptonWrapLabel5.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.kryptonWrapLabel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(57)))), ((int)(((byte)(91)))));
-            this.kryptonWrapLabel5.Location = new System.Drawing.Point(787, 438);
+            this.kryptonWrapLabel5.Location = new System.Drawing.Point(22, 313);
             this.kryptonWrapLabel5.Name = "kryptonWrapLabel5";
             this.kryptonWrapLabel5.Size = new System.Drawing.Size(77, 15);
             this.kryptonWrapLabel5.Text = "Horario tarde";
             this.kryptonWrapLabel5.Click += new System.EventHandler(this.kryptonWrapLabel1_Click);
             // 
-            // kryptonDataGridView2
-            // 
-            this.kryptonDataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.kryptonDataGridView2.Location = new System.Drawing.Point(865, 498);
-            this.kryptonDataGridView2.Name = "kryptonDataGridView2";
-            this.kryptonDataGridView2.Size = new System.Drawing.Size(274, 177);
-            this.kryptonDataGridView2.TabIndex = 6;
-            // 
             // kryptonWrapLabel6
             // 
             this.kryptonWrapLabel6.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.kryptonWrapLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(57)))), ((int)(((byte)(91)))));
-            this.kryptonWrapLabel6.Location = new System.Drawing.Point(445, 438);
+            this.kryptonWrapLabel6.Location = new System.Drawing.Point(12, 277);
             this.kryptonWrapLabel6.Name = "kryptonWrapLabel6";
             this.kryptonWrapLabel6.Size = new System.Drawing.Size(87, 15);
             this.kryptonWrapLabel6.Text = "Horario Manhã";
@@ -215,24 +207,25 @@ namespace Impar
             // DtDataFim
             // 
             this.DtDataFim.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DtDataFim.Location = new System.Drawing.Point(729, 403);
+            this.DtDataFim.Location = new System.Drawing.Point(240, 242);
             this.DtDataFim.Name = "DtDataFim";
-            this.DtDataFim.Size = new System.Drawing.Size(168, 21);
+            this.DtDataFim.Size = new System.Drawing.Size(89, 21);
             this.DtDataFim.TabIndex = 1;
             this.DtDataFim.ValueNullable = new System.DateTime(2023, 5, 6, 0, 0, 0, 0);
             // 
             // DtHoraFimTarde
             // 
             this.DtHoraFimTarde.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.DtHoraFimTarde.Location = new System.Drawing.Point(837, 458);
+            this.DtHoraFimTarde.Location = new System.Drawing.Point(206, 307);
             this.DtHoraFimTarde.Name = "DtHoraFimTarde";
+            this.DtHoraFimTarde.ShowUpDown = true;
             this.DtHoraFimTarde.Size = new System.Drawing.Size(87, 21);
             this.DtHoraFimTarde.TabIndex = 1;
             this.DtHoraFimTarde.ValueNullable = new System.DateTime(2023, 5, 6, 19, 0, 0, 0);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 471);
+            this.button1.Location = new System.Drawing.Point(823, 69);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(155, 38);
             this.button1.TabIndex = 21;
@@ -242,9 +235,9 @@ namespace Impar
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(323, 517);
+            this.button2.Location = new System.Drawing.Point(549, 392);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(143, 34);
+            this.button2.Size = new System.Drawing.Size(104, 34);
             this.button2.TabIndex = 22;
             this.button2.Text = "Disponibilidade";
             this.button2.UseVisualStyleBackColor = true;
@@ -254,48 +247,145 @@ namespace Impar
             // 
             this.dataGridView1.AllowUserToOrderColumns = true;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(94, 560);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 386);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(551, 115);
+            this.dataGridView1.Size = new System.Drawing.Size(531, 377);
             this.dataGridView1.TabIndex = 23;
-            // 
-            // dateTimePicker1
-            // 
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePicker1.Location = new System.Drawing.Point(94, 326);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePicker1.TabIndex = 24;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(527, 517);
+            this.button3.Location = new System.Drawing.Point(558, 432);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(117, 26);
+            this.button3.Size = new System.Drawing.Size(104, 39);
             this.button3.TabIndex = 25;
             this.button3.Text = "button3";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(421, 341);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(104, 38);
+            this.button4.TabIndex = 32;
+            this.button4.Text = "Com ID do google";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(22, 341);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(160, 43);
+            this.button5.TabIndex = 33;
+            this.button5.Text = "Ocupado";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(206, 341);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(133, 39);
+            this.button6.TabIndex = 34;
+            this.button6.Text = "button6 - OK";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(687, 389);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.Size = new System.Drawing.Size(764, 377);
+            this.dataGridView2.TabIndex = 35;
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(730, 343);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(130, 40);
+            this.button7.TabIndex = 36;
+            this.button7.Text = "button7";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(1271, 259);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(137, 37);
+            this.button8.TabIndex = 37;
+            this.button8.Text = "Pendentes de atribuiçao ";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(1076, 341);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(137, 37);
+            this.button9.TabIndex = 37;
+            this.button9.Text = "TOP - A funcionar nao mexer";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(880, 347);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(137, 37);
+            this.button10.TabIndex = 37;
+            this.button10.Text = "button8";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(1271, 302);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(137, 37);
+            this.button11.TabIndex = 37;
+            this.button11.Text = "Atribuidos";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(1271, 341);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(137, 37);
+            this.button12.TabIndex = 37;
+            this.button12.Text = "Todos";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
+            // 
             // GoogleAgenda
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1276, 711);
+            this.ClientSize = new System.Drawing.Size(1463, 781);
+            this.Controls.Add(this.button10);
+            this.Controls.Add(this.button9);
+            this.Controls.Add(this.button12);
+            this.Controls.Add(this.button11);
+            this.Controls.Add(this.button8);
+            this.Controls.Add(this.button7);
+            this.Controls.Add(this.dataGridView2);
+            this.Controls.Add(this.button6);
+            this.Controls.Add(this.button5);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.kryptonButton2);
             this.Controls.Add(this.kryptonWrapLabel5);
             this.Controls.Add(this.kryptonWrapLabel6);
-            this.Controls.Add(this.kryptonWrapLabel4);
             this.Controls.Add(this.kryptonWrapLabel3);
             this.Controls.Add(this.kryptonWrapLabel2);
             this.Controls.Add(this.kryptonWrapLabel1);
             this.Controls.Add(this.kryptonTextBox1);
-            this.Controls.Add(this.kryptonDataGridView2);
             this.Controls.Add(this.kryptonDataGridView1);
             this.Controls.Add(this.kryptonButton1);
             this.Controls.Add(this.DtHoraFimTarde);
@@ -310,8 +400,8 @@ namespace Impar
             this.Text = "GoogleAgenda";
             this.Load += new System.EventHandler(this.GoogleAgenda_Load);
             ((System.ComponentModel.ISupportInitialize)(this.kryptonDataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonDataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -332,16 +422,23 @@ namespace Impar
         private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker DtHoraFimManha;
         private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker DtHoraInicioTarde;
         private ComponentFactory.Krypton.Toolkit.KryptonWrapLabel kryptonWrapLabel3;
-        private ComponentFactory.Krypton.Toolkit.KryptonWrapLabel kryptonWrapLabel4;
         private ComponentFactory.Krypton.Toolkit.KryptonWrapLabel kryptonWrapLabel5;
-        private ComponentFactory.Krypton.Toolkit.KryptonDataGridView kryptonDataGridView2;
         private ComponentFactory.Krypton.Toolkit.KryptonWrapLabel kryptonWrapLabel6;
         private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker DtDataFim;
         private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker DtHoraFimTarde;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button button12;
     }
 }
