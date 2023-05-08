@@ -59,7 +59,7 @@ namespace Impar
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(904, 623);
+            this.button1.Location = new System.Drawing.Point(1134, 589);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(146, 44);
             this.button1.TabIndex = 1;
@@ -82,7 +82,7 @@ namespace Impar
             this.kryptonGroupBox1.Panel.Controls.Add(this.tbpesquisatlm);
             this.kryptonGroupBox1.Panel.Controls.Add(this.tbpesquisanome);
             this.kryptonGroupBox1.Panel.Controls.Add(this.tbpesquisaId);
-            this.kryptonGroupBox1.Size = new System.Drawing.Size(1246, 104);
+            this.kryptonGroupBox1.Size = new System.Drawing.Size(1268, 104);
             this.kryptonGroupBox1.TabIndex = 2;
             // 
             // tbpesquisaId
@@ -155,7 +155,7 @@ namespace Impar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1374, 727);
+            this.ClientSize = new System.Drawing.Size(1433, 727);
             this.Controls.Add(this.kryptonGroupBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.kryptonDataGridView1);

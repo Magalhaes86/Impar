@@ -62,6 +62,7 @@ namespace Impar
             this.label12 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.kryptonCheckBox1 = new ComponentFactory.Krypton.Toolkit.KryptonCheckBox();
             this.SuspendLayout();
             // 
             // tbhorario
@@ -102,6 +103,7 @@ namespace Impar
             this.btatualizar.TabIndex = 30;
             this.btatualizar.Text = "atualizar";
             this.btatualizar.UseVisualStyleBackColor = true;
+            this.btatualizar.Click += new System.EventHandler(this.btatualizar_Click);
             // 
             // label8
             // 
@@ -325,11 +327,20 @@ namespace Impar
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // kryptonCheckBox1
+            // 
+            this.kryptonCheckBox1.Location = new System.Drawing.Point(34, 464);
+            this.kryptonCheckBox1.Name = "kryptonCheckBox1";
+            this.kryptonCheckBox1.Size = new System.Drawing.Size(84, 20);
+            this.kryptonCheckBox1.TabIndex = 36;
+            this.kryptonCheckBox1.Values.Text = "Enviar SMS";
+            // 
             // Marcacoes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(891, 658);
+            this.ClientSize = new System.Drawing.Size(1100, 658);
+            this.Controls.Add(this.kryptonCheckBox1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.tbtlmpaciente);
             this.Controls.Add(this.tbnomepaciente);
@@ -403,5 +414,6 @@ namespace Impar
         internal System.Windows.Forms.TextBox tbnomepaciente;
         internal System.Windows.Forms.TextBox tbtlmpaciente;
         private System.Windows.Forms.Timer timer1;
+        private ComponentFactory.Krypton.Toolkit.KryptonCheckBox kryptonCheckBox1;
     }
 }

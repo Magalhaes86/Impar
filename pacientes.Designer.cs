@@ -52,25 +52,33 @@ namespace Impar
             this.btnGravar = new System.Windows.Forms.Button();
             this.lbldelete = new System.Windows.Forms.Label();
             this.btnDelete = new System.Windows.Forms.Button();
+            this.kryptonDataGridView1 = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
+            this.kryptonGroupBox1 = new ComponentFactory.Krypton.Toolkit.KryptonGroupBox();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonDataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1.Panel)).BeginInit();
+            this.kryptonGroupBox1.Panel.SuspendLayout();
+            this.kryptonGroupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(668, 62);
+            this.button1.Location = new System.Drawing.Point(970, 608);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(137, 74);
+            this.button1.Size = new System.Drawing.Size(137, 34);
             this.button1.TabIndex = 0;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(832, 62);
+            this.button2.Location = new System.Drawing.Point(596, 25);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(137, 74);
+            this.button2.Size = new System.Drawing.Size(137, 34);
             this.button2.TabIndex = 0;
             this.button2.Text = "button1";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label7
             // 
@@ -224,7 +232,7 @@ namespace Impar
             // 
             this.btnNovo.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.btnNovo.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
-            this.btnNovo.Location = new System.Drawing.Point(732, 417);
+            this.btnNovo.Location = new System.Drawing.Point(558, 588);
             this.btnNovo.Name = "btnNovo";
             this.btnNovo.Size = new System.Drawing.Size(118, 35);
             this.btnNovo.TabIndex = 40;
@@ -236,19 +244,20 @@ namespace Impar
             // 
             this.btnUpdate.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.btnUpdate.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
-            this.btnUpdate.Location = new System.Drawing.Point(687, 314);
+            this.btnUpdate.Location = new System.Drawing.Point(343, 538);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(118, 35);
             this.btnUpdate.TabIndex = 41;
             this.btnUpdate.TabStop = false;
             this.btnUpdate.Text = "ATUALIZAR";
             this.btnUpdate.UseVisualStyleBackColor = false;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // btnGravar
             // 
             this.btnGravar.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.btnGravar.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
-            this.btnGravar.Location = new System.Drawing.Point(466, 182);
+            this.btnGravar.Location = new System.Drawing.Point(206, 538);
             this.btnGravar.Name = "btnGravar";
             this.btnGravar.Size = new System.Drawing.Size(118, 35);
             this.btnGravar.TabIndex = 42;
@@ -261,7 +270,7 @@ namespace Impar
             // 
             this.lbldelete.AutoSize = true;
             this.lbldelete.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbldelete.Location = new System.Drawing.Point(605, 554);
+            this.lbldelete.Location = new System.Drawing.Point(75, 628);
             this.lbldelete.Name = "lbldelete";
             this.lbldelete.Size = new System.Drawing.Size(109, 15);
             this.lbldelete.TabIndex = 61;
@@ -272,18 +281,39 @@ namespace Impar
             // 
             this.btnDelete.BackColor = System.Drawing.Color.Transparent;
             this.btnDelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnDelete.Location = new System.Drawing.Point(720, 546);
+            this.btnDelete.Location = new System.Drawing.Point(190, 620);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(37, 30);
             this.btnDelete.TabIndex = 60;
             this.btnDelete.TabStop = false;
             this.btnDelete.UseVisualStyleBackColor = false;
             // 
+            // kryptonDataGridView1
+            // 
+            this.kryptonDataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.kryptonDataGridView1.Location = new System.Drawing.Point(640, 113);
+            this.kryptonDataGridView1.Name = "kryptonDataGridView1";
+            this.kryptonDataGridView1.Size = new System.Drawing.Size(750, 442);
+            this.kryptonDataGridView1.TabIndex = 62;
+            // 
+            // kryptonGroupBox1
+            // 
+            this.kryptonGroupBox1.Location = new System.Drawing.Point(640, 12);
+            this.kryptonGroupBox1.Name = "kryptonGroupBox1";
+            // 
+            // kryptonGroupBox1.Panel
+            // 
+            this.kryptonGroupBox1.Panel.Controls.Add(this.button2);
+            this.kryptonGroupBox1.Size = new System.Drawing.Size(750, 96);
+            this.kryptonGroupBox1.TabIndex = 63;
+            // 
             // pacientes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1053, 662);
+            this.ClientSize = new System.Drawing.Size(1427, 662);
+            this.Controls.Add(this.kryptonGroupBox1);
+            this.Controls.Add(this.kryptonDataGridView1);
             this.Controls.Add(this.lbldelete);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnGravar);
@@ -305,11 +335,15 @@ namespace Impar
             this.Controls.Add(this.tbEmail);
             this.Controls.Add(this.tbNif);
             this.Controls.Add(this.tbNome);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "pacientes";
             this.Text = "pacientes";
             this.Load += new System.EventHandler(this.pacientes_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonDataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1.Panel)).EndInit();
+            this.kryptonGroupBox1.Panel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1)).EndInit();
+            this.kryptonGroupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -340,5 +374,7 @@ namespace Impar
         private System.Windows.Forms.Button btnGravar;
         private System.Windows.Forms.Label lbldelete;
         private System.Windows.Forms.Button btnDelete;
+        private ComponentFactory.Krypton.Toolkit.KryptonDataGridView kryptonDataGridView1;
+        private ComponentFactory.Krypton.Toolkit.KryptonGroupBox kryptonGroupBox1;
     }
 }

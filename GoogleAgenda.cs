@@ -17,6 +17,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Services;
 using Google.Apis.Calendar.v3.Data;
+using System.Net.Http;
 
 namespace Impar
 {
@@ -182,8 +183,8 @@ namespace Impar
 
             // Exibindo o DataTable no DataGridView
             kryptonDataGridView1.DataSource = dt;
-        
-    }
+
+        }
 
         private void kryptonButton2_Click(object sender, EventArgs e)
         {
@@ -499,7 +500,7 @@ namespace Impar
 
             dataGridView1.DataSource = dt;
         }
-    
+
 
         private TimeSpan intervaloMarcacoes;
 
@@ -511,7 +512,7 @@ namespace Impar
             TimeSpan dtHoraFimManha = DtHoraFimManha.Value.TimeOfDay;
             TimeSpan dtHoraInicioTarde = DtHoraInicioTarde.Value.TimeOfDay;
             TimeSpan dtHoraFimTarde = DtHoraFimTarde.Value.TimeOfDay;
-          
+
             //intervaloMarcacoes = Intervalomarcaçoes.Value.TimeOfDay;
 
 
@@ -622,7 +623,7 @@ namespace Impar
 
 
                 // Verificando se o horário está ocupado
-       
+
                 foreach (var evento in events.Items)
                 {
                     DateTime dtInicioEvento = evento.Start.DateTime ?? DateTime.Parse(evento.Start.Date);
@@ -685,7 +686,7 @@ namespace Impar
             dataGridView1.Columns.Add(agendarColumn);
 
             // Adicionando um handler para o evento CellContentClick
-           // dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            // dataGridView1.CellContentClick += dataGridView1_CellContentClick;
         }
 
 
@@ -787,8 +788,8 @@ namespace Impar
             }
 
             dataGridView1.DataSource = dt;
-        
-    }
+
+        }
         //private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         //{
         //    // Verificando se o botão "Agendar" foi clicado
@@ -811,7 +812,7 @@ namespace Impar
             public DateTime Inicio { get; set; }
             public DateTime Fim { get; set; }
         }
-      
+
 
         private List<Agendamento> ObterAgendamentos()
         {
@@ -1281,7 +1282,7 @@ namespace Impar
         }
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-           
+
 
             var senderGrid = (DataGridView)sender;
 
@@ -1296,7 +1297,7 @@ namespace Impar
                 string descricao = senderGrid.Rows[e.RowIndex].Cells["Descrição"].Value.ToString();
                 string titulo = senderGrid.Rows[e.RowIndex].Cells["Título"].Value.ToString();
                 string CodCliente = senderGrid.Rows[e.RowIndex].Cells["Código Cliente"].Value.ToString();
-            
+
 
                 // Abre o FormAdicionarEvento passando os valores como parâmetros
                 FormAdicionarEvento form = new FormAdicionarEvento(data, horaInicio, horaFim, Idgoogle, descricao, titulo, CodCliente);
@@ -1375,7 +1376,7 @@ namespace Impar
 
             DataTable dt = new DataTable();
             // Adicione colunas adicionais
-           
+
             dt.Columns.Add("Data");
             dt.Columns.Add("Hora Início");
             dt.Columns.Add("Hora Fim");
@@ -1419,12 +1420,12 @@ namespace Impar
 
 
         }
-    
 
-    //private bool agendarColumnAdded = false;
-    private bool editarColumnAdded = false;
 
-    private void dataGridView2_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        //private bool agendarColumnAdded = false;
+        private bool editarColumnAdded = false;
+
+        private void dataGridView2_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             DataGridViewRow row = dataGridView2.Rows[e.RowIndex];
             object codigoCliente = row.Cells["Código Cliente"].Value;
@@ -1546,7 +1547,7 @@ namespace Impar
         private void button8_Click(object sender, EventArgs e)
         {
             // Aplicando o filtro para mostrar apenas os resultados com a coluna 7 vazia
-    (dataGridView2.DataSource as DataTable).DefaultView.RowFilter = "[Código Cliente] IS NULL";
+            (dataGridView2.DataSource as DataTable).DefaultView.RowFilter = "[Código Cliente] IS NULL";
         }
 
         //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
@@ -1562,7 +1563,247 @@ namespace Impar
             // Removendo o filtro para mostrar todos os resultados
             (dataGridView2.DataSource as DataTable).DefaultView.RowFilter = string.Empty;
         }
-    }
+
+
+
+
+
+        private void kryptonButton3_Click(object sender, EventArgs e)
+        {
+
+            if (kryptonNavigator1.SelectedPage == kryptonPage1) // nome da sua tabPage onde está o DataGridView
+            {
+                // Cria a conexão com o banco de dados MySQL
+                MySqlConnection conn = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
+
+                conn.Open();
+
+                // Cria a consulta SQL
+                string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, SmsEnviada FROM marcacoes";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                dgvsmspendentes.DataSource = dt;
+
+                conn.Close();
+                dgvsmspendentes.Refresh();
+            }
+        }
+
+        private void kryptonButton6_Click(object sender, EventArgs e)
+        {
+
+
+
+        }
+
+        private void kryptonButton7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void kryptonButton4_Click(object sender, EventArgs e)
+        {
+            if (kryptonNavigator1.SelectedPage == kryptonPage1)
+            {
+                // Cria a conexão com o banco de dados MySQL
+                MySqlConnection conn = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
+                conn.Open();
+
+                // Cria a consulta SQL com a cláusula WHERE
+                string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, SmsEnviada FROM marcacoes WHERE SmsEnviada = 0";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                dgvsmspendentes.DataSource = dt;
+
+                conn.Close();
+                dgvsmspendentes.Refresh();
+            }
+        }
+
+        private void kryptonButton5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Daqui para BAIXO é codigo para enviar sms !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Daqui para BAIXO é codigo para enviar sms !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Daqui para BAIXO é codigo para enviar sms !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+        private async Task<bool> EnviarSMS(string from, string to, string content)
+        {
+            try
+            {
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("x-api-key", "gOhTfeXsLXdN7V-0Sct_GfYxROcqW1iK5JjmmvM3iOaFLkdSlJRFjrvTJQk-g_sb");
+
+                var response = await client.PostAsync(
+                    "https://api.httpsms.com/v1/messages/send",
+                    new StringContent(
+                        System.Text.Json.JsonSerializer.Serialize(new
+                        {
+                            from = from,
+                            To = to,
+                            Content = content
+                        }),
+                        Encoding.UTF8,
+                        "application/json"
+                    )
+                );
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                // trate a exceção aqui, se necessário
+                return false;
+            }
+        }
+
+
+        //!!!!!!!!!!!!!!!!!!! ENVIA SMS PARA OS PENDENTES SELECIONADOS NO DATAGRID!!!!!!!!!!!!!!!!!
+        //!!!!!!!!!!!!!!!!!!! ENVIA SMS PARA OS PENDENTES SELECIONADOS NO DATAGRID !!!!!!!!!!!!!!!!!
+        private async void btnEnviarSMSPENDENTESSELECIONADOS_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Define a conexão com o banco de dados MySQL
+                MySqlConnection conn = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
+
+                conn.Open();
+
+                // Cria a lista de IDs dos clientes selecionados
+                List<int> idsSelecionados = new List<int>();
+                foreach (DataGridViewRow row in dgvsmspendentes.SelectedRows)
+                {
+                    idsSelecionados.Add(int.Parse(row.Cells["IdCliente"].Value.ToString()));
+                }
+
+                // Define a consulta SQL com a cláusula WHERE modificada para filtrar apenas os clientes selecionados com SmsEnviada = 0
+                string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, SmsEnviada FROM marcacoes WHERE SmsEnviada = 0 AND IdCliente IN (" + string.Join(",", idsSelecionados) + ")";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                // Fecha a conexão com o banco de dados
+                conn.Close();
+
+                // Percorre os dados da DataTable para enviar os SMS
+                foreach (DataRow row in dt.Rows)
+                {
+                    string from = "Remetente";
+                    string to = row["Telemovel"].ToString();
+                    string content = "Mensagem de texto";
+                    bool enviadoComSucesso = await EnviarSMS(from, to, content);
+
+                    if (enviadoComSucesso)
+                    {
+                        // Atualiza o status da mensagem SMS no banco de dados
+                        int idMarcacao = int.Parse(row["IdCliente"].ToString());
+                        string updateQuery = $"UPDATE marcacoes SET SmsEnviada = 1 WHERE IdCliente = {idMarcacao}";
+
+                        MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn);
+                        conn.Open();
+                        updateCmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
+                }
+
+                MessageBox.Show("Todos os SMS foram enviados com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao enviar SMS: {ex.Message}");
+            }
+        }
+
+
+
+
+        //!!!!!!!!!!!!!!!!!!! ENVIA SMS PARA TODOS OS PENDENTES !!!!!!!!!!!!!!!!!
+        //!!!!!!!!!!!!!!!!!!! ENVIA SMS PARA TODOS OS PENDENTES !!!!!!!!!!!!!!!!!
+        private async void btnEnviarSMS_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Define a conexão com o banco de dados MySQL
+                MySqlConnection conn = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
+
+                conn.Open();
+
+                // Define a consulta SQL
+                string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, SmsEnviada FROM marcacoes WHERE SmsEnviada = 0";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                // Fecha a conexão com o banco de dados
+                conn.Close();
+
+                // Percorre os dados da DataTable para enviar os SMS
+                foreach (DataRow row in dt.Rows)
+                {
+                    string from = "Remetente";
+                    string to = row["Telemovel"].ToString();
+                    string content = "Mensagem de texto";
+                    bool enviadoComSucesso = await EnviarSMS(from, to, content);
+
+                    if (enviadoComSucesso)
+                    {
+                        // Atualiza o status da mensagem SMS no banco de dados
+                        int idMarcacao = int.Parse(row["IdCliente"].ToString());
+                        string updateQuery = $"UPDATE marcacoes SET SmsEnviada = 1 WHERE IdCliente = {idMarcacao}";
+
+                        MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn);
+                        conn.Open();
+                        updateCmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
+                }
+
+                MessageBox.Show("Todos os SMS foram enviados com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao enviar SMS: {ex.Message}");
+            }
+        }
+
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Daqui para cima é codigo para enviar sms !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Daqui para cima é codigo para enviar sms !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Daqui para cima é codigo para enviar sms !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     }
 
-    
+}

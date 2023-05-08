@@ -74,51 +74,153 @@ namespace Impar
      
         private void btnGravar_Click(object sender, EventArgs e)
         {
-            //string insertQuery = "INSERT INTO pacientes (Nome,Nif,Morada,Email,Tlm,Tlf,Obs) VALUES('" + tbNome.Text + "','" + tbNif.Text + "','" + tbMorada.Text + "','" + tbEmail.Text + "','" + tbTlm.Text + "','" + tbTlf.Text + "','" + tbobs.Text + "');";
-            //executeMyQuery(insertQuery);
 
 
-            // Verifica se o número de telefone foi informado
+            // Verifica se o número de telemóvel foi inserido corretamente
             if (string.IsNullOrEmpty(tbTlm.Text))
             {
-                // Exibe uma mensagem de aviso e pergunta se o usuário deseja continuar sem informar o número de telefone
-                DialogResult result = MessageBox.Show("Pretende continuar sem inserir um número de telemóvel? Caso tenha modulo SMS o número de telemóvel é necessário para o envio das mesmas!", "Aviso", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                // Se o usuário escolher "Sim", continua sem inserir o número de telefone
-                if (result == DialogResult.Yes)
-                {
-                    // Monta a consulta SQL de inserção
-                    string insertQuery = "INSERT INTO pacientes (Nome,Nif,Morada,Email,Tlm,Tlf,Obs) VALUES('" + tbNome.Text + "','" + tbNif.Text + "','" + tbMorada.Text + "','" + tbEmail.Text + "','" + tbTlm.Text + "','" + tbTlf.Text + "','" + tbobs.Text + "');";
-
-                    // Executa a consulta SQL
-                    executeMyQuery(insertQuery);
-
-                    // Exibe uma mensagem de sucesso
-                    MessageBox.Show("Os dados foram inseridos com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    // Se o usuário escolher "Não", posiciona o foco no campo de número de telefone
-                    tbTlm.Focus();
-                }
+                // Exibe mensagem de erro
+                MessageBox.Show("O número de telemóvel deve ser preenchido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tbTlm.Focus();
+                return;
             }
-            else
+            else if (tbTlm.Text.Length != 9)
             {
-                // Se o número de telefone foi informado, monta a consulta SQL de inserção
-                string insertQuery = "INSERT INTO pacientes (Nome,Nif,Morada,Email,Tlm,Tlf,Obs) VALUES('" + tbNome.Text + "','" + tbNif.Text + "','" + tbMorada.Text + "','" + tbEmail.Text + "','" + tbTlm.Text + "','" + tbTlf.Text + "','" + tbobs.Text + "');";
-
-                // Executa a consulta SQL
-                executeMyQuery(insertQuery);
-
-                // Exibe uma mensagem de sucesso
-                MessageBox.Show("Os dados foram inseridos com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Exibe mensagem de erro
+                MessageBox.Show("O número de telemóvel deve possuir 9 dígitos.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tbTlm.Focus();
+                return;
             }
+            else if (!int.TryParse(tbTlm.Text, out int n))
+            {
+                // Exibe mensagem de erro
+                MessageBox.Show("O número de telemóvel deve ser numérico.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tbTlm.Focus();
+                return;
+            }
+            // Concatena o prefixo "+351" com o número de telemóvel
+            string numeroTelemovel = "+351" + tbTlm.Text;
 
+            // Monta a consulta SQL de inserção
+            string insertQuery = "INSERT INTO pacientes (Nome,Nif,Morada,Email,Tlm,Tlf,Obs) VALUES('" + tbNome.Text + "','" + tbNif.Text + "','" + tbMorada.Text + "','" + tbEmail.Text + "','" + numeroTelemovel + "','" + tbTlf.Text + "','" + tbobs.Text + "');";
+
+            // Executa a consulta SQL
+            executeMyQuery(insertQuery);
+
+            // Exibe uma mensagem de sucesso
+            MessageBox.Show("Os dados foram inseridos com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+
+
+
+
+
+            //// Verifica se o número de telemóvel foi inserido
+            //if (string.IsNullOrEmpty(tbTlm.Text))
+            //{
+            //    // Exibe uma mensagem de aviso e pergunta se deseja continuar sem inserido o número de telemóvel
+            //    DialogResult result = MessageBox.Show("Pretende continuar sem inserir um número de telemóvel? Caso tenha modulo SMS o número de telemóvel é necessário para o envio das mesmas!", "Aviso", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            //    // Se o escolher "Sim", continua sem inserir o número de telemóvel
+            //    if (result == DialogResult.Yes)
+            //    {
+            //        // Monta a consulta SQL de inserção
+            //        string insertQuery = "INSERT INTO pacientes (Nome,Nif,Morada,Email,Tlm,Tlf,Obs) VALUES('" + tbNome.Text + "','" + tbNif.Text + "','" + tbMorada.Text + "','" + tbEmail.Text + "','" + tbTlm.Text + "','" + tbTlf.Text + "','" + tbobs.Text + "');";
+
+            //        // Executa a consulta SQL
+            //        executeMyQuery(insertQuery);
+
+            //        // Exibe uma mensagem de sucesso
+            //        MessageBox.Show("Os dados foram inseridos com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //    }
+            //    else
+            //    {
+            //        // Se escolher "Não", posiciona o foco no campo de número de telemóvel
+            //        tbTlm.Focus();
+            //    }
+            //}
+            //else
+            //{
+            //    // Se o número de telemóvel foi inserido, monta a consulta SQL de inserção
+            //    string insertQuery = "INSERT INTO pacientes (Nome,Nif,Morada,Email,Tlm,Tlf,Obs) VALUES('" + tbNome.Text + "','" + tbNif.Text + "','" + tbMorada.Text + "','" + tbEmail.Text + "','" + tbTlm.Text + "','" + tbTlf.Text + "','" + tbobs.Text + "');";
+
+            //    // Executa a consulta SQL
+            //    executeMyQuery(insertQuery);
+
+            //    // Exibe uma mensagem de sucesso
+            //    MessageBox.Show("Os dados foram inseridos com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //}
+
+       
 
         private void pacientes_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Configurando a conexão com o banco de dados MySQL
+                string connectionString = (@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
+
+                MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                // Criando um objeto DataTable e preenchendo-o com os dados da tabela pacientes
+                DataTable dt = new DataTable();
+                MySqlDataAdapter adapter = new MySqlDataAdapter("SELECT * FROM pacientes", connection);
+                adapter.Fill(dt);
+
+                // Atribuindo o objeto DataTable ao DataSource do DataGridView
+                kryptonDataGridView1.DataSource = dt;
+
+                // Fechando a conexão com o banco de dados
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao listar clientes: " + ex.Message);
+            }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            // Verifica se o número de telemóvel foi inserido corretamente
+            if (string.IsNullOrEmpty(tbTlm.Text))
+            {
+                // Exibe mensagem de erro
+                MessageBox.Show("O número de telemóvel deve ser preenchido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tbTlm.Focus();
+                return;
+            }
+            else if (tbTlm.Text.Length != 9)
+            {
+                // Exibe mensagem de erro
+                MessageBox.Show("O número de telemóvel deve possuir 9 dígitos.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tbTlm.Focus();
+                return;
+            }
+            else if (!int.TryParse(tbTlm.Text, out int n))
+            {
+                // Exibe mensagem de erro
+                MessageBox.Show("O número de telemóvel deve ser numérico.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tbTlm.Focus();
+                return;
+            }
+            // Concatena o prefixo "+351" com o número de telemóvel
+            string numeroTelemovel = "+351" + tbTlm.Text;
+
+            // Monta a consulta SQL de atualização
+            string updateQuery = "UPDATE pacientes SET Nome = '" + tbNome.Text + "', Nif = '" + tbNif.Text + "', Morada = '" + tbMorada.Text + "', Email = '" + tbEmail.Text + "', Tlm = '" + numeroTelemovel + "', Tlf = '" + tbTlf.Text + "', Obs = '" + tbobs.Text + "' WHERE ID = " + tbId.Text + ";";
+
+            // Executa a consulta SQL
+            executeMyQuery(updateQuery);
+
+            // Exibe uma mensagem de sucesso
+            MessageBox.Show("Os dados foram atualizados com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
