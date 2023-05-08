@@ -1630,14 +1630,176 @@ namespace Impar
             }
         }
 
-        private void kryptonButton5_Click(object sender, EventArgs e)
-        {
 
+        //!!!!!!!!!!!!!!!!!!! ENVIA SMS PARA OS PENDENTES SELECIONADOS NO DATAGRID!!!!!!!!!!!!!!!!!
+        //!!!!!!!!!!!!!!!!!!! A FUNCIONAR NAO MEXER  !!!!!!!!!!!!!!!!!
+
+        private async void kryptonButton5_Click(object sender, EventArgs e)
+        {
+            //!!!!!!!!!!!!!!!!!!! ENVIA SMS PARA OS PENDENTES SELECIONADOS NO DATAGRID!!!!!!!!!!!!!!!!!
+         
+
+            // Pergunta ao usuário se deseja enviar a mensagem de texto
+            var result = MessageBox.Show("Antes de continuar, verifique se tem a aplicação iniciada no seu telemóvel. Deseja continuar com o envio da mensagem?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            // Verifica se o usuário escolheu o botão Sim
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    // Define a conexão com o banco de dados MySQL
+                    MySqlConnection conn = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
+                    conn.Open();
+
+                    //// Cria a lista de IDs dos clientes selecionados
+           
+                    List<int> idsSelecionados = new List<int>();
+                    foreach (DataGridViewRow row in dgvsmspendentes.Rows)
+                    {
+                        DataGridViewCheckBoxCell chk = (DataGridViewCheckBoxCell)row.Cells["SmsEnviada"];
+                        if (chk.Value != null && (bool)chk.Value)
+                        {
+                            idsSelecionados.Add(int.Parse(row.Cells["IdCliente"].Value.ToString()));
+                        }
+                    }
+                    // Verifica se a lista de IDs selecionados não está vazia
+                    if (idsSelecionados.Count > 0)
+                    {
+                        // Define a consulta SQL com a cláusula WHERE modificada para filtrar apenas os clientes selecionados com SmsEnviada = 0
+                        //   string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, CAST(SmsEnviada AS BOOLEAN) AS SmsEnviada FROM marcacoes WHERE SmsEnviada = 0 AND SmsEnviada IS NOT NULL AND IdCliente IN(" + string.Join(", ", idsSelecionados) + ")";
+                        string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, IF(SmsEnviada = 0, FALSE, TRUE) AS SmsEnviada FROM marcacoes WHERE SmsEnviada = 0 AND SmsEnviada IS NOT NULL AND IdCliente IN(" + string.Join(", ", idsSelecionados) + ")";
+                        MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+
+                        // Fecha a conexão com o banco de dados
+                        conn.Close();
+
+                        // Percorre os dados da DataTable para enviar os SMS
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            string from = "+351910045307"; // Número de origem PASSAR DEPOIS PARA PARAMETRO
+                            string to = row["Telemovel"].ToString();
+                            string nome = row["Nome"].ToString();
+                            string horario = row["Horario"].ToString();
+                            string horaInicio = row["Horainicio"].ToString();
+                            string content = $"Estimado {nome}, informamos que tem marcação no dia {horario} às {horaInicio}";
+                            bool enviadoComSucesso = await EnviarSMS(from, to, content);
+
+                            if (enviadoComSucesso)
+                            {
+                                // Atualiza o status da mensagem SMS no banco de dados
+                                int idMarcacao = int.Parse(row["IdCliente"].ToString());
+                                string updateQuery = $"UPDATE marcacoes SET SmsEnviada = 1 WHERE IdCliente = {idMarcacao}";
+
+                                MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn);
+                                conn.Open();
+                                updateCmd.ExecuteNonQuery();
+                                conn.Close();
+                            }
+                        }
+
+                        MessageBox.Show("Todos os SMS foram enviados com sucesso!");
+                    }
+                }
+                
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao enviar SMS: {ex.Message}");
+                }
+         
+                    }
+
+
+               
         }
 
 
 
 
+
+        //private async void kryptonButton5_Click(object sender, EventArgs e)
+        //{
+        //!!!!!!!!!!!!!!!!!!! ENVIA SMS PARA OS PENDENTES SELECIONADOS NO DATAGRID!!!!!!!!!!!!!!!!!
+
+
+        // Pergunta ao usuário se deseja enviar a mensagem de texto
+                                    //        var result = MessageBox.Show("Antes de continuar, verifique se tem a aplicação iniciada no seu telemóvel. Deseja continuar com o envio da mensagem?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                                    //            // Verifica se o usuário escolheu o botão Sim
+                                    //            if (result == DialogResult.Yes)
+                                    //            {
+                                    //                try
+                                    //                {
+                                    //                    // Define a conexão com o banco de dados MySQL
+                                    //                    MySqlConnection conn = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
+                                    //        conn.Open();
+
+                                    //                    //// Cria a lista de IDs dos clientes selecionados
+           
+                                    //                    List<int> idsSelecionados = new List<int>();
+                                    //                    foreach (DataGridViewRow row in dgvsmspendentes.Rows)
+                                    //                    {
+                                    //                        DataGridViewCheckBoxCell chk = (DataGridViewCheckBoxCell)row.Cells["SmsEnviada"];
+                                    //                        if (chk.Value != null && (bool) chk.Value)
+                                    //        {
+                                    //            idsSelecionados.Add(int.Parse(row.Cells["IdCliente"].Value.ToString()));
+                                    //        }
+                                    //    }
+                                    //                    // Verifica se a lista de IDs selecionados não está vazia
+                                    //                    if (idsSelecionados.Count > 0)
+                                    //                    {
+                                    //                        // Define a consulta SQL com a cláusula WHERE modificada para filtrar apenas os clientes selecionados com SmsEnviada = 0
+                                    //                        //   string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, CAST(SmsEnviada AS BOOLEAN) AS SmsEnviada FROM marcacoes WHERE SmsEnviada = 0 AND SmsEnviada IS NOT NULL AND IdCliente IN(" + string.Join(", ", idsSelecionados) + ")";
+                                    //                        string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, IF(SmsEnviada = 0, FALSE, TRUE) AS SmsEnviada FROM marcacoes WHERE SmsEnviada = 0 AND SmsEnviada IS NOT NULL AND IdCliente IN(" + string.Join(", ", idsSelecionados) + ")";
+                                    //    MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                                    //    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                                    //    DataTable dt = new DataTable();
+                                    //    da.Fill(dt);
+
+                                    //                        // Fecha a conexão com o banco de dados
+                                    //                        conn.Close();
+
+                                    //                        // Percorre os dados da DataTable para enviar os SMS
+                                    //                        foreach (DataRow row in dt.Rows)
+                                    //                        {
+                                    //                            string from = "+351910045307"; // Número de origem PASSAR DEPOIS PARA PARAMETRO
+                                    //    string to = row["Telemovel"].ToString();
+                                    //    string nome = row["Nome"].ToString();
+                                    //    string horario = row["Horario"].ToString();
+                                    //    string horaInicio = row["Horainicio"].ToString();
+                                    //    string content = $"Estimado {nome}, informamos que tem marcação no dia {horario} às {horaInicio}";
+                                    //    bool enviadoComSucesso = await EnviarSMS(from, to, content);
+
+                                    //                            if (enviadoComSucesso)
+                                    //                            {
+                                    //                                // Atualiza o status da mensagem SMS no banco de dados
+                                    //                                int idMarcacao = int.Parse(row["IdCliente"].ToString());
+                                    //    string updateQuery = $"UPDATE marcacoes SET SmsEnviada = 1 WHERE IdCliente = {idMarcacao}";
+
+                                    //    MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn);
+                                    //    conn.Open();
+                                    //                                updateCmd.ExecuteNonQuery();
+                                    //                                conn.Close();
+                                    //                            }
+                                    //                        }
+
+                                    //                        MessageBox.Show("Todos os SMS foram enviados com sucesso!");
+                                    //                    }
+                                    //                }
+
+
+                                    //                catch (Exception ex)
+                                    //{
+                                    //    MessageBox.Show($"Erro ao enviar SMS: {ex.Message}");
+                                    //}
+         
+                                    //                    }
+
+        //}
 
 
 
@@ -1687,59 +1849,82 @@ namespace Impar
         //!!!!!!!!!!!!!!!!!!! ENVIA SMS PARA OS PENDENTES SELECIONADOS NO DATAGRID !!!!!!!!!!!!!!!!!
         private async void btnEnviarSMSPENDENTESSELECIONADOS_Click(object sender, EventArgs e)
         {
-            try
+            //!!!!!!!!!!!!!!!!!!! ENVIA SMS PARA OS PENDENTES SELECIONADOS NO DATAGRID!!!!!!!!!!!!!!!!!
+
+
+            // Pergunta ao usuário se deseja enviar a mensagem de texto
+            var result = MessageBox.Show("Antes de continuar, verifique se tem a aplicação iniciada no seu telemóvel. Deseja continuar com o envio da mensagem?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            // Verifica se o usuário escolheu o botão Sim
+            if (result == DialogResult.Yes)
             {
-                // Define a conexão com o banco de dados MySQL
-                MySqlConnection conn = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
-
-                conn.Open();
-
-                // Cria a lista de IDs dos clientes selecionados
-                List<int> idsSelecionados = new List<int>();
-                foreach (DataGridViewRow row in dgvsmspendentes.SelectedRows)
+                try
                 {
-                    idsSelecionados.Add(int.Parse(row.Cells["IdCliente"].Value.ToString()));
-                }
+                    // Define a conexão com o banco de dados MySQL
+                    MySqlConnection conn = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
+                    conn.Open();
 
-                // Define a consulta SQL com a cláusula WHERE modificada para filtrar apenas os clientes selecionados com SmsEnviada = 0
-                string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, SmsEnviada FROM marcacoes WHERE SmsEnviada = 0 AND IdCliente IN (" + string.Join(",", idsSelecionados) + ")";
+                    //// Cria a lista de IDs dos clientes selecionados
 
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                // Fecha a conexão com o banco de dados
-                conn.Close();
-
-                // Percorre os dados da DataTable para enviar os SMS
-                foreach (DataRow row in dt.Rows)
-                {
-                    string from = "Remetente";
-                    string to = row["Telemovel"].ToString();
-                    string content = "Mensagem de texto";
-                    bool enviadoComSucesso = await EnviarSMS(from, to, content);
-
-                    if (enviadoComSucesso)
+                    List<int> idsSelecionados = new List<int>();
+                    foreach (DataGridViewRow row in dgvsmspendentes.Rows)
                     {
-                        // Atualiza o status da mensagem SMS no banco de dados
-                        int idMarcacao = int.Parse(row["IdCliente"].ToString());
-                        string updateQuery = $"UPDATE marcacoes SET SmsEnviada = 1 WHERE IdCliente = {idMarcacao}";
+                        DataGridViewCheckBoxCell chk = (DataGridViewCheckBoxCell)row.Cells["SmsEnviada"];
+                        if (chk.Value != null && (bool)chk.Value)
+                        {
+                            idsSelecionados.Add(int.Parse(row.Cells["IdCliente"].Value.ToString()));
+                        }
+                    }
+                    // Verifica se a lista de IDs selecionados não está vazia
+                    if (idsSelecionados.Count > 0)
+                    {
+                        // Define a consulta SQL com a cláusula WHERE modificada para filtrar apenas os clientes selecionados com SmsEnviada = 0
+                        //   string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, CAST(SmsEnviada AS BOOLEAN) AS SmsEnviada FROM marcacoes WHERE SmsEnviada = 0 AND SmsEnviada IS NOT NULL AND IdCliente IN(" + string.Join(", ", idsSelecionados) + ")";
+                        string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, IF(SmsEnviada = 0, FALSE, TRUE) AS SmsEnviada FROM marcacoes WHERE SmsEnviada = 0 AND SmsEnviada IS NOT NULL AND IdCliente IN(" + string.Join(", ", idsSelecionados) + ")";
+                        MySqlCommand cmd = new MySqlCommand(query, conn);
 
-                        MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn);
-                        conn.Open();
-                        updateCmd.ExecuteNonQuery();
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+
+                        // Fecha a conexão com o banco de dados
                         conn.Close();
+
+                        // Percorre os dados da DataTable para enviar os SMS
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            string from = "+351910045307"; // Número de origem PASSAR DEPOIS PARA PARAMETRO
+                            string to = row["Telemovel"].ToString();
+                            string nome = row["Nome"].ToString();
+                            string horario = row["Horario"].ToString();
+                            string horaInicio = row["Horainicio"].ToString();
+                            string content = $"Estimado {nome}, informamos que tem marcação no dia {horario} às {horaInicio}";
+                            bool enviadoComSucesso = await EnviarSMS(from, to, content);
+
+                            if (enviadoComSucesso)
+                            {
+                                // Atualiza o status da mensagem SMS no banco de dados
+                                int idMarcacao = int.Parse(row["IdCliente"].ToString());
+                                string updateQuery = $"UPDATE marcacoes SET SmsEnviada = 1 WHERE IdCliente = {idMarcacao}";
+
+                                MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn);
+                                conn.Open();
+                                updateCmd.ExecuteNonQuery();
+                                conn.Close();
+                            }
+                        }
+
+                        MessageBox.Show("Todos os SMS foram enviados com sucesso!");
                     }
                 }
 
-                MessageBox.Show("Todos os SMS foram enviados com sucesso!");
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao enviar SMS: {ex.Message}");
+                }
+
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao enviar SMS: {ex.Message}");
-            }
+
         }
 
 
@@ -1753,7 +1938,6 @@ namespace Impar
             {
                 // Define a conexão com o banco de dados MySQL
                 MySqlConnection conn = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
-
                 conn.Open();
 
                 // Define a consulta SQL
@@ -1771,9 +1955,17 @@ namespace Impar
                 // Percorre os dados da DataTable para enviar os SMS
                 foreach (DataRow row in dt.Rows)
                 {
-                    string from = "Remetente";
+
+            
+
+                    string from = "+351910045307"; // Número de origem PASSAR DEPOIS PARA PARAMETRO
                     string to = row["Telemovel"].ToString();
-                    string content = "Mensagem de texto";
+                    // string content = "Estimado" + tbnomepaciente.Text + "informamos que tem marcação no dia " + tbhorario.Text + " às " + tbhorainicio.Text; // Conteúdo da mensagem - Vamos definir o tipo de tratamento a ir buscar as mensagens 
+                    string nome = row["Nome"].ToString();
+                    string horario = row["Horario"].ToString();
+                    string horaInicio = row["Horainicio"].ToString();
+                   
+                    string content = $"Estimado {nome}, informamos que tem marcação no dia {horario} às {horaInicio}";
                     bool enviadoComSucesso = await EnviarSMS(from, to, content);
 
                     if (enviadoComSucesso)

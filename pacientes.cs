@@ -222,5 +222,27 @@ namespace Impar
             // Exibe uma mensagem de sucesso
             MessageBox.Show("Os dados foram atualizados com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        private void kryptonDataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Verifica se o clique foi na célula de uma linha e não no cabeçalho
+            if (e.RowIndex >= 0)
+            {
+                // Obtém a linha clicada
+                DataGridViewRow row = kryptonDataGridView1.Rows[e.RowIndex];
+
+                // Obtém os valores das colunas e atribui às textboxes correspondentes
+                tbId.Text = row.Cells[0].Value.ToString();
+                tbNome.Text = row.Cells[1].Value.ToString();
+                tbNif.Text = row.Cells[2].Value.ToString();
+                tbTlm.Text = row.Cells[5].Value.ToString();
+                tbEmail.Text = row.Cells[4].Value.ToString();
+                tbTlf.Text = row.Cells[6].Value.ToString();
+                tbMorada.Text = row.Cells[3].Value.ToString();
+                tbobs.Text = row.Cells[7].Value.ToString();
+            }
+        }
     }
-}
+
+       
+    }

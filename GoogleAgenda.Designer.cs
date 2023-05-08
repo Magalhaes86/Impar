@@ -452,6 +452,8 @@ namespace Impar
             // 
             // dgvsmspendentes
             // 
+            this.dgvsmspendentes.AllowUserToAddRows = false;
+            this.dgvsmspendentes.AllowUserToDeleteRows = false;
             this.dgvsmspendentes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvsmspendentes.Location = new System.Drawing.Point(22, 16);
             this.dgvsmspendentes.Name = "dgvsmspendentes";

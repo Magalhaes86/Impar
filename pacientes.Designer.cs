@@ -54,11 +54,15 @@ namespace Impar
             this.btnDelete = new System.Windows.Forms.Button();
             this.kryptonDataGridView1 = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
             this.kryptonGroupBox1 = new ComponentFactory.Krypton.Toolkit.KryptonGroupBox();
+            this.kryptonGroup1 = new ComponentFactory.Krypton.Toolkit.KryptonGroup();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonDataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1.Panel)).BeginInit();
             this.kryptonGroupBox1.Panel.SuspendLayout();
             this.kryptonGroupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonGroup1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonGroup1.Panel)).BeginInit();
+            this.kryptonGroup1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -154,7 +158,7 @@ namespace Impar
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(69, 41);
+            this.label1.Location = new System.Drawing.Point(76, 58);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(22, 15);
             this.label1.TabIndex = 25;
@@ -164,7 +168,7 @@ namespace Impar
             // 
             this.tbId.Enabled = false;
             this.tbId.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbId.Location = new System.Drawing.Point(94, 38);
+            this.tbId.Location = new System.Drawing.Point(120, 55);
             this.tbId.Name = "tbId";
             this.tbId.Size = new System.Drawing.Size(94, 21);
             this.tbId.TabIndex = 20;
@@ -232,7 +236,7 @@ namespace Impar
             // 
             this.btnNovo.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.btnNovo.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
-            this.btnNovo.Location = new System.Drawing.Point(558, 588);
+            this.btnNovo.Location = new System.Drawing.Point(555, 607);
             this.btnNovo.Name = "btnNovo";
             this.btnNovo.Size = new System.Drawing.Size(118, 35);
             this.btnNovo.TabIndex = 40;
@@ -291,14 +295,15 @@ namespace Impar
             // kryptonDataGridView1
             // 
             this.kryptonDataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.kryptonDataGridView1.Location = new System.Drawing.Point(640, 113);
+            this.kryptonDataGridView1.Location = new System.Drawing.Point(640, 150);
             this.kryptonDataGridView1.Name = "kryptonDataGridView1";
             this.kryptonDataGridView1.Size = new System.Drawing.Size(750, 442);
             this.kryptonDataGridView1.TabIndex = 62;
+            this.kryptonDataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.kryptonDataGridView1_CellClick);
             // 
             // kryptonGroupBox1
             // 
-            this.kryptonGroupBox1.Location = new System.Drawing.Point(640, 12);
+            this.kryptonGroupBox1.Location = new System.Drawing.Point(640, 49);
             this.kryptonGroupBox1.Name = "kryptonGroupBox1";
             // 
             // kryptonGroupBox1.Panel
@@ -307,11 +312,20 @@ namespace Impar
             this.kryptonGroupBox1.Size = new System.Drawing.Size(750, 96);
             this.kryptonGroupBox1.TabIndex = 63;
             // 
+            // kryptonGroup1
+            // 
+            this.kryptonGroup1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.kryptonGroup1.Location = new System.Drawing.Point(0, 0);
+            this.kryptonGroup1.Name = "kryptonGroup1";
+            this.kryptonGroup1.Size = new System.Drawing.Size(1427, 50);
+            this.kryptonGroup1.TabIndex = 64;
+            // 
             // pacientes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1427, 662);
+            this.Controls.Add(this.kryptonGroup1);
             this.Controls.Add(this.kryptonGroupBox1);
             this.Controls.Add(this.kryptonDataGridView1);
             this.Controls.Add(this.lbldelete);
@@ -344,6 +358,9 @@ namespace Impar
             this.kryptonGroupBox1.Panel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1)).EndInit();
             this.kryptonGroupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonGroup1.Panel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonGroup1)).EndInit();
+            this.kryptonGroup1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -376,5 +393,6 @@ namespace Impar
         private System.Windows.Forms.Button btnDelete;
         private ComponentFactory.Krypton.Toolkit.KryptonDataGridView kryptonDataGridView1;
         private ComponentFactory.Krypton.Toolkit.KryptonGroupBox kryptonGroupBox1;
+        private ComponentFactory.Krypton.Toolkit.KryptonGroup kryptonGroup1;
     }
 }

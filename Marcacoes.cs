@@ -17,10 +17,16 @@ using Google.Apis.Calendar.v3.Data;
 using System.Globalization;
 using System.Threading;
 
+using System.Net.Http;
+using System.Threading.Tasks;
+
 namespace Impar
 {
     public partial class Marcacoes : Form
     {
+
+        private BindingSource bindingSource = new BindingSource();
+
         public Marcacoes()
         {
             InitializeComponent();
@@ -31,14 +37,59 @@ namespace Impar
 
         private void Marcacoes_Load(object sender, EventArgs e)
         {
+            // Cria um BindingSource e define a sua fonte de dados como sendo a tabela "marcacoes"
+            // Cria um BindingSource e define a sua fonte de dados como sendo a tabela "marcacoes"
+            bindingSource = new BindingSource();
+            AtualizarBindingSource();
 
+            // Define o Text da label para mostrar o número total de registros
+            kryptonLabel2.Text = "Registros: " + bindingSource.Count.ToString();
+
+            // Define os eventos Click dos botões para navegar pelos registros
+            btanterior.Click += btanterior_Click;
+            btprimeiro.Click += btprimeiro_Click;
+            btseguinte.Click += btseguinte_Click;
+            tbultimo.Click += tbultimo_Click;
+
+            // Obtém o ID seguinte ao último registro na base de dados
+            connection.Open();
+            string selectQuery = "SELECT MAX(ID) FROM marcacoes";
+            MySqlCommand command = new MySqlCommand(selectQuery, connection);
+            int idSeguinte = (int)command.ExecuteScalar() + 1;
+            connection.Close();
+
+            // Define o Text do KryptonTextBox com o valor do ID seguinte
+            kryptonTextBox1.Text = idSeguinte.ToString();
         }
+        
  
         //   MySqlConnection connection = new MySqlConnection(@"server=localhost;database=ContabSysDB;port=3308;userid=root;password=xd");
         MySqlConnection connection = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
 
-
         MySqlCommand command;
+
+        private void AtualizarBindingSource()
+        {
+            // Abre a conexão com o banco de dados
+            connection.Open();
+
+            // Executa a consulta SQL para atualizar a tabela "marcacoes"
+            string selectQuery = "SELECT * FROM marcacoes";
+            MySqlDataAdapter adapter = new MySqlDataAdapter(selectQuery, connection);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+
+            // Define o DataSource do BindingSource como sendo a nova tabela de dados
+            bindingSource.DataSource = dataTable;
+
+            // Atualiza o Text da label para mostrar o número total de registros
+            kryptonLabel2.Text = "Registros: " + bindingSource.Count.ToString();
+
+            // Fecha a conexão com o banco de dados
+            connection.Close();
+        }
+
+
 
         public void openConnection()
         {
@@ -95,11 +146,6 @@ namespace Impar
 
 
 
-            // a ESTUDAR NAO ESTA CORRETO AINDA
-      
-            //string insertQuery = "INSERT INTO marcacoes (Idcliente,IDGoogle,Horario,TipoTratamento,Obs,Descricao,TituloGoogle,Horainicio,Horafim,Nome,telemovel) " +
-            // "VALUES('" + tbcodcliente.Text + "','" + tbidgoogle.Text + "','" + tbhorario.Text + "','" + tbtipotratamento.Text + "','" + tbobs.Text + "','" + tbdescricao.Text + "','" + tbtitulogoogle.Text + "','" + tbhorainicio.Text + "','" + tbhorafim.Text + "','" + tbnomepaciente.Text + "','" + tbtlmpaciente.Text + "');";
-            //executeMyQuery(insertQuery);
         }
 
         private void atualizarMarcacoes()
@@ -232,5 +278,249 @@ namespace Impar
         {
             atualizarMarcacoes();
         }
+
+        private void btanterior_Click(object sender, EventArgs e)
+        {
+            // Move para o registro anterior
+            bindingSource.MovePrevious();
+
+            // Atualiza as caixas de texto com os valores do registro atual
+            DataRowView currentRow = (DataRowView)bindingSource.Current;
+            if (currentRow != null)
+            {
+                kryptonTextBox1.Text = currentRow["ID"].ToString();
+                tbcodcliente.Text = currentRow["Idcliente"].ToString();
+                tbhorario.Text = currentRow["Horario"].ToString();
+                tbtipotratamento.Text = currentRow["TipoTratamento"].ToString();
+                tbobs.Text = currentRow["Obs"].ToString();
+                tbdescricao.Text = currentRow["Descricao"].ToString();
+                tbtitulogoogle.Text = currentRow["TituloGoogle"].ToString();
+                tbhorainicio.Text = currentRow["Horainicio"].ToString();
+                tbhorafim.Text = currentRow["Horafim"].ToString();
+                tbnomepaciente.Text = currentRow["Nome"].ToString();
+                tbtlmpaciente.Text = currentRow["telemovel"].ToString();
+                kryptonCheckBox1.Checked = (bool)currentRow["SmsEnviada"];
+            }
+
+            // Atualiza o BindingSource
+            AtualizarBindingSource();
+        }
+
+        private void btseguinte_Click(object sender, EventArgs e)
+        {
+            // Move para o próximo registro
+            bindingSource.MoveNext();
+
+            // Atualiza as caixas de texto com os valores do registro atual
+            DataRowView currentRow = (DataRowView)bindingSource.Current;
+            if (currentRow != null)
+            {
+                kryptonTextBox1.Text = currentRow["ID"].ToString();
+                tbcodcliente.Text = currentRow["Idcliente"].ToString();
+                tbhorario.Text = currentRow["Horario"].ToString();
+                tbtipotratamento.Text = currentRow["TipoTratamento"].ToString();
+                tbobs.Text = currentRow["Obs"].ToString();
+                tbdescricao.Text = currentRow["Descricao"].ToString();
+                tbtitulogoogle.Text = currentRow["TituloGoogle"].ToString();
+                tbhorainicio.Text = currentRow["Horainicio"].ToString();
+                tbhorafim.Text = currentRow["Horafim"].ToString();
+                tbnomepaciente.Text = currentRow["Nome"].ToString();
+                tbtlmpaciente.Text = currentRow["telemovel"].ToString();
+                kryptonCheckBox1.Checked = (bool)currentRow["SmsEnviada"];
+            }
+
+            // Atualiza o BindingSource
+            AtualizarBindingSource();
+        }
+
+        private void btprimeiro_Click(object sender, EventArgs e)
+        {
+            // Move para o primeiro registro
+            bindingSource.MoveFirst();
+
+            // Atualiza as caixas de texto com os valores do registro atual
+            DataRowView currentRow = (DataRowView)bindingSource.Current;
+            if (currentRow != null)
+            {
+                kryptonTextBox1.Text = currentRow["ID"].ToString();
+                tbcodcliente.Text = currentRow["Idcliente"].ToString();
+                tbhorario.Text = currentRow["Horario"].ToString();
+                tbtipotratamento.Text = currentRow["TipoTratamento"].ToString();
+                tbobs.Text = currentRow["Obs"].ToString();
+                tbdescricao.Text = currentRow["Descricao"].ToString();
+                tbtitulogoogle.Text = currentRow["TituloGoogle"].ToString();
+                tbhorainicio.Text = currentRow["Horainicio"].ToString();
+                tbhorafim.Text = currentRow["Horafim"].ToString();
+                tbnomepaciente.Text = currentRow["Nome"].ToString();
+                tbtlmpaciente.Text = currentRow["telemovel"].ToString();
+                kryptonCheckBox1.Checked = (bool)currentRow["SmsEnviada"];
+            }
+
+            // Atualiza o BindingSource
+            AtualizarBindingSource();
+        }
+
+        private void tbultimo_Click(object sender, EventArgs e)
+        {
+            // Move para o último registro
+            bindingSource.MoveLast();
+
+            // Atualiza as caixas de texto com os valores do registro atual
+            DataRowView currentRow = (DataRowView)bindingSource.Current;
+            if (currentRow != null)
+            {
+                kryptonTextBox1.Text = currentRow["ID"].ToString();
+                tbcodcliente.Text = currentRow["Idcliente"].ToString();
+                tbhorario.Text = currentRow["Horario"].ToString();
+                tbtipotratamento.Text = currentRow["TipoTratamento"].ToString();
+                tbobs.Text = currentRow["Obs"].ToString();
+                tbdescricao.Text = currentRow["Descricao"].ToString();
+                tbtitulogoogle.Text = currentRow["TituloGoogle"].ToString();
+                tbhorainicio.Text = currentRow["Horainicio"].ToString();
+                tbhorafim.Text = currentRow["Horafim"].ToString();
+                tbnomepaciente.Text = currentRow["Nome"].ToString();
+                tbtlmpaciente.Text = currentRow["telemovel"].ToString();
+                kryptonCheckBox1.Checked = (bool)currentRow["SmsEnviada"];
+            }
+
+            // Atualiza o BindingSource
+            AtualizarBindingSource();
+        }
+
+
+
+        private async Task<bool> EnviarSMS(string from, string to, string content)
+        {
+            try
+            {
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("x-api-key", "gOhTfeXsLXdN7V-0Sct_GfYxROcqW1iK5JjmmvM3iOaFLkdSlJRFjrvTJQk-g_sb");
+
+                var response = await client.PostAsync(
+                    "https://api.httpsms.com/v1/messages/send",
+                    new StringContent(
+                        System.Text.Json.JsonSerializer.Serialize(new
+                        {
+                            from = from,
+                            To = to,
+                            Content = content
+                        }),
+                        Encoding.UTF8,
+                        "application/json"
+                    )
+                );
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                // trate a exceção aqui, se necessário
+                return false;
+            }
+        }
+
+
+
+        //CODIGO DE ENVIO SMS
+        //private async void btEnviarSMS_Click(object sender, EventArgs e)
+        //{
+        //    // Verifica se o kryptonCheckBox1 está marcado
+        //    if (kryptonCheckBox1.Checked)
+        //    {
+        //        // Obtém o número de telefone do destinatário
+        //        string numeroTelemovel = tbtlmpaciente.Text;
+
+        //        // Verifica se o número de telefone foi preenchido corretamente
+        //        if (string.IsNullOrEmpty(numeroTelemovel))
+        //        {
+        //            // Exibe mensagem de erro
+        //            MessageBox.Show("O número de telemóvel deve ser preenchido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //            return;
+        //        }
+        //        else if (numeroTelemovel.Length != 12)
+        //        {
+        //            // Exibe mensagem de erro
+        //            MessageBox.Show("O número de telemóvel deve possuir 12 dígitos (incluindo o prefixo +351).", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //            return;
+        //        }
+
+        //        // Envia a mensagem
+        //        string from = "YourFromNumberHere"; // Número de origem
+        //        string to = numeroTelemovel; // Número de destino
+        //        string content = "Sua mensagem aqui"; // Conteúdo da mensagem
+        //        bool enviado = await EnviarSMS(from, to, content);
+
+        //        // Exibe mensagem de sucesso ou erro
+        //        if (enviado)
+        //        {
+        //            MessageBox.Show("A mensagem foi enviada com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Ocorreu um erro ao enviar a mensagem.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        // Exibe mensagem de erro
+        //        MessageBox.Show("O checkbox para envio de SMS não está marcado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
+
+
+
+        //+351910045307
+
+        private async void button4_Click(object sender, EventArgs e)
+        {
+            // Verifica se o kryptonCheckBox1 está marcado
+            if (kryptonCheckBox1.Checked)
+            {
+                // Obtém o número de telefone do destinatário
+                string numeroTelemovel = tbtlmpaciente.Text;
+
+                // Verifica se o número de telefone foi preenchido corretamente
+                if (string.IsNullOrEmpty(numeroTelemovel))
+                {
+                    // Exibe mensagem de erro
+                    MessageBox.Show("O número de telemóvel deve ser preenchido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Pergunta ao usuário se deseja enviar a mensagem de texto
+                var result = MessageBox.Show("Antes de continuar, verifique se tem a aplicação iniciada no seu telemóvel. Deseja continuar com o envio da mensagem?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                // Verifica se o usuário escolheu o botão Sim
+                if (result == DialogResult.Yes)
+                {
+                    // Envia a mensagem
+                    string from = "+351910045307"; // Número de origem PASSAR DEPOIS PARA PARAMETRO
+                    string to = numeroTelemovel; // Número de destino vai Buscar à Testbox
+                    string content = "Estimado" + tbnomepaciente.Text + "informamos que tem marcação no dia " + tbhorario.Text + " às " + tbhorainicio.Text; // Conteúdo da mensagem - Vamos definir o tipo de tratamento a ir buscar as mensagens 
+                    bool enviado = await EnviarSMS(from, to, content);
+
+                    // Exibe mensagem de sucesso ou erro
+                    if (enviado)
+                    {
+                        MessageBox.Show("A mensagem foi enviada com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ocorreu um erro ao enviar a mensagem. Verifique se tem a aplicação iniciada no seu telemóvel.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    // Exibe mensagem de erro
+                    MessageBox.Show("O envio da mensagem de texto foi cancelado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("O checkbox para envio de SMS não está marcado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }
+
