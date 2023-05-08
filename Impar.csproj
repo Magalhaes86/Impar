@@ -888,6 +888,12 @@
     <Compile Include="GoogleAgenda.Designer.cs">
       <DependentUpon>GoogleAgenda.cs</DependentUpon>
     </Compile>
+    <Compile Include="listagemPacientesMarcacoes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="listagemPacientesMarcacoes.Designer.cs">
+      <DependentUpon>listagemPacientesMarcacoes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Marcacoes.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -917,6 +923,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GoogleAgenda.resx">
       <DependentUpon>GoogleAgenda.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="listagemPacientesMarcacoes.resx">
+      <DependentUpon>listagemPacientesMarcacoes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Marcacoes.resx">
       <DependentUpon>Marcacoes.cs</DependentUpon>
