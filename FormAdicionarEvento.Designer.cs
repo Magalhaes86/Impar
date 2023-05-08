@@ -52,9 +52,9 @@ namespace Impar
             this.tbhorafim2 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.btatualizar = new System.Windows.Forms.Button();
-            this.tbhorario = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
-            this.tbhorafim = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
-            this.tbhorainicio = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
+            //this.tbhorario = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
+            //this.tbhorafim = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
+            //this.tbhorainicio = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
             this.SuspendLayout();
             // 
             // button1
@@ -249,41 +249,41 @@ namespace Impar
             // 
             // tbhorario
             // 
-            this.tbhorario.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.tbhorario.Location = new System.Drawing.Point(207, 221);
-            this.tbhorario.Name = "tbhorario";
-            this.tbhorario.Size = new System.Drawing.Size(168, 21);
-            this.tbhorario.TabIndex = 5;
-            this.tbhorario.ValueNullable = new System.DateTime(2023, 5, 6, 0, 0, 0, 0);
-            // 
-            // tbhorafim
-            // 
-            this.tbhorafim.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.tbhorafim.Location = new System.Drawing.Point(208, 276);
-            this.tbhorafim.Name = "tbhorafim";
-            this.tbhorafim.ShowUpDown = true;
-            this.tbhorafim.Size = new System.Drawing.Size(86, 21);
-            this.tbhorafim.TabIndex = 6;
-            this.tbhorafim.ValueNullable = new System.DateTime(2023, 5, 6, 12, 30, 0, 0);
+            //this.tbhorario.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            //this.tbhorario.Location = new System.Drawing.Point(207, 221);
+            //this.tbhorario.Name = "tbhorario";
+            //this.tbhorario.Size = new System.Drawing.Size(168, 21);
+            //this.tbhorario.TabIndex = 5;
+            //this.tbhorario.ValueNullable = new System.DateTime(2023, 5, 6, 0, 0, 0, 0);
+            //// 
+            //// tbhorafim
+            //// 
+            //this.tbhorafim.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            //this.tbhorafim.Location = new System.Drawing.Point(208, 276);
+            //this.tbhorafim.Name = "tbhorafim";
+            //this.tbhorafim.ShowUpDown = true;
+            //this.tbhorafim.Size = new System.Drawing.Size(86, 21);
+            //this.tbhorafim.TabIndex = 6;
+            //this.tbhorafim.ValueNullable = new System.DateTime(2023, 5, 6, 12, 30, 0, 0);
             // 
             // tbhorainicio
             // 
-            this.tbhorainicio.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.tbhorainicio.Location = new System.Drawing.Point(207, 250);
-            this.tbhorainicio.Name = "tbhorainicio";
-            this.tbhorainicio.ShowUpDown = true;
-            this.tbhorainicio.Size = new System.Drawing.Size(87, 21);
-            this.tbhorainicio.TabIndex = 7;
-            this.tbhorainicio.ValueNullable = new System.DateTime(2023, 5, 6, 8, 0, 0, 0);
+            //this.tbhorainicio.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            //this.tbhorainicio.Location = new System.Drawing.Point(207, 250);
+            //this.tbhorainicio.Name = "tbhorainicio";
+            //this.tbhorainicio.ShowUpDown = true;
+            //this.tbhorainicio.Size = new System.Drawing.Size(87, 21);
+            //this.tbhorainicio.TabIndex = 7;
+            //this.tbhorainicio.ValueNullable = new System.DateTime(2023, 5, 6, 8, 0, 0, 0);
             // 
             // FormAdicionarEvento
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(894, 566);
-            this.Controls.Add(this.tbhorario);
-            this.Controls.Add(this.tbhorafim);
-            this.Controls.Add(this.tbhorainicio);
+            //this.Controls.Add(this.tbhorario);
+            //this.Controls.Add(this.tbhorafim);
+            //this.Controls.Add(this.tbhorainicio);
             this.Controls.Add(this.btatualizar);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label10);
@@ -340,8 +340,6 @@ namespace Impar
         private System.Windows.Forms.TextBox tbhorafim2;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button btatualizar;
-        private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker tbhorario;
-        private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker tbhorafim;
-        private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker tbhorainicio;
+       
     }
 }

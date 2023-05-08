@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
-
 using MySql.Data;
 
 
@@ -20,13 +19,17 @@ namespace Impar
         public listagemPacientesMarcacoes()
         {
             InitializeComponent();
+
         }
 
+
+
+
         //   MySqlConnection connection = new MySqlConnection(@"server=localhost;database=ContabSysDB;port=3308;userid=root;password=xd");
-       // MySqlConnection connection = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
+        // MySqlConnection connection = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
 
 
-      //  MySqlCommand command;
+        //  MySqlCommand command;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -69,19 +72,75 @@ namespace Impar
                 string nomePaciente = kryptonDataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
                 string tlmPaciente = kryptonDataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString();
 
-                // Define os valores das textboxes no formulário Marcacoes
-                Marcacoes form = new Marcacoes();
-                form.tbcodcliente.Text = codCliente;
-                form.tbnomepaciente.Text = nomePaciente;
-                form.tbtlmpaciente.Text = tlmPaciente;
+                // Procura o formulário Marcacoes entre os formulários abertos
+                Marcacoes form = Application.OpenForms.OfType<Marcacoes>().FirstOrDefault();
 
-                // Abre o formulário Marcacoes
-                form.Show();
+                // Atualiza as propriedades do formulário se ele foi encontrado
+                if (form != null)
+                {
+                    form.tbcodcliente.Text = codCliente;
+                    form.tbnomepaciente.Text = nomePaciente;
+                    form.tbtlmpaciente.Text = tlmPaciente;
+                }
+                else
+                {
+                    // Cria um novo formulário se ele não foi encontrado
+                    form = new Marcacoes();
+                    form.tbcodcliente.Text = codCliente;
+                    form.tbnomepaciente.Text = nomePaciente;
+                    form.tbtlmpaciente.Text = tlmPaciente;
+                    form.Show();
+                }
 
                 // Fecha o formulário atual
                 this.Close();
-            
+            }
         }
-    }
+
+        private void listagemPacientesMarcacoes_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void kryptonHeaderGroup1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void tbpesquisaId_TextChanged(object sender, EventArgs e)
+        {
+            BindingSource bs = new BindingSource();
+            bs.DataSource = kryptonDataGridView1.DataSource;
+            bs.Filter = string.Format("CONVERT(" + this.kryptonDataGridView1.Columns[0].DataPropertyName + ", System.String) like '%" + tbpesquisaId.Text.Replace("'", "''") + "%'");
+            kryptonDataGridView1.DataSource = bs;
+        }
+
+        private void tbpesquisanome_TextChanged(object sender, EventArgs e)
+        {
+
+            BindingSource bs = new BindingSource();
+            bs.DataSource = kryptonDataGridView1.DataSource;
+            bs.Filter = string.Format("CONVERT(" + this.kryptonDataGridView1.Columns[1].DataPropertyName + ", System.String) like '%" + tbpesquisanome.Text.Replace("'", "''") + "%'");
+            kryptonDataGridView1.DataSource = bs;
+
+        }
+        private void tbpesquisatlm_TextChanged(object sender, EventArgs e)
+        {
+            BindingSource bs = new BindingSource();
+            bs.DataSource = kryptonDataGridView1.DataSource;
+            bs.Filter = string.Format("CONVERT(" + this.kryptonDataGridView1.Columns[5].DataPropertyName + ", System.String) like '%" + tbpesquisatlm.Text.Replace("'", "''") + "%'");
+            kryptonDataGridView1.DataSource = bs;
+         
+
+            }
+
+        private void tbpesquisatlf_TextChanged(object sender, EventArgs e)
+        {
+            BindingSource bs = new BindingSource();
+            bs.DataSource = kryptonDataGridView1.DataSource;
+            bs.Filter = string.Format("CONVERT(" + this.kryptonDataGridView1.Columns[6].DataPropertyName + ", System.String) like '%" + tbpesquisatlf.Text.Replace("'", "''") + "%'");
+            kryptonDataGridView1.DataSource = bs;
+   
+        }
     }
 }

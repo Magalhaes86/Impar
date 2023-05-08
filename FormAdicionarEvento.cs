@@ -33,9 +33,9 @@ namespace Impar
             tbcodcliente.Text = CodCliente;
 
             // Definindo o valor do DateTimePicker
-            tbhorario.Value = DateTime.Parse(data);
-            tbhorainicio.Value = DateTime.ParseExact(horaInicio, "HH:mm", CultureInfo.InvariantCulture);
-            tbhorafim.Value = DateTime.ParseExact(horaFim, "HH:mm", CultureInfo.InvariantCulture);
+            //tbhorario.Value = DateTime.Parse(data);
+            //tbhorainicio.Value = DateTime.ParseExact(horaInicio, "HH:mm", CultureInfo.InvariantCulture);
+            //tbhorafim.Value = DateTime.ParseExact(horaFim, "HH:mm", CultureInfo.InvariantCulture);
         }
 
 

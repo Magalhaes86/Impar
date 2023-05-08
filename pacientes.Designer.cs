@@ -76,7 +76,7 @@ namespace Impar
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(85, 199);
+            this.label7.Location = new System.Drawing.Point(85, 141);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(28, 15);
             this.label7.TabIndex = 29;
@@ -86,11 +86,11 @@ namespace Impar
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(85, 230);
+            this.label6.Location = new System.Drawing.Point(55, 230);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(23, 15);
+            this.label6.Size = new System.Drawing.Size(55, 15);
             this.label6.TabIndex = 28;
-            this.label6.Text = "Tlf:";
+            this.label6.Text = "Telefone";
             // 
             // label5
             // 
@@ -191,7 +191,7 @@ namespace Impar
             // tbTlm
             // 
             this.tbTlm.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbTlm.Location = new System.Drawing.Point(120, 196);
+            this.tbTlm.Location = new System.Drawing.Point(120, 138);
             this.tbTlm.Name = "tbTlm";
             this.tbTlm.Size = new System.Drawing.Size(307, 21);
             this.tbTlm.TabIndex = 36;

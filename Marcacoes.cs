@@ -90,7 +90,7 @@ namespace Impar
 
             // a ESTUDAR NAO ESTA CORRETO AINDA
             string insertQuery = "INSERT INTO marcacoes (Idcliente,IDGoogle,Horario,TipoTratamento,Obs,Descricao,TituloGoogle,Horainicio,Horafim,Nome,telemovel) " +
-             "VALUES('" + tbcodcliente.Text + "','" + tbidgoogle.Text + "','" + tbhorario2.Text + "','" + tbtipotratamento.Text + "','" + tbobs.Text + "','" + tbdescricao.Text + "','" + tbtitulogoogle.Text + "','" + tbhorainicio.Text + "','" + tbhorafim.Text + "','" + tbnomepaciente.Text + "','" + tbtlmpaciente.Text + "');";
+             "VALUES('" + tbcodcliente.Text + "','" + tbidgoogle.Text + "','" + tbhorario.Text + "','" + tbtipotratamento.Text + "','" + tbobs.Text + "','" + tbdescricao.Text + "','" + tbtitulogoogle.Text + "','" + tbhorainicio.Text + "','" + tbhorafim.Text + "','" + tbnomepaciente.Text + "','" + tbtlmpaciente.Text + "');";
             executeMyQuery(insertQuery);
         }
 
