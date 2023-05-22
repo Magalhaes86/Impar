@@ -268,7 +268,7 @@ namespace Impar
             // 
             // tbIdMarcacao
             // 
-            this.tbIdMarcacao.Location = new System.Drawing.Point(176, 71);
+            this.tbIdMarcacao.Location = new System.Drawing.Point(59, 92);
             this.tbIdMarcacao.Name = "tbIdMarcacao";
             this.tbIdMarcacao.Size = new System.Drawing.Size(67, 20);
             this.tbIdMarcacao.TabIndex = 10;
@@ -285,7 +285,7 @@ namespace Impar
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(501, 258);
+            this.button1.Location = new System.Drawing.Point(471, 258);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(120, 49);
             this.button1.TabIndex = 8;
@@ -467,10 +467,6 @@ namespace Impar
         }
 
         #endregion
-
-        private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker tbhorario;
-        private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker tbhorafim;
-        private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker tbhorainicio;
         private System.Windows.Forms.Button btatualizar;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label10;
@@ -482,15 +478,9 @@ namespace Impar
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox tbtitulogoogle;
-        private System.Windows.Forms.TextBox tbobs;
         private System.Windows.Forms.TextBox tbhorafim2;
         private System.Windows.Forms.TextBox tbhorainicio2;
         private System.Windows.Forms.TextBox tbhorario2;
-        private System.Windows.Forms.TextBox tbtipotratamento;
-        private System.Windows.Forms.TextBox tbidgoogle;
-        private System.Windows.Forms.TextBox tbdescricao;
-        private System.Windows.Forms.TextBox tbIdMarcacao;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label11;
@@ -500,7 +490,6 @@ namespace Impar
         internal System.Windows.Forms.TextBox tbnomepaciente;
         internal System.Windows.Forms.TextBox tbtlmpaciente;
         private System.Windows.Forms.Timer timer1;
-        private ComponentFactory.Krypton.Toolkit.KryptonCheckBox kryptonCheckBox1;
         private ComponentFactory.Krypton.Toolkit.KryptonLabel kryptonLabel2;
         private ComponentFactory.Krypton.Toolkit.KryptonLabel kryptonLabel1;
         private ComponentFactory.Krypton.Toolkit.KryptonButton tbultimo;
@@ -509,5 +498,15 @@ namespace Impar
         private ComponentFactory.Krypton.Toolkit.KryptonButton btprimeiro;
         private ComponentFactory.Krypton.Toolkit.KryptonTextBox kryptonTextBox1;
         private System.Windows.Forms.Button button4;
+        internal System.Windows.Forms.TextBox tbidgoogle;
+        internal System.Windows.Forms.TextBox tbIdMarcacao;
+        internal ComponentFactory.Krypton.Toolkit.KryptonCheckBox kryptonCheckBox1;
+        public ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker tbhorario;
+        public ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker tbhorafim;
+        public ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker tbhorainicio;
+        public System.Windows.Forms.TextBox tbtitulogoogle;
+        public System.Windows.Forms.TextBox tbobs;
+        public System.Windows.Forms.TextBox tbtipotratamento;
+        public System.Windows.Forms.TextBox tbdescricao;
     }
 }

@@ -1,391 +1,317 @@
 ﻿using System;
-using System.IO;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-using Calendar.NET;
-using Outlook = Microsoft.Office.Interop.Outlook;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
-using Google.Apis.Util.Store;
-using System.Net;
-using System.Drawing;
 using System.Collections.Generic;
-using CefSharp.WinForms;
-using CefSharp;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using MySql.Data.MySqlClient;
+using MySql.Data;
+using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Services;
+using Google.Apis.Calendar.v3.Data;
+using System.Net.Http;
+using WindowsFormsCalendar;
+using static Impar.GoogleAgenda;
 
 namespace Impar
 {
     public partial class Agenda : Form
     {
-
-        Outlook.Application outlookApp;
-        Outlook.NameSpace outlookNamespace;
-        Outlook.MAPIFolder calendarFolder;
-        Outlook.Items calendarItems;
-
+        private List<CalendarItem> _items = new List<CalendarItem>();
 
         public Agenda()
         {
             InitializeComponent();
-            //InitializeBrowser();
-            outlookApp = new Outlook.Application();
-            outlookNamespace = outlookApp.GetNamespace("MAPI");
 
-            // Conecta-se à conta do usuário no Outlook
-            outlookNamespace.Logon();
-
-            // Obtém a pasta de calendário padrão do Outlook
-            calendarFolder = outlookNamespace.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar);
-
-            // Obtém os itens da pasta de calendário
-            calendarItems = calendarFolder.Items;
-
-            // Filtra os itens para o período de um mês a partir de hoje
-            string filter = $"[Start] >= '{DateTime.Today.ToString("g")}' AND [End] <= '{DateTime.Today.AddMonths(1).ToString("g")}'";
-            calendarItems = calendarItems.Restrict(filter);
-
-            // Adiciona os eventos ao controle "MonthCalendar"
-            foreach (Outlook.AppointmentItem item in calendarItems)
-            {
-                monthCalendar4.AddBoldedDate(item.Start.Date);
-            }
-
-            // Atualiza o controle "MonthCalendar"
-            monthCalendar4.UpdateBoldedDates();
         }
 
 
-        //private void InitializeBrowser()
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
+                e.RowIndex >= 0)
+            {
+                //TODO - Button Clicked - Implement the button-click event handling here
+            }
+        }
+
+          private void dataGridView2_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.ColumnIndex == dataGridView2.Columns["Ação"].Index && e.RowIndex >= 0) // Verifica se é a coluna "Ação" e não é o cabeçalho
+            {
+                var buttonCell = dataGridView2.Rows[e.RowIndex].Cells["Ação"] as DataGridViewButtonCell;
+                if (buttonCell != null && buttonCell.Value != null)
+                {
+                    string buttonText = buttonCell.Value.ToString();
+                    if (buttonText == "Marcar")
+                    {
+                        buttonCell.Value = "Marcar";
+                    }
+                    else if (buttonText == "Editar")
+                    {
+                        buttonCell.Value = "Editar";
+                    }
+                }
+            }
+        }
+
+        private DataTable dt; // Declare o DataTable fora do método para que possa ser reutilizado
+
+        private void kryptonMonthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
+        {
+            DateTime selectedStartDate = e.Start.Date;
+            DateTime selectedEndDate = e.End.Date;
+
+            selectedEndDate = selectedEndDate.AddDays(1).AddSeconds(-1);
+
+            GoogleCredential credential;
+            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
+            {
+                credential = GoogleCredential.FromStream(stream)
+                    .CreateScoped(CalendarService.Scope.Calendar);
+            }
+
+            var service = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = "GoogleAgenda"
+            });
+
+            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
+            request.TimeMin = selectedStartDate;
+            request.TimeMax = selectedEndDate;
+            request.ShowDeleted = false;
+            request.SingleEvents = true;
+            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+            Events events = request.Execute();
+
+            List<Agendamento> agendamentos = new List<Agendamento>();
+            if (events.Items != null && events.Items.Count > 0)
+            {
+                foreach (var eventItem in events.Items)
+                {
+                    agendamentos.Add(new Agendamento()
+                    {
+                        Inicio = eventItem.Start.DateTime.Value,
+                        Fim = eventItem.End.DateTime.Value
+                    });
+                }
+            }
+
+            TimeSpan morningStartTime = DtHoraInicioManha.Value.TimeOfDay;
+            TimeSpan morningEndTime = DtHoraFimManha.Value.TimeOfDay;
+            TimeSpan afternoonStartTime = DtHoraInicioTarde.Value.TimeOfDay;
+            TimeSpan afternoonEndTime = DtHoraFimTarde.Value.TimeOfDay;
+
+            List<DateTime> horariosDisponiveis = new List<DateTime>();
+
+            for (DateTime currentDate = selectedStartDate.Date; currentDate <= selectedEndDate.Date; currentDate = currentDate.AddDays(1))
+            {
+                DateTime currentMorningStartTime = currentDate.Date + morningStartTime;
+                DateTime currentMorningEndTime = currentDate.Date + morningEndTime;
+                DateTime currentAfternoonStartTime = currentDate.Date + afternoonStartTime;
+                DateTime currentAfternoonEndTime = currentDate.Date + afternoonEndTime;
+
+                for (DateTime time = currentMorningStartTime; time < currentMorningEndTime; time = time.AddMinutes(30))
+                {
+                    horariosDisponiveis.Add(time);
+                }
+
+                for (DateTime time = currentAfternoonStartTime; time < currentAfternoonEndTime; time = time.AddMinutes(30))
+                {
+                    horariosDisponiveis.Add(time);
+                }
+            }
+
+            dataGridView2.Columns.Clear(); // Remove todas as colunas existentes
+
+            DataGridViewButtonColumn btnColumn = new DataGridViewButtonColumn();
+            btnColumn.HeaderText = "Ação";
+            btnColumn.Name = "Ação";
+            dataGridView2.Columns.Add(btnColumn);
+
+            dataGridView2.Columns.Add("Data", "Data");
+            dataGridView2.Columns.Add("Horário", "Horário");
+            dataGridView2.Columns.Add("Status", "Status");
+            dataGridView2.Columns.Add("Ocupado até", "Ocupado até");
+            dataGridView2.Columns.Add("Título", "Título");
+            dataGridView2.Columns.Add("Descrição", "Descrição");
+
+            foreach (DateTime horario in horariosDisponiveis)
+            {
+                var agendamento = agendamentos.FirstOrDefault(a => horario.Date == a.Inicio.Date && horario.TimeOfDay >= a.Inicio.TimeOfDay && horario.TimeOfDay < a.Fim.TimeOfDay);
+
+                if (agendamento != null)
+                {
+                    var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
+
+                    if (eventItem != null)
+                    {
+                        string titulo = eventItem.Summary;
+                        string descricao = eventItem.Description;
+                        dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), titulo, descricao);
+                    }
+                    else
+                    {
+                        dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), "", "");
+                    }
+                }
+                else
+                {
+                    dataGridView2.Rows.Add("Marcar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Disponível", "", "", "");
+                }
+            }
+        }
+
+        private void Agenda_Load(object sender, EventArgs e)
+        {
+
+        }
+        //private void dataGridView2_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         //{
-        //    Cef.Initialize(new CefSettings());
-
-        //    chromiumWebBrowser1 = new ChromiumWebBrowser();
-        //    chromiumWebBrowser1.Dock = DockStyle.Fill;
-        //    this.Controls.Add(chromiumWebBrowser1);
-
-        //    chromiumWebBrowser1.FrameLoadEnd += OnFrameLoadEnd;
+        //    if (e.ColumnIndex == dataGridView2.Columns["Ação"].Index && e.RowIndex >= 0) // Verifica se é a coluna "Ação" e não é o cabeçalho
+        //    {
+        //        var buttonCell = dataGridView2.Rows[e.RowIndex].Cells["Ação"] as DataGridViewButtonCell;
+        //        if (buttonCell != null && buttonCell.Value != null)
+        //        {
+        //            string buttonText = buttonCell.Value.ToString();
+        //            if (buttonText == "Marcar")
+        //            {
+        //                buttonCell.Value = "Marcar";
+        //            }
+        //            else if (buttonText == "Editar")
+        //            {
+        //                buttonCell.Value = "Editar";
+        //            }
+        //        }
+        //    }
         //}
 
-        //private void OnFrameLoadEnd(object sender, FrameLoadEndEventArgs e)
+        //private DataTable dt; // Declare o DataTable fora do método para que possa ser reutilizado
+
+        //private void kryptonMonthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
         //{
-        //    if (e.Frame.IsMain)
+        //    DateTime selectedStartDate = e.Start.Date;
+        //    DateTime selectedEndDate = e.End.Date;
+
+        //    selectedEndDate = selectedEndDate.AddDays(1).AddSeconds(-1);
+
+        //    GoogleCredential credential;
+        //    using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
         //    {
-        //        if (e.Url == "https://login.live.com/login.srf")
+        //        credential = GoogleCredential.FromStream(stream)
+        //            .CreateScoped(CalendarService.Scope.Calendar);
+        //    }
+
+        //    var service = new CalendarService(new BaseClientService.Initializer()
+        //    {
+        //        HttpClientInitializer = credential,
+        //        ApplicationName = "GoogleAgenda"
+        //    });
+
+        //    EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
+        //    request.TimeMin = selectedStartDate;
+        //    request.TimeMax = selectedEndDate;
+        //    request.ShowDeleted = false;
+        //    request.SingleEvents = true;
+        //    request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+        //    Events events = request.Execute();
+
+        //    List<Agendamento> agendamentos = new List<Agendamento>();
+        //    if (events.Items != null && events.Items.Count > 0)
+        //    {
+        //        foreach (var eventItem in events.Items)
         //        {
-        //            chromiumWebBrowser1.ExecuteScriptAsync($"document.getElementById('i0116').value = 'marcosmagalhaes86@outlook.pt'");
-        //            chromiumWebBrowser1.ExecuteScriptAsync($"document.getElementById('i0118').value = 'M@galhae$020486'");
-        //            chromiumWebBrowser1.ExecuteScriptAsync($"document.querySelector('#idSIButton9').click()");
+        //            agendamentos.Add(new Agendamento()
+        //            {
+        //                Inicio = eventItem.Start.DateTime.Value,
+        //                Fim = eventItem.End.DateTime.Value
+        //            });
         //        }
-        //        else if (e.Url == "https://outlook.live.com/mail/inbox")
+        //    }
+
+        //    TimeSpan morningStartTime = DtHoraInicioManha.Value.TimeOfDay;
+        //    TimeSpan morningEndTime = DtHoraFimManha.Value.TimeOfDay;
+        //    TimeSpan afternoonStartTime = DtHoraInicioTarde.Value.TimeOfDay;
+        //    TimeSpan afternoonEndTime = DtHoraFimTarde.Value.TimeOfDay;
+
+        //    List<DateTime> horariosDisponiveis = new List<DateTime>();
+
+        //    for (DateTime currentDate = selectedStartDate.Date; currentDate <= selectedEndDate.Date; currentDate = currentDate.AddDays(1))
+        //    {
+        //        DateTime currentMorningStartTime = currentDate.Date + morningStartTime;
+        //        DateTime currentMorningEndTime = currentDate.Date + morningEndTime;
+        //        DateTime currentAfternoonStartTime = currentDate.Date + afternoonStartTime;
+        //        DateTime currentAfternoonEndTime = currentDate.Date + afternoonEndTime;
+
+        //        for (DateTime time = currentMorningStartTime; time < currentMorningEndTime; time = time.AddMinutes(30))
         //        {
-        //            chromiumWebBrowser1.Load("https://outlook.live.com/calendar/0/view/month");
+        //            horariosDisponiveis.Add(time);
+        //        }
+
+        //        for (DateTime time = currentAfternoonStartTime; time < currentAfternoonEndTime; time = time.AddMinutes(30))
+        //        {
+        //            horariosDisponiveis.Add(time);
+        //        }
+        //    }
+
+        //    dataGridView2.Columns.Clear(); // Remove todas as colunas existentes
+
+        //    DataGridViewButtonColumn btnColumn = new DataGridViewButtonColumn();
+        //    btnColumn.HeaderText = "Ação";
+        //    btnColumn.Name = "Ação";
+        //    dataGridView2.Columns.Add(btnColumn);
+
+        //    dataGridView2.Columns.Add("Data", "Data");
+        //    dataGridView2.Columns.Add("Horário", "Horário");
+        //    dataGridView2.Columns.Add("Status", "Status");
+        //    dataGridView2.Columns.Add("Ocupado até", "Ocupado até");
+        //    dataGridView2.Columns.Add("Título", "Título");
+        //    dataGridView2.Columns.Add("Descrição", "Descrição");
+
+        //    foreach (DateTime horario in horariosDisponiveis)
+        //    {
+        //        var agendamento = agendamentos.FirstOrDefault(a => horario.Date == a.Inicio.Date && horario.TimeOfDay >= a.Inicio.TimeOfDay && horario.TimeOfDay < a.Fim.TimeOfDay);
+
+        //        if (agendamento != null)
+        //        {
+        //            var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
+
+        //            if (eventItem != null)
+        //            {
+        //                string titulo = eventItem.Summary;
+        //                string descricao = eventItem.Description;
+        //                dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), titulo, descricao);
+        //            }
+        //            else
+        //            {
+        //                dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), "", "");
+        //            }
+        //        }
+        //        else
+        //        {
+        //            dataGridView2.Rows.Add("Marcar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Disponível", "", "", "");
         //        }
         //    }
         //}
 
 
-private void Agenda_Load(object sender, EventArgs e)
-        {
-            // chromiumWebBrowser1.Load("https://www.google.com/");
-            // chromiumWebBrowser1.Load(" https://outlook.live.com/calendar/");
-            // Navega para a página de login do Outlook
-            chromiumWebBrowser1.Load("https://login.live.com/login");
-
-
-            // Registra o evento LoadingStateChanged para saber quando a página foi carregada
-            chromiumWebBrowser1.LoadingStateChanged += ChromiumWebBrowser1_LoadingStateChanged;
-        }
-
-        private async void ChromiumWebBrowser1_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
-        {
-
-          
-
-            if (!e.IsLoading)
-            {
-                if (chromiumWebBrowser1.Address.Contains("https://login.live.com/login"))
-                {
-                    // Insere o e-mail e aguarda o preenchimento automático do campo de senha
-                    await chromiumWebBrowser1.EvaluateScriptAsync("document.getElementById('i0116').value='marcosmagalhaes86@outlook.pt';");
-                    await Task.Delay(2000);
-
-                    // Insere a senha e clica no botão de login
-                    await chromiumWebBrowser1.EvaluateScriptAsync("document.getElementById('i0118').value='M@galhae$020486';");
-                    await Task.Delay(2000);
-                    await chromiumWebBrowser1.EvaluateScriptAsync("document.getElementById('idSIButton9').click();");
-
-                    // Aguarda o carregamento da página de autenticação de dois fatores, se necessário
-                    await Task.Delay(2000);
-
-                    // Aguarda o carregamento completo da página de calendário
-                    await Task.Delay(5000);
-
-                    // Redireciona para a página de calendário após o login
-                    chromiumWebBrowser1.Load("https://outlook.live.com/calendar/0/view/month");
-                }
-            }
-
-        }
-
-
-
-        private void buttonAdicionarEvento_Click(object sender, EventArgs e)
-        {
-         
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Outlook.Application outlookApp = new Outlook.Application();
-            Outlook.MAPIFolder calendarFolder = outlookApp.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar);
-
-            if (calendarFolder != null)
-            {
-                string exportFilePath = Path.Combine(@"C:\CalendarioOutlook", "Calendário.csv");
-
-                if (File.Exists(exportFilePath))
-                {
-                    File.Delete(exportFilePath);
-                }
-
-          
-
-                if (File.Exists(exportFilePath))
-                {
-                    using (StreamReader sr = new StreamReader(exportFilePath))
-                    {
-                        dataGridView2.ColumnCount = 3;
-                        dataGridView2.Columns[0].Name = "Assunto";
-                        dataGridView2.Columns[1].Name = "Início";
-                        dataGridView2.Columns[2].Name = "Fim";
-
-                        while (!sr.EndOfStream)
-                        {
-                            string[] line = sr.ReadLine().Split(',');
-                            object[] appointmentInfo = new object[3];
-                            appointmentInfo[0] = line[0];
-                            appointmentInfo[1] = DateTime.Parse(line[1]);
-                            appointmentInfo[2] = DateTime.Parse(line[2]);
-                            dataGridView2.Rows.Add(appointmentInfo);
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Não foi possível exportar o calendário do Outlook.");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Não foi possível localizar uma pasta de calendário válida no Outlook.");
-            }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Inicializa o objeto do Outlook
-                Outlook.Application outlookApp = new Outlook.Application();
-
-                // Obtém a pasta de calendário padrão do Outlook
-                Outlook.MAPIFolder calendarFolder = outlookApp.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar);
-
-                // Obtém uma lista de todos os itens na pasta de calendário
-                Outlook.Items calendarItems = calendarFolder.Items;
-
-                // Cria uma lista de objetos para armazenar os dados do calendário
-                List<object[]> calendarData = new List<object[]>();
-
-                // Itera sobre todos os itens do calendário e adiciona seus dados à lista de dados do calendário
-                foreach (Outlook.AppointmentItem item in calendarItems)
-                {
-                    calendarData.Add(new object[] { item.Subject, item.Start.ToString("g"), item.End.ToString("g") });
-                }
-
-                // Define as colunas do DataGridView
-                dataGridView1.Columns.Add("Subject", "Assunto");
-                dataGridView1.Columns.Add("Start", "Início");
-                dataGridView1.Columns.Add("End", "Fim");
-
-                // Adiciona os dados do calendário ao DataGridView
-                foreach (object[] data in calendarData)
-                {
-                    dataGridView1.Rows.Add(data);
-                }
-
-                MessageBox.Show("Dados do calendário importados com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao importar dados do calendário: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-
-        private void ImportarCalendario(string importFilePath)
-        {
-            try
-            {
-                // Inicializa o objeto do Outlook
-                Outlook.Application outlookApp = new Outlook.Application();
-
-                // Obtém a pasta de calendário padrão do Outlook
-                Outlook.MAPIFolder calendarFolder = outlookApp.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar);
-
-                // Remove todos os itens da pasta de calendário
-                foreach (object item in calendarFolder.Items)
-                {
-                    ((Outlook.AppointmentItem)item).Delete();
-                }
-
-                // Lê o arquivo CSV e cria itens de compromisso no calendário do Outlook
-                using (StreamReader reader = new StreamReader(importFilePath, Encoding.Default))
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        string[] fields = reader.ReadLine().Split(',');
-
-                        // Cria um novo item de compromisso no calendário
-                        Outlook.AppointmentItem appointmentItem = (Outlook.AppointmentItem)calendarFolder.Items.Add(Outlook.OlItemType.olAppointmentItem);
-
-                        // Define as propriedades do item de compromisso
-                        appointmentItem.Subject = fields[0];
-                        appointmentItem.Start = DateTime.Parse(fields[1]);
-                        appointmentItem.End = DateTime.Parse(fields[2]);
-                        appointmentItem.Location = fields[3];
-                        appointmentItem.Body = fields[4];
-                        appointmentItem.ReminderMinutesBeforeStart = int.Parse(fields[5]);
-
-                        // Salva o item de compromisso no calendário
-                        appointmentItem.Save();
-                    }
-                }
-
-                MessageBox.Show("Dados do calendário importados com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao importar dados do calendário: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void button3_Click(object sender, EventArgs e, string exportFilePath)
-        {
-            try
-            {
-                // Inicializa o objeto do Outlook
-                Outlook.Application outlookApp = new Outlook.Application();
-
-                // Obtém a pasta de calendário padrão do Outlook
-                Outlook.MAPIFolder calendarFolder = outlookApp.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar);
-
-                // Cria o arquivo CSV
-                using (StreamWriter sw = new StreamWriter(exportFilePath, false, Encoding.UTF8))
-                {
-                    // Escreve o cabeçalho do arquivo CSV
-                    sw.WriteLine("Subject,Start Time,End Time,Location,Description");
-
-                    // Itera sobre os itens da pasta de calendário e escreve os dados no arquivo CSV
-                    foreach (Outlook.AppointmentItem appt in calendarFolder.Items)
-                    {
-                        string subject = appt.Subject;
-                        string startTime = appt.Start.ToString();
-                        string endTime = appt.End.ToString();
-                        string location = appt.Location;
-                        string description = appt.Body;
-
-                        // Remove as quebras de linha do campo de descrição
-                        description = description.Replace("\r\n", " ");
-
-                        // Escreve os dados no arquivo CSV
-                        sw.WriteLine($"{subject},{startTime},{endTime},{location},{description}");
-                    }
-                }
-
-                MessageBox.Show("Dados do calendário exportados com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao exportar dados do calendário: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void MonthCalendar4_DateSelected(object sender, DateRangeEventArgs e)
-        {
-            Outlook.Application outlookApp = new Outlook.Application();
-            Outlook.MAPIFolder calendarFolder = outlookApp.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar);
-
-            DateTime startDate = monthCalendar4.SelectionRange.Start;
-            DateTime endDate = monthCalendar4.SelectionRange.End;
-
-            string filter = String.Format("[Start] >= '{0}' AND [End] <= '{1}'", startDate.ToString("g"), endDate.ToString("g"));
-
-            Outlook.Items calendarItems = calendarFolder.Items.Restrict(filter);
-
-            // Exibir os eventos em um DataGridView
-            dataGridView1.DataSource = calendarItems;
-        }
-
-        private void MonthCalendar4_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            Outlook.Application outlookApp = new Outlook.Application();
-            Outlook.MAPIFolder calendarFolder = outlookApp.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar);
-            DateTime date = monthCalendar4.SelectionStart;
-            string filter = "[Start] >= '" + date.ToString("g") + "' AND [End] <= '" + date.ToString("g") + "'";
-            Outlook.Items calendarItems = calendarFolder.Items.Restrict(filter);
-            if (calendarItems.Count > 0)
-            {
-                Outlook.AppointmentItem appointmentItem = calendarItems[1] as Outlook.AppointmentItem;
-                if (appointmentItem != null)
-                {
-                    appointmentItem.Display();
-                }
-            }
-        }
-
-        private void monthCalendar4_DateSelected_1(object sender, DateRangeEventArgs e)
-        {
-            // Cria uma instância do objeto Outlook
-            Outlook.Application outlookApp = new Outlook.Application();
-
-            // Obtém a pasta de calendário padrão do Outlook
-            Outlook.MAPIFolder calendarFolder = outlookApp.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar);
-
-            // Obtém a data selecionada no MonthCalendar
-            DateTime selectedDate = monthCalendar4.SelectionStart.Date;
-
-            // Filtra os itens do calendário para mostrar apenas os eventos que ocorrem na data selecionada
-            string filter = string.Format("[Start] >= '{0}' AND [End] < '{1}'", selectedDate.ToString("g"), selectedDate.AddDays(1).ToString("g"));
-            Outlook.Items calendarItems = calendarFolder.Items.Restrict(filter);
-
-            // Cria uma lista de eventos do calendário a serem exibidos no DataGridView
-            List<CalendarEvent> eventsList = new List<CalendarEvent>();
-
-            // Itera sobre cada item no calendário e adiciona os eventos que ocorrem na data selecionada à lista de eventos
-            foreach (Outlook.AppointmentItem item in calendarItems)
-            {
-                if (item.Start.Date == selectedDate)
-                {
-                    eventsList.Add(new CalendarEvent { Subject = item.Subject, StartTime = item.Start.TimeOfDay, EndTime = item.End.TimeOfDay });
-                }
-            }
-
-            // Exibe os eventos no DataGridView
-            dataGridView1.DataSource = eventsList;
-        }
-
-        // Define uma classe para representar um evento do calendário
-        public class CalendarEvent
-        {
-            public string Subject { get; set; }
-            public TimeSpan StartTime { get; set; }
-            public TimeSpan EndTime { get; set; }
-        }
     }
 }
+
+
+
 
 
 

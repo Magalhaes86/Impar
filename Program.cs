@@ -1,22 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Impar
 {
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            // Crie uma instância do formulário Agenda
+            GoogleAgenda agendaForm = new GoogleAgenda();
+
+            // Verifique se a instância não é nula
+            if (agendaForm != null)
+            {
+                try
+                {
+                    Application.Run(agendaForm);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro ao executar o formulário Agenda: " + ex.Message);
+                }
+            }
+            else
+            {
+                // Trate o caso em que a instância não foi criada corretamente
+                MessageBox.Show("Erro ao criar o formulário Agenda.");
+            }
         }
     }
 }

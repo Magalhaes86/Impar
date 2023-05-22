@@ -88,7 +88,7 @@ namespace Impar
             // 
             // tbsms
             // 
-            this.tbsms.Location = new System.Drawing.Point(156, 172);
+            this.tbsms.Location = new System.Drawing.Point(131, 170);
             this.tbsms.Multiline = true;
             this.tbsms.Name = "tbsms";
             this.tbsms.Size = new System.Drawing.Size(255, 167);

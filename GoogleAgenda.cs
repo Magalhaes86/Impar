@@ -18,6 +18,9 @@ using Google.Apis.Calendar.v3;
 using Google.Apis.Services;
 using Google.Apis.Calendar.v3.Data;
 using System.Net.Http;
+using WindowsFormsCalendar;
+using static Impar.GoogleAgenda;
+using System.Globalization;
 
 namespace Impar
 {
@@ -71,9 +74,319 @@ namespace Impar
             }
         }
 
+
+
+        //private List<DateTime> GetOccupiedTimeSlotsInRange(List<Agendamento> agendamentos, DateTime inicio, DateTime fim)
+        //{
+        //    List<DateTime> horariosOcupados = new List<DateTime>();
+
+        //    foreach (Agendamento agendamento in agendamentos)
+        //    {
+        //        if (agendamento.Inicio.Date >= inicio.Date && agendamento.Fim.Date <= fim.Date)
+        //        {
+        //            DateTime horario = agendamento.Inicio;
+        //            while (horario < agendamento.Fim)
+        //            {
+        //                horariosOcupados.Add(horario);
+        //                horario = horario.AddMinutes(30);
+        //            }
+        //        }
+        //    }
+
+        //    return horariosOcupados;
+        //}
+
+
+
+
+        // !!!!!!!!!!!!!!!!!  EVENTO NO CALENDR BIER
+
+        //private List<Agendamento> agendamentos2 = new List<Agendamento>();
+
+
+        //private List<DateTime> GetAvailableTimeSlots2(DateTime inicio, DateTime fim, DateTime manhaInicio, DateTime manhaFim, DateTime tardeInicio, DateTime tardeFim, List<Agendamento> agendamentos)
+        //{
+        //    List<DateTime> horariosDisponiveis = new List<DateTime>();
+
+        //    foreach (DateTime horario in GetTimeSlots2(inicio, fim, manhaInicio, manhaFim, tardeInicio, tardeFim))
+        //    {
+        //        if (!IsHorarioOcupado2(horario, manhaInicio, manhaFim, tardeInicio, tardeFim, agendamentos))
+        //        {
+        //            horariosDisponiveis.Add(horario);
+        //        }
+        //    }
+
+        //    return horariosDisponiveis;
+        //}
+        //private List<DateTime> GetOccupiedTimeSlots2(DateTime inicio, DateTime fim, DateTime manhaInicio, DateTime manhaFim, DateTime tardeInicio, DateTime tardeFim, List<Agendamento> agendamentos)
+        //{
+        //    List<DateTime> horariosOcupados = new List<DateTime>();
+
+        //    foreach (DateTime horario in GetTimeSlots2(inicio, fim, manhaInicio, manhaFim, tardeInicio, tardeFim))
+        //    {
+        //        if (IsHorarioOcupado2(horario, manhaInicio, manhaFim, tardeInicio, tardeFim, agendamentos))
+        //        {
+        //            horariosOcupados.Add(horario);
+        //        }
+        //    }
+
+        //    return horariosOcupados;
+        //}
+
+        //private bool IsHorarioOcupado2(DateTime horario, DateTime manhaInicio, DateTime manhaFim, DateTime tardeInicio, DateTime tardeFim, List<Agendamento> agendamentos)
+        //{
+        //    foreach (var agendamento in agendamentos)
+        //    {
+        //        if (horario >= agendamento.Inicio && horario < agendamento.Fim)
+        //            return true;
+        //    }
+
+        //    return false;
+        //}
+
+        //private IEnumerable<DateTime> GetTimeSlots2(DateTime inicio, DateTime fim, DateTime manhaInicio, DateTime manhaFim, DateTime tardeInicio, DateTime tardeFim)
+        //{
+        //    DateTime horario = inicio;
+
+        //    while (horario < fim)
+        //    {
+        //        if ((horario.TimeOfDay >= manhaInicio.TimeOfDay && horario.TimeOfDay < manhaFim.TimeOfDay) ||
+        //            (horario.TimeOfDay >= tardeInicio.TimeOfDay && horario.TimeOfDay < tardeFim.TimeOfDay))
+        //        {
+        //            yield return horario;
+        //        }
+
+        //        horario = horario.AddMinutes(30);
+        //    }
+        //}
+
+
+
+
+        //    private List<DateTime> GetAvailableTimeSlots2(DateTime startDate, DateTime endDate, DateTime morningStartTime, DateTime morningEndTime, DateTime afternoonStartTime, DateTime afternoonEndTime)
+        //    {
+        //        List<DateTime> timeSlots = new List<DateTime>();
+
+        //        DateTime currentStartDate = startDate.Date;
+        //        DateTime currentEndDate = endDate.Date;
+
+        //        while (currentStartDate <= currentEndDate)
+        //        {
+        //            DateTime currentMorningStartTime = currentStartDate.Add(morningStartTime.TimeOfDay);
+        //            DateTime currentMorningEndTime = currentStartDate.Add(morningEndTime.TimeOfDay);
+        //            DateTime currentAfternoonStartTime = currentStartDate.Add(afternoonStartTime.TimeOfDay);
+        //            DateTime currentAfternoonEndTime = currentStartDate.Add(afternoonEndTime.TimeOfDay);
+
+        //            for (DateTime time = currentMorningStartTime; time < currentMorningEndTime; time = time.AddMinutes(30))
+        //            {
+        //                timeSlots.Add(time);
+        //            }
+
+        //            for (DateTime time = currentAfternoonStartTime; time < currentAfternoonEndTime; time = time.AddMinutes(30))
+        //            {
+        //                timeSlots.Add(time);
+        //            }
+
+        //            currentStartDate = currentStartDate.AddDays(1);
+        //        }
+
+        //        return timeSlots;
+
+        //}
+
+
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
+                e.RowIndex >= 0)
+            {
+                string buttonText = dataGridView2.Rows[e.RowIndex].Cells["Ação"].Value?.ToString();
+
+                if (buttonText == "Marcar")
+                {
+                    string data = dataGridView2.Rows[e.RowIndex].Cells["Data"].Value?.ToString();
+                    string horario = dataGridView2.Rows[e.RowIndex].Cells["Horário"].Value?.ToString();
+                    DateTime horarioInicio = DateTime.ParseExact(horario, "HH:mm", CultureInfo.InvariantCulture);
+                    DateTime horarioFim = horarioInicio.AddMinutes(30);
+                    string ocupadoAte = horarioFim.ToString("HH:mm");
+
+                    // Abrir o formulário Marcacoes e passar os valores
+                    Marcacoes marcacoesForm = new Marcacoes();
+                    marcacoesForm.tbhorario.Value = DateTime.Parse(data);
+                    marcacoesForm.tbhorainicio.Value = horarioInicio;
+                    marcacoesForm.tbhorafim.Value = horarioFim;
+                    marcacoesForm.Show();
+                }
+                else if (buttonText == "Editar")
+                {
+                    string data = dataGridView2.Rows[e.RowIndex].Cells["Data"].Value?.ToString();
+                    string horario = dataGridView2.Rows[e.RowIndex].Cells["Horário"].Value?.ToString();
+                    string ocupadoAte = dataGridView2.Rows[e.RowIndex].Cells["Ocupado até"].Value?.ToString();
+                    string titulo = dataGridView2.Rows[e.RowIndex].Cells["Título"].Value?.ToString();
+                    string descricao = dataGridView2.Rows[e.RowIndex].Cells["Descrição"].Value?.ToString();
+                    string eventId = dataGridView2.Rows[e.RowIndex].Cells["EventId"].Value?.ToString();
+
+                    // Abrir o formulário Marcacoes e passar os valores
+                    Marcacoes marcacoesForm = new Marcacoes();
+                    marcacoesForm.tbhorario.Value = DateTime.Parse(data);
+                    marcacoesForm.tbhorainicio.Value = DateTime.ParseExact(horario, "HH:mm", CultureInfo.InvariantCulture);
+                    marcacoesForm.tbhorafim.Value = DateTime.ParseExact(ocupadoAte, "HH:mm", CultureInfo.InvariantCulture);
+                    marcacoesForm.tbtitulogoogle.Text = titulo;
+                    marcacoesForm.tbdescricao.Text = descricao;
+                    marcacoesForm.tbidgoogle.Text = eventId;
+                    marcacoesForm.Show();
+                }
+            }
+        }
+
+        private void dataGridView2_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.ColumnIndex == dataGridView2.Columns["Ação"].Index && e.RowIndex >= 0)
+            {
+                string buttonText = dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString() ?? string.Empty;
+                if (buttonText == "Editar")
+                {
+                    e.Value = "Editar";
+                }
+                else
+                {
+                    e.Value = "Marcar";
+                }
+            }
+        }
+
+        private DataTable dt; // Declare o DataTable fora do método para que possa ser reutilizado
+
+
+
+
+        //private void kryptonMonthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
+        //{
+        //    DateTime selectedStartDate = e.Start.Date;
+        //    DateTime selectedEndDate = e.End.Date;
+
+        //    selectedEndDate = selectedEndDate.AddDays(1).AddSeconds(-1);
+
+        //    GoogleCredential credential;
+        //    using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
+        //    {
+        //        credential = GoogleCredential.FromStream(stream)
+        //            .CreateScoped(CalendarService.Scope.Calendar);
+        //    }
+
+        //    var service = new CalendarService(new BaseClientService.Initializer()
+        //    {
+        //        HttpClientInitializer = credential,
+        //        ApplicationName = "GoogleAgenda"
+        //    });
+
+        //    EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
+        //    request.TimeMin = selectedStartDate;
+        //    request.TimeMax = selectedEndDate;
+        //    request.ShowDeleted = false;
+        //    request.SingleEvents = true;
+        //    request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+        //    Events events = request.Execute();
+
+        //    List<Agendamento> agendamentos = new List<Agendamento>();
+        //    if (events.Items != null && events.Items.Count > 0)
+        //    {
+        //        foreach (var eventItem in events.Items)
+        //        {
+        //            agendamentos.Add(new Agendamento()
+        //            {
+        //                Inicio = eventItem.Start.DateTime.Value,
+        //                Fim = eventItem.End.DateTime.Value
+        //            });
+        //        }
+        //    }
+
+        //    TimeSpan morningStartTime = DtHoraInicioManha.Value.TimeOfDay;
+        //    TimeSpan morningEndTime = DtHoraFimManha.Value.TimeOfDay;
+        //    TimeSpan afternoonStartTime = DtHoraInicioTarde.Value.TimeOfDay;
+        //    TimeSpan afternoonEndTime = DtHoraFimTarde.Value.TimeOfDay;
+
+        //    List<DateTime> horariosDisponiveis = new List<DateTime>();
+
+        //    for (DateTime currentDate = selectedStartDate.Date; currentDate <= selectedEndDate.Date; currentDate = currentDate.AddDays(1))
+        //    {
+        //        DateTime currentMorningStartTime = currentDate.Date + morningStartTime;
+        //        DateTime currentMorningEndTime = currentDate.Date + morningEndTime;
+        //        DateTime currentAfternoonStartTime = currentDate.Date + afternoonStartTime;
+        //        DateTime currentAfternoonEndTime = currentDate.Date + afternoonEndTime;
+
+        //        for (DateTime time = currentMorningStartTime; time < currentMorningEndTime; time = time.AddMinutes(30))
+        //        {
+        //            horariosDisponiveis.Add(time);
+        //        }
+
+        //        for (DateTime time = currentAfternoonStartTime; time < currentAfternoonEndTime; time = time.AddMinutes(30))
+        //        {
+        //            horariosDisponiveis.Add(time);
+        //        }
+        //    }
+
+        //    dataGridView2.Columns.Clear(); // Remove todas as colunas existentes
+
+        //    // Adicione as colunas ao dataGridView2
+        //    DataGridViewButtonColumn btnColumn = new DataGridViewButtonColumn();
+        //    btnColumn.HeaderText = "Ação";
+        //    btnColumn.Name = "Ação";
+        //    dataGridView2.Columns.Add(btnColumn);
+        //    dataGridView2.Columns.Add("Data", "Data");
+        //    dataGridView2.Columns.Add("Horário", "Horário");
+        //    dataGridView2.Columns.Add("Status", "Status");
+        //    dataGridView2.Columns.Add("Ocupado até", "Ocupado até");
+        //    dataGridView2.Columns.Add("Título", "Título");
+        //    dataGridView2.Columns.Add("Descrição", "Descrição");
+        //    dataGridView2.Columns.Add("EventId", "EventId");
+
+
+        //    foreach (DateTime horario in horariosDisponiveis)
+        //    {
+        //        var agendamento = agendamentos.FirstOrDefault(a => horario.Date == a.Inicio.Date && horario.TimeOfDay >= a.Inicio.TimeOfDay && horario.TimeOfDay < a.Fim.TimeOfDay);
+
+        //        if (agendamento != null)
+        //        {
+        //            var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
+
+        //            if (eventItem != null)
+        //            {
+        //                string eventId = eventItem.Id;
+        //                string titulo = eventItem.Summary;
+        //                string descricao = eventItem.Description;
+        //                dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), titulo, descricao, eventId);
+        //            }
+        //            else
+        //            {
+        //                dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), "", "", "");
+        //            }
+        //        }
+        //        else
+        //        {
+        //            dataGridView2.Rows.Add("Marcar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Disponível", "", "", "", "");
+        //        }
+        //    }
+
+        //    dataGridView2.CellFormatting += dataGridView2_CellFormatting;
+        //    dataGridView2.CellContentClick += dataGridView2_CellContentClick;
+        //}
+
+
+
+
+
         private void kryptonMonthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
         {
-            //Criando uma nova instância do Google Credential
+            DateTime selectedStartDate = e.Start.Date;
+            DateTime selectedEndDate = e.End.Date;
+
+            selectedEndDate = selectedEndDate.AddDays(1).AddSeconds(-1);
+
             GoogleCredential credential;
             using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
             {
@@ -81,50 +394,110 @@ namespace Impar
                     .CreateScoped(CalendarService.Scope.Calendar);
             }
 
-            // Criando o serviço de calendário
             var service = new CalendarService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
                 ApplicationName = "GoogleAgenda"
             });
 
-            // Definindo os parâmetros para a pesquisa do evento
             EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
-            request.TimeMin = new DateTime(e.Start.Year, e.Start.Month, e.Start.Day, 0, 0, 0);
-            request.TimeMax = new DateTime(e.End.Year, e.End.Month, e.End.Day, 23, 59, 59);
+            request.TimeMin = selectedStartDate;
+            request.TimeMax = selectedEndDate;
             request.ShowDeleted = false;
             request.SingleEvents = true;
-            request.MaxResults = 10;
             request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
 
-            // Obtendo os eventos da agenda
             Events events = request.Execute();
 
-            // Criando o DataTable
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Título");
-            dt.Columns.Add("Data de Início");
-            dt.Columns.Add("Hora de Início");
-            dt.Columns.Add("Data de Fim");
-            dt.Columns.Add("Hora de Fim");
-            dt.Columns.Add("Descrição");
-
-            // Preenchendo o DataTable com os eventos da agenda
-            foreach (var eventItem in events.Items)
+            List<Agendamento> agendamentos = new List<Agendamento>();
+            if (events.Items != null && events.Items.Count > 0)
             {
-                DataRow row = dt.NewRow();
-                row["Título"] = eventItem.Summary;
-                row["Data de Início"] = eventItem.Start.DateTime.Value.ToLocalTime().ToString("dd/MM/yyyy");
-                row["Hora de Início"] = eventItem.Start.DateTime.Value.ToLocalTime().ToString("HH:mm:ss");
-                row["Data de Fim"] = eventItem.End.DateTime.Value.ToLocalTime().ToString("dd/MM/yyyy");
-                row["Hora de Fim"] = eventItem.End.DateTime.Value.ToLocalTime().ToString("HH:mm:ss");
-                row["Descrição"] = eventItem.Description;
-                dt.Rows.Add(row);
+                foreach (var eventItem in events.Items)
+                {
+                    agendamentos.Add(new Agendamento()
+                    {
+                        Inicio = eventItem.Start.DateTime.Value,
+                        Fim = eventItem.End.DateTime.Value
+                    });
+                }
             }
 
-            // Exibindo o DataTable no DataGridView
-            kryptonDataGridView1.DataSource = dt;
+            TimeSpan morningStartTime = DtHoraInicioManha.Value.TimeOfDay;
+            TimeSpan morningEndTime = DtHoraFimManha.Value.TimeOfDay;
+            TimeSpan afternoonStartTime = DtHoraInicioTarde.Value.TimeOfDay;
+            TimeSpan afternoonEndTime = DtHoraFimTarde.Value.TimeOfDay;
+
+            List<DateTime> horariosDisponiveis = new List<DateTime>();
+
+            for (DateTime currentDate = selectedStartDate.Date; currentDate <= selectedEndDate.Date; currentDate = currentDate.AddDays(1))
+            {
+                DateTime currentMorningStartTime = currentDate.Date + morningStartTime;
+                DateTime currentMorningEndTime = currentDate.Date + morningEndTime;
+                DateTime currentAfternoonStartTime = currentDate.Date + afternoonStartTime;
+                DateTime currentAfternoonEndTime = currentDate.Date + afternoonEndTime;
+
+                for (DateTime time = currentMorningStartTime; time < currentMorningEndTime; time = time.AddMinutes(30))
+                {
+                    horariosDisponiveis.Add(time);
+                }
+
+                for (DateTime time = currentAfternoonStartTime; time < currentAfternoonEndTime; time = time.AddMinutes(30))
+                {
+                    horariosDisponiveis.Add(time);
+                }
+            }
+
+            dataGridView2.Columns.Clear(); // Remove todas as colunas existentes
+
+            // Adicione as colunas ao dataGridView2
+            DataGridViewButtonColumn btnColumn = new DataGridViewButtonColumn();
+            btnColumn.HeaderText = "Ação";
+            btnColumn.Name = "Ação";
+            dataGridView2.Columns.Add(btnColumn);
+            dataGridView2.Columns.Add("Data", "Data");
+            dataGridView2.Columns.Add("Horário", "Horário");
+            dataGridView2.Columns.Add("Status", "Status");
+            dataGridView2.Columns.Add("Ocupado até", "Ocupado até");
+            dataGridView2.Columns.Add("Título", "Título");
+            dataGridView2.Columns.Add("Descrição", "Descrição");
+            dataGridView2.Columns.Add("EventId", "EventId");
+
+            foreach (DateTime horario in horariosDisponiveis)
+            {
+                var agendamento = agendamentos.FirstOrDefault(a => horario.Date == a.Inicio.Date && horario.TimeOfDay >= a.Inicio.TimeOfDay && horario.TimeOfDay < a.Fim.TimeOfDay);
+
+                if (agendamento != null)
+                {
+                    var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
+
+                    if (eventItem != null)
+                    {
+                        string eventId = eventItem.Id;
+                        string titulo = eventItem.Summary;
+                        string descricao = eventItem.Description;
+                        dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), titulo, descricao, eventId);
+                    }
+                    else
+                    {
+                        dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), "", "", "");
+                    }
+                }
+                else
+                {
+                    dataGridView2.Rows.Add("Marcar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Disponível", "", "", "", "");
+                }
+            }
+
+            // Ocultar colunas "Título", "Descrição" e "EventId"
+            dataGridView2.Columns["Título"].Visible = false;
+            dataGridView2.Columns["Descrição"].Visible = false;
+            dataGridView2.Columns["EventId"].Visible = false;
+
+            dataGridView2.CellFormatting += dataGridView2_CellFormatting;
+            dataGridView2.CellContentClick += dataGridView2_CellContentClick;
         }
+
+
 
         private void GoogleAgenda_Load(object sender, EventArgs e)
         {
@@ -133,107 +506,16 @@ namespace Impar
 
         private void kryptonButton1_Click(object sender, EventArgs e)
         {
-            //Criando uma nova instância do Google Credential
-            GoogleCredential credential;
-            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
-            {
-                credential = GoogleCredential.FromStream(stream)
-                    .CreateScoped(CalendarService.Scope.Calendar);
-            }
-
-            // Criando o serviço de calendário
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "GoogleAgenda"
-            });
-
-            // Definindo os parâmetros para a pesquisa do evento
-            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
-            request.TimeMin = DateTime.Now;
-            request.ShowDeleted = false;
-            request.SingleEvents = true;
-            request.MaxResults = 10;
-            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-
-            // Obtendo os eventos da agenda
-            Events events = request.Execute();
-
-            // Criando o DataTable
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Título");
-            dt.Columns.Add("Data de Início");
-            dt.Columns.Add("Hora de Início");
-            dt.Columns.Add("Data de Fim");
-            dt.Columns.Add("Hora de Fim");
-            dt.Columns.Add("Descrição");
-
-            // Preenchendo o DataTable com os eventos da agenda
-            foreach (var eventItem in events.Items)
-            {
-                DataRow row = dt.NewRow();
-                row["Título"] = eventItem.Summary;
-                row["Data de Início"] = eventItem.Start.DateTime.Value.ToLocalTime().ToString("dd/MM/yyyy");
-                row["Hora de Início"] = eventItem.Start.DateTime.Value.ToLocalTime().ToString("HH:mm:ss");
-                row["Data de Fim"] = eventItem.End.DateTime.Value.ToLocalTime().ToString("dd/MM/yyyy");
-                row["Hora de Fim"] = eventItem.End.DateTime.Value.ToLocalTime().ToString("HH:mm:ss");
-                row["Descrição"] = eventItem.Description;
-                dt.Rows.Add(row);
-            }
-
-            // Exibindo o DataTable no DataGridView
-            kryptonDataGridView1.DataSource = dt;
+            
 
         }
 
         private void kryptonButton2_Click(object sender, EventArgs e)
         {
-            //Criando uma nova instância do Google Credential
-            GoogleCredential credential;
-            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
-            {
-                credential = GoogleCredential.FromStream(stream)
-                    .CreateScoped(CalendarService.Scope.Calendar);
-            }
+          
 
-            // Criando o serviço de calendário
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "GoogleAgenda"
-            });
+            
 
-            // Definindo os parâmetros para a pesquisa do evento
-            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
-            request.TimeMin = DateTime.Now;
-            request.ShowDeleted = false;
-            request.SingleEvents = true;
-            request.MaxResults = 10;
-            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-
-            // Obtendo os eventos da agenda
-            Events events = request.Execute();
-
-            // Criando o DataTable
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Título");
-            dt.Columns.Add("Data/Hora de Início");
-            dt.Columns.Add("Data/Hora de Fim");
-
-            // Preenchendo o DataTable com os eventos da agenda
-            foreach (var eventItem in events.Items)
-            {
-                DataRow row = dt.NewRow();
-                row["Título"] = eventItem.Summary;
-                row["Data/Hora de Início"] = eventItem.Start.DateTime.Value.ToLocalTime();
-                row["Data/Hora de Fim"] = eventItem.End.DateTime.Value.ToLocalTime();
-                dt.Rows.Add(row);
-
-
-            }
-
-            // Exibindo o DataTable no DataGridView
-            kryptonDataGridView1.DataSource = dt;
         }
 
         private void kryptonWrapLabel1_Click(object sender, EventArgs e)
@@ -245,161 +527,7 @@ namespace Impar
         private void button1_Click(object sender, EventArgs e)
         {
 
-            DateTime dtDataInicio = DtDataInicio.Value.Date;
-            DateTime dtDataFim = DtDataFim.Value.Date;
-            TimeSpan dtHoraInicioManha = DtHoraInicioManha.Value.TimeOfDay;
-            TimeSpan dtHoraFimManha = DtHoraFimManha.Value.TimeOfDay;
-            TimeSpan dtHoraInicioTarde = DtHoraInicioTarde.Value.TimeOfDay;
-            TimeSpan dtHoraFimTarde = DtHoraFimTarde.Value.TimeOfDay;
-
-            //Criando uma nova instância do Google Credential
-            GoogleCredential credential;
-            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
-            {
-                credential = GoogleCredential.FromStream(stream)
-                    .CreateScoped(CalendarService.Scope.Calendar);
-            }
-
-            // Criando o serviço de calendário
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "GoogleAgenda"
-            });
-
-            // Definindo os parâmetros para a pesquisa do evento
-            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
-
-            request.TimeMin = dtDataInicio;
-            request.TimeMax = dtDataFim;
-            request.ShowDeleted = false;
-            request.SingleEvents = true;
-            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-
-            // Obtendo os eventos da agenda
-            Events events = request.Execute();
-
-            // Criando a lista de horários disponíveis
-            List<DateTime> horariosDisponiveis = new List<DateTime>();
-
-            // Criando a DataTable
-            DataTable dataTable = new DataTable();
-
-            // Adicionando as colunas na DataTable
-            dataTable.Columns.Add("Data", typeof(DateTime));
-            dataTable.Columns.Add("Horário", typeof(TimeSpan));
-            dataTable.Columns.Add("Duração", typeof(TimeSpan));
-            dataTable.Columns.Add("Status", typeof(string)); // Nova coluna "Status"
-            dataTable.Columns.Add("Intervalo", typeof(TimeSpan));
-
-
-            // Definindo a duração mínima para os eventos
-            TimeSpan duracaoMinimaEvento = new TimeSpan(0, 15, 0);
-
-
-            // Adicionando horários disponíveis no período da manhã
-            DateTime dtHorario = dtDataInicio + dtHoraInicioManha;
-            while (dtHorario + new TimeSpan(1, 0, 0) <= dtDataFim + dtHoraFimManha)
-            {
-                bool horarioDisponivel = true;
-                string status = "Disponível";
-                TimeSpan duracao = new TimeSpan(1, 0, 0); // duração padrão de 1 hora
-
-                // Verificando se o horário está ocupado
-                foreach (var evento in events.Items)
-                {
-                    DateTime dtInicioEvento = evento.Start.DateTime ?? DateTime.Parse(evento.Start.Date);
-                    DateTime dtFimEvento = evento.End.DateTime ?? DateTime.Parse(evento.End.Date);
-
-                    // if (dtHorario >= dtInicioEvento && dtHorario < dtFimEvento)
-                    if ((dtInicioEvento - dtHorario) < duracaoMinimaEvento && (dtFimEvento - dtHorario).CompareTo(duracaoMinimaEvento) >= 0)
-                    {
-                        horarioDisponivel = false;
-                        status = "Ocupado";
-                        if ((dtFimEvento - dtHorario) < duracaoMinimaEvento) // verifica se a duração do evento é menor que a duração mínima permitida
-                        {
-                            duracao = dtFimEvento - dtHorario; // atualiza a duração do evento na DataTable
-                            break;
-                        }
-                    }
-                }
-
-                // Definindo horários de início e término do intervalo de almoço
-                DateTime dtInicioAlmoco = dtDataInicio + dtHoraFimManha;
-                DateTime dtFimAlmoco = dtDataInicio + dtHoraInicioTarde;
-
-                if (dtHorario >= dtInicioAlmoco && dtHorario < dtFimAlmoco)
-                {
-                    horarioDisponivel = false;
-                    status = "Intervalo de almoço";
-                }
-
-                // Se o horário estiver disponível, adiciona na lista de horários disponíveis
-                if (horarioDisponivel)
-                {
-                    horariosDisponiveis.Add(dtHorario);
-                }
-
-                // Calculando o intervalo
-                TimeSpan intervalo = dtHorario.TimeOfDay.Add(new TimeSpan(0, 30, 0));
-                // Adicionando o horário na DataTable com o status correspondente
-                dataTable.Rows.Add(dtHorario.Date, dtHorario.TimeOfDay, new TimeSpan(1, 0, 0), status, intervalo);
-
-                // Incrementando 30 minutos
-                dtHorario = dtHorario + new TimeSpan(0, 30, 0);
-            }
-
-
-            // Adicionando horários disponíveis no período da tarde
-            dtHorario = dtDataInicio + dtHoraInicioTarde;
-            while (dtHorario + new TimeSpan(1, 0, 0) <= dtDataFim + dtHoraFimTarde)
-            {
-                bool horarioDisponivel = true;
-                string status = "Disponível";
-
-                // Verificando se o horário está ocupado
-                foreach (var evento in events.Items)
-                {
-                    DateTime dtInicioEvento = evento.Start.DateTime ?? DateTime.Parse(evento.Start.Date);
-                    DateTime dtFimEvento = evento.End.DateTime ?? DateTime.Parse(evento.End.Date);
-
-                    if (dtHorario >= dtInicioEvento && dtHorario < dtFimEvento)
-                    {
-                        horarioDisponivel = false;
-                        status = "Ocupado";
-                        break;
-                    }
-                }
-                // Definindo horários de início e término do intervalo de almoço
-                DateTime dtInicioAlmoco = dtDataInicio + dtHoraFimManha;
-                DateTime dtFimAlmoco = dtDataInicio + dtHoraInicioTarde;
-
-                if (dtHorario >= dtInicioAlmoco && dtHorario < dtFimAlmoco)
-                {
-                    horarioDisponivel = false;
-                    status = "Intervalo de almoço";
-                }
-
-                // Se o horário estiver disponível, adiciona na lista de horários disponíveis
-                if (horarioDisponivel)
-                {
-                    horariosDisponiveis.Add(dtHorario);
-                }
-                // Calculando o intervalo
-                TimeSpan intervalo = dtHorario.TimeOfDay.Add(new TimeSpan(0, 30, 0));
-
-
-                // Adicionando o horário na DataTable com o status correspondente
-                dataTable.Rows.Add(dtHorario.Date, dtHorario.TimeOfDay, new TimeSpan(1, 0, 0), status, intervalo);
-
-                // Incrementando 30 minutos
-                dtHorario = dtHorario + new TimeSpan(0, 30, 0);
-            }
-            // Exibindo os horários disponíveis no DataGridView
-
-            dataGridView1.DataSource = dataTable;
-
-            // Setando o DataGridView para usar a DataTable como data source
+        
         }
 
 
@@ -790,21 +918,7 @@ namespace Impar
             dataGridView1.DataSource = dt;
 
         }
-        //private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        //{
-        //    // Verificando se o botão "Agendar" foi clicado
-        //    if (e.ColumnIndex == dataGridView1.Columns.Count - 1 && e.RowIndex >= 0)
-        //    {
-        //        // Obtendo a data e hora selecionada pelo usuário
-        //        DateTime data = (DateTime)dataGridView1.Rows[e.RowIndex].Cells[0].Value;
-        //        TimeSpan hora = (TimeSpan)dataGridView1.Rows[e.RowIndex].Cells[1].Value;
-
-        //        // Criando um novo formulário para adicionar um evento na agenda
-        //        FormAdicionarEvento form = new FormAdicionarEvento(data + hora, data + hora + new TimeSpan(1, 0, 0));
-        //        form.ShowDialog();
-        //    }
-
-        //}
+      
 
         public class Agendamento
         {
@@ -1075,236 +1189,18 @@ namespace Impar
 
         private void button7_Click(object sender, EventArgs e)
         {
-            // Criando uma nova instância do Google Credential
-            GoogleCredential credential;
-            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
-            {
-                credential = GoogleCredential.FromStream(stream)
-                    .CreateScoped(CalendarService.Scope.Calendar);
-            }
-
-            // Criando o serviço de calendário
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "GoogleAgenda"
-            });
-
-            // Definindo os parâmetros para a pesquisa do evento
-            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
-            request.TimeMin = DtDataInicio.Value.Date;
-            request.TimeMax = DtDataFim.Value.Date.AddDays(1);
-            request.ShowDeleted = false;
-            request.SingleEvents = true;
-            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-
-            // Executando a pesquisa
-            Events events = request.Execute();
-
-            // Processando os eventos encontrados
-            List<Agendamento> agendamentos = new List<Agendamento>();
-            if (events.Items != null && events.Items.Count > 0)
-            {
-                foreach (var eventItem in events.Items)
-                {
-                    agendamentos.Add(new Agendamento()
-                    {
-                        EventId = eventItem.Id, // Adicione esta linha
-                        Inicio = eventItem.Start.DateTime.Value,
-                        Fim = eventItem.End.DateTime.Value
-                    });
-                }
-            }
-
-            DateTime startDate = DtDataInicio.Value.Date;
-            DateTime endDate = DtDataFim.Value.Date;
-            DateTime morningStartTime = DtHoraInicioManha.Value;
-            DateTime morningEndTime = DtHoraFimManha.Value;
-            DateTime afternoonStartTime = DtHoraInicioTarde.Value;
-            DateTime afternoonEndTime = DtHoraFimTarde.Value;
-
-            List<DateTime> horariosDisponiveis = GetAvailableTimeSlots(startDate, endDate, morningStartTime, morningEndTime, afternoonStartTime, afternoonEndTime);
-
-            foreach (Agendamento agendamento in agendamentos)
-            {
-                for (int i = horariosDisponiveis.Count - 1; i >= 0; i--)
-                {
-                    DateTime horarioDisponivel = horariosDisponiveis[i];
-                    if (horarioDisponivel >= agendamento.Inicio && horarioDisponivel < agendamento.Fim)
-                    {
-                        horariosDisponiveis.RemoveAt(i);
-                    }
-                }
-            }
-
-            DataTable dt = new DataTable();
-            // Adicione colunas adicionais
-
-
-            foreach (Agendamento agendamento in agendamentos)
-            {
-                // Obtendo o evento correspondente ao agendamento
-                var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
-
-                int? codigoCliente = GetClientIdByGoogleEventId(agendamento.EventId);
-
-                if (eventItem != null)
-                {
-                    string titulo = eventItem.Summary;
-                    string descricao = eventItem.Description;
-
-                    dt.Rows.Add(agendamento.Inicio.ToString("dd/MM/yyyy"), agendamento.Inicio.ToString("HH:mm"), agendamento.Fim.ToString("HH:mm"), agendamento.EventId, titulo, descricao, codigoCliente);
-                }
-                else
-                {
-                    dt.Rows.Add(agendamento.Inicio.ToString("dd/MM/yyyy"), agendamento.Inicio.ToString("HH:mm"), agendamento.Fim.ToString("HH:mm"), agendamento.EventId, "", "", codigoCliente);
-                }
-            }
-
-
-
-            dataGridView2.DataSource = dt;
-
-
-            dataGridView2.CellFormatting += dataGridView2_CellFormatting;
-            dataGridView2.CellPainting += dataGridView2_CellPainting;
-
-            DataGridViewButtonColumn agendarColumn = new DataGridViewButtonColumn();
-            agendarColumn.HeaderText = "Agendar";
-
-            dataGridView2.Columns.Add(agendarColumn);
-
-            dataGridView2.CellContentClick += dataGridView2_CellContentClick;
-
+        
         }
 
         private void button10_Click(object sender, EventArgs e)
         {
-            // Criando uma nova instância do Google Credential
-            GoogleCredential credential;
-            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
-            {
-                credential = GoogleCredential.FromStream(stream)
-                    .CreateScoped(CalendarService.Scope.Calendar);
-            }
-
-            // Criando o serviço de calendário
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "GoogleAgenda"
-            });
-
-            // Definindo os parâmetros para a pesquisa do evento
-            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
-            request.TimeMin = DtDataInicio.Value.Date;
-            request.TimeMax = DtDataFim.Value.Date.AddDays(1);
-            request.ShowDeleted = false;
-            request.SingleEvents = true;
-            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-
-            // Executando a pesquisa
-            Events events = request.Execute();
-
-            // Processando os eventos encontrados
-            List<Agendamento> agendamentos = new List<Agendamento>();
-            if (events.Items != null && events.Items.Count > 0)
-            {
-                foreach (var eventItem in events.Items)
-                {
-                    agendamentos.Add(new Agendamento()
-                    {
-                        EventId = eventItem.Id, // Adicione esta linha
-                        Inicio = eventItem.Start.DateTime.Value,
-                        Fim = eventItem.End.DateTime.Value
-                    });
-                }
-            }
-
-            DateTime startDate = DtDataInicio.Value.Date;
-            DateTime endDate = DtDataFim.Value.Date;
-            DateTime morningStartTime = DtHoraInicioManha.Value;
-            DateTime morningEndTime = DtHoraFimManha.Value;
-            DateTime afternoonStartTime = DtHoraInicioTarde.Value;
-            DateTime afternoonEndTime = DtHoraFimTarde.Value;
-
-            List<DateTime> horariosDisponiveis = GetAvailableTimeSlots(startDate, endDate, morningStartTime, morningEndTime, afternoonStartTime, afternoonEndTime);
-
-            foreach (Agendamento agendamento in agendamentos)
-            {
-                for (int i = horariosDisponiveis.Count - 1; i >= 0; i--)
-                {
-                    DateTime horarioDisponivel = horariosDisponiveis[i];
-                    if (horarioDisponivel >= agendamento.Inicio && horarioDisponivel < agendamento.Fim)
-                    {
-                        horariosDisponiveis.RemoveAt(i);
-                    }
-                }
-            }
-
-            DataTable dt = new DataTable();
-            // Adicione colunas adicionais
-            dt.Columns.Add("Data");
-            dt.Columns.Add("Hora Início");
-            dt.Columns.Add("Hora Fim");
-            dt.Columns.Add("EventId");
-            dt.Columns.Add("Título");
-            dt.Columns.Add("Descrição");
-            foreach (Agendamento agendamento in agendamentos)
-            {
-                // Obtendo o evento correspondente ao agendamento
-                var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
-
-                if (eventItem != null)
-                {
-                    string titulo = eventItem.Summary;
-                    string descricao = eventItem.Description;
-
-                    dt.Rows.Add(agendamento.Inicio.ToString("dd/MM/yyyy"), agendamento.Inicio.ToString("HH:mm"), agendamento.Fim.ToString("HH:mm"), agendamento.EventId, titulo, descricao);
-                }
-                else
-                {
-                    dt.Rows.Add(agendamento.Inicio.ToString("dd/MM/yyyy"), agendamento.Inicio.ToString("HH:mm"), agendamento.Fim.ToString("HH:mm"), agendamento.EventId, "", "");
-                }
-            }
-
-            dataGridView2.DataSource = dt;
-
-            // Adicionando uma nova coluna com os botões de agendamento
-            DataGridViewButtonColumn agendarColumn = new DataGridViewButtonColumn();
-            agendarColumn.HeaderText = "Agendar";
-            agendarColumn.Text = "Agendar";
-            agendarColumn.UseColumnTextForButtonValue = true;
-            dataGridView2.Columns.Add(agendarColumn);
-
-            // Adicionando um handler para o evento CellContentClick
-            dataGridView2.CellContentClick += dataGridView2_CellContentClick;
-        }
-        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-
-            var senderGrid = (DataGridView)sender;
-
-            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
-                e.RowIndex >= 0)
-            {
-                // Recuperando os valores das colunas
-                string data = senderGrid.Rows[e.RowIndex].Cells["Data"].Value.ToString();
-                string horaInicio = senderGrid.Rows[e.RowIndex].Cells["Hora Início"].Value.ToString();
-                string horaFim = senderGrid.Rows[e.RowIndex].Cells["Hora Fim"].Value.ToString();
-                string Idgoogle = senderGrid.Rows[e.RowIndex].Cells["EventId"].Value.ToString();
-                string descricao = senderGrid.Rows[e.RowIndex].Cells["Descrição"].Value.ToString();
-                string titulo = senderGrid.Rows[e.RowIndex].Cells["Título"].Value.ToString();
-                string CodCliente = senderGrid.Rows[e.RowIndex].Cells["Código Cliente"].Value.ToString();
-
-
-                // Abre o FormAdicionarEvento passando os valores como parâmetros
-                FormAdicionarEvento form = new FormAdicionarEvento(data, horaInicio, horaFim, Idgoogle, descricao, titulo, CodCliente);
-                form.Show();
-            }
+       
+            
 
         }
+       
+
+
 
 
         private bool agendarColumnAdded = false;
@@ -1312,6 +1208,105 @@ namespace Impar
         //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
         private void button9_Click(object sender, EventArgs e)
         {
+          
+
+        }
+
+
+        //private bool agendarColumnAdded = false;
+        private bool editarColumnAdded = false;
+
+
+        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
+        
+
+
+        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
+        private int? GetClientIdByGoogleEventId(string googleEventId)
+        {
+            int? clientId = null;
+
+            // Defina sua string de conexão aqui
+            //string connectionString = "Server=your_server;Database=your_database;Uid=your_username;Pwd=your_password;";
+            string connectionString = (@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
+
+            // Crie a consulta SQL para buscar o IDcliente com base no IdGoogle
+            string query = "SELECT IDcliente FROM marcacoes WHERE IdGoogle = @googleEventId";
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    // Adicione o parâmetro à consulta
+                    command.Parameters.AddWithValue("@googleEventId", googleEventId);
+
+                    // Abra a conexão e execute a consulta
+                    connection.Open();
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        // Se a consulta retornar algum resultado, atribua o IDcliente à variável
+                        if (reader.Read())
+                        {
+                            clientId = reader.GetInt32(0);
+                        }
+                    }
+                }
+            }
+
+            return clientId;
+        }
+
+        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
+        private void button8_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
+        private void button11_Click(object sender, EventArgs e)
+        {
+         
+        }
+
+        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
+        private void button12_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+
+
+
+
+        private void kryptonButton3_Click(object sender, EventArgs e)
+        {
+
+            if (kryptonNavigator1.SelectedPage == kryptonPage1) // nome da sua tabPage onde está o DataGridView
+            {
+                // Cria a conexão com o banco de dados MySQL
+                MySqlConnection conn = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
+
+                conn.Open();
+
+                // Cria a consulta SQL
+                string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, SmsEnviada FROM marcacoes";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                dgvsmspendentes.DataSource = dt;
+
+                conn.Close();
+                dgvsmspendentes.Refresh();
+            }
+        }
+
+        private void kryptonButton6_Click(object sender, EventArgs e)
+        {
+
             // Criando uma nova instância do Google Credential
             GoogleCredential credential;
             using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
@@ -1405,72 +1400,30 @@ namespace Impar
                 }
             }
 
-            dataGridView2.DataSource = dt;
+            kryptonDataGridView2.DataSource = dt;
 
 
-            dataGridView2.CellFormatting += dataGridView2_CellFormatting;
-            dataGridView2.CellPainting += dataGridView2_CellPainting;
+            kryptonDataGridView2.CellFormatting += kryptonDataGridView2_CellFormatting;
+            kryptonDataGridView2.CellPainting += kryptonDataGridView2_CellPainting;
 
             DataGridViewButtonColumn agendarColumn = new DataGridViewButtonColumn();
             agendarColumn.HeaderText = "Agendar";
 
-            dataGridView2.Columns.Add(agendarColumn);
+            kryptonDataGridView2.Columns.Add(agendarColumn);
 
-            dataGridView2.CellContentClick += dataGridView2_CellContentClick;
+            kryptonDataGridView2.CellContentClick += kryptonDataGridView2_CellContentClick;
+
+
 
 
         }
 
 
-        //private bool agendarColumnAdded = false;
-        private bool editarColumnAdded = false;
-
-        private void dataGridView2_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
-        {
-            DataGridViewRow row = dataGridView2.Rows[e.RowIndex];
-            object codigoCliente = row.Cells["Código Cliente"].Value;
-
-            // Verifique se o código do cliente está presente
-            if (codigoCliente != null && codigoCliente != DBNull.Value)
-            {
-                // Mude o texto do botão para "Editar"
-                row.Cells[dataGridView2.Columns.Count - 1].Value = "Editar";
-            }
-            else
-            {
-                // Mude o texto do botão para "Agendar"
-                row.Cells[dataGridView2.Columns.Count - 1].Value = "Agendar";
-            }
-        }
-
-
-        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
-        private void dataGridView2_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            if (e.ColumnIndex == 7) // Verifique se a coluna é a coluna do botão
-            {
-                DataGridViewRow row = dataGridView2.Rows[e.RowIndex];
-                object codigoCliente = row.Cells["Código Cliente"].Value;
-
-                // Verifique se o código do cliente está presente
-                if (codigoCliente != null && codigoCliente != DBNull.Value)
-                {
-                    // Mude a cor do botão para amarelo
-                    row.Cells[e.ColumnIndex].Style.BackColor = Color.Yellow;
-                }
-                else
-                {
-                    // Mude a cor do botão para verde
-                    row.Cells[e.ColumnIndex].Style.BackColor = Color.Green;
-                }
-            }
-        }
-        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
-        private void dataGridView2_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        private void kryptonDataGridView2_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.ColumnIndex == 7 && e.RowIndex >= 0)
             {
-                DataGridViewRow row = dataGridView2.Rows[e.RowIndex];
+                DataGridViewRow row = kryptonDataGridView2.Rows[e.RowIndex];
                 object codigoCliente = row.Cells["Código Cliente"].Value;
 
                 // Verifique se o código do cliente está presente
@@ -1508,102 +1461,63 @@ namespace Impar
         }
 
 
-        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
-        private int? GetClientIdByGoogleEventId(string googleEventId)
+        private void kryptonDataGridView2_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            int? clientId = null;
-
-            // Defina sua string de conexão aqui
-            //string connectionString = "Server=your_server;Database=your_database;Uid=your_username;Pwd=your_password;";
-            string connectionString = (@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
-
-            // Crie a consulta SQL para buscar o IDcliente com base no IdGoogle
-            string query = "SELECT IDcliente FROM marcacoes WHERE IdGoogle = @googleEventId";
-
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            if (e.ColumnIndex == 7) // Verifique se a coluna é a coluna do botão
             {
-                using (MySqlCommand command = new MySqlCommand(query, connection))
-                {
-                    // Adicione o parâmetro à consulta
-                    command.Parameters.AddWithValue("@googleEventId", googleEventId);
+                DataGridViewRow row = kryptonDataGridView2.Rows[e.RowIndex];
+                object codigoCliente = row.Cells["Código Cliente"].Value;
 
-                    // Abra a conexão e execute a consulta
-                    connection.Open();
-                    using (MySqlDataReader reader = command.ExecuteReader())
-                    {
-                        // Se a consulta retornar algum resultado, atribua o IDcliente à variável
-                        if (reader.Read())
-                        {
-                            clientId = reader.GetInt32(0);
-                        }
-                    }
+                // Verifique se o código do cliente está presente
+                if (codigoCliente != null && codigoCliente != DBNull.Value)
+                {
+                    // Mude a cor do botão para amarelo
+                    row.Cells[e.ColumnIndex].Style.BackColor = Color.Yellow;
+                }
+                else
+                {
+                    // Mude a cor do botão para verde
+                    row.Cells[e.ColumnIndex].Style.BackColor = Color.Green;
                 }
             }
-
-            return clientId;
-        }
-
-        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
-        private void button8_Click(object sender, EventArgs e)
-        {
-            // Aplicando o filtro para mostrar apenas os resultados com a coluna 7 vazia
-            (dataGridView2.DataSource as DataTable).DefaultView.RowFilter = "[Código Cliente] IS NULL";
-        }
-
-        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
-        private void button11_Click(object sender, EventArgs e)
-        {
-            // Aplicando o filtro para mostrar apenas os resultados com a coluna 7 não vazia
-            (dataGridView2.DataSource as DataTable).DefaultView.RowFilter = "[Código Cliente] IS NOT NULL";
-        }
-
-        //  !!!!!!!!!!!!!!  NAO APAGAR !!!!!!!!!!!!!!
-        private void button12_Click(object sender, EventArgs e)
-        {
-            // Removendo o filtro para mostrar todos os resultados
-            (dataGridView2.DataSource as DataTable).DefaultView.RowFilter = string.Empty;
         }
 
 
 
 
-
-        private void kryptonButton3_Click(object sender, EventArgs e)
+        private void kryptonDataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
-            if (kryptonNavigator1.SelectedPage == kryptonPage1) // nome da sua tabPage onde está o DataGridView
+
+            var senderGrid = (DataGridView)sender;
+
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
+                e.RowIndex >= 0)
             {
-                // Cria a conexão com o banco de dados MySQL
-                MySqlConnection conn = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
+                // Recuperando os valores das colunas
+                string data = senderGrid.Rows[e.RowIndex].Cells["Data"].Value.ToString();
+                string horaInicio = senderGrid.Rows[e.RowIndex].Cells["Hora Início"].Value.ToString();
+                string horaFim = senderGrid.Rows[e.RowIndex].Cells["Hora Fim"].Value.ToString();
+                string Idgoogle = senderGrid.Rows[e.RowIndex].Cells["EventId"].Value.ToString();
+                string descricao = senderGrid.Rows[e.RowIndex].Cells["Descrição"].Value.ToString();
+                string titulo = senderGrid.Rows[e.RowIndex].Cells["Título"].Value.ToString();
+                string CodCliente = senderGrid.Rows[e.RowIndex].Cells["Código Cliente"].Value.ToString();
 
-                conn.Open();
 
-                // Cria a consulta SQL
-                string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, SmsEnviada FROM marcacoes";
-
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-
-
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                dgvsmspendentes.DataSource = dt;
-
-                conn.Close();
-                dgvsmspendentes.Refresh();
+                // Abre o FormAdicionarEvento passando os valores como parâmetros
+                FormAdicionarEvento form = new FormAdicionarEvento(data, horaInicio, horaFim, Idgoogle, descricao, titulo, CodCliente);
+                form.Show();
             }
-        }
-
-        private void kryptonButton6_Click(object sender, EventArgs e)
-        {
-
-
 
         }
+
+
+
 
         private void kryptonButton7_Click(object sender, EventArgs e)
         {
-
+            // Aplicando o filtro para mostrar apenas os resultados com a coluna 7 vazia
+            (kryptonDataGridView2.DataSource as DataTable).DefaultView.RowFilter = "[Código Cliente] IS NULL";
         }
 
         private void kryptonButton4_Click(object sender, EventArgs e)
@@ -1715,94 +1629,6 @@ namespace Impar
 
                
         }
-
-
-
-
-
-        //private async void kryptonButton5_Click(object sender, EventArgs e)
-        //{
-        //!!!!!!!!!!!!!!!!!!! ENVIA SMS PARA OS PENDENTES SELECIONADOS NO DATAGRID!!!!!!!!!!!!!!!!!
-
-
-        // Pergunta ao usuário se deseja enviar a mensagem de texto
-                                    //        var result = MessageBox.Show("Antes de continuar, verifique se tem a aplicação iniciada no seu telemóvel. Deseja continuar com o envio da mensagem?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                                    //            // Verifica se o usuário escolheu o botão Sim
-                                    //            if (result == DialogResult.Yes)
-                                    //            {
-                                    //                try
-                                    //                {
-                                    //                    // Define a conexão com o banco de dados MySQL
-                                    //                    MySqlConnection conn = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
-                                    //        conn.Open();
-
-                                    //                    //// Cria a lista de IDs dos clientes selecionados
-           
-                                    //                    List<int> idsSelecionados = new List<int>();
-                                    //                    foreach (DataGridViewRow row in dgvsmspendentes.Rows)
-                                    //                    {
-                                    //                        DataGridViewCheckBoxCell chk = (DataGridViewCheckBoxCell)row.Cells["SmsEnviada"];
-                                    //                        if (chk.Value != null && (bool) chk.Value)
-                                    //        {
-                                    //            idsSelecionados.Add(int.Parse(row.Cells["IdCliente"].Value.ToString()));
-                                    //        }
-                                    //    }
-                                    //                    // Verifica se a lista de IDs selecionados não está vazia
-                                    //                    if (idsSelecionados.Count > 0)
-                                    //                    {
-                                    //                        // Define a consulta SQL com a cláusula WHERE modificada para filtrar apenas os clientes selecionados com SmsEnviada = 0
-                                    //                        //   string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, CAST(SmsEnviada AS BOOLEAN) AS SmsEnviada FROM marcacoes WHERE SmsEnviada = 0 AND SmsEnviada IS NOT NULL AND IdCliente IN(" + string.Join(", ", idsSelecionados) + ")";
-                                    //                        string query = "SELECT IdCliente, Nome, Telemovel, Horario, Horainicio, HoraFim, IF(SmsEnviada = 0, FALSE, TRUE) AS SmsEnviada FROM marcacoes WHERE SmsEnviada = 0 AND SmsEnviada IS NOT NULL AND IdCliente IN(" + string.Join(", ", idsSelecionados) + ")";
-                                    //    MySqlCommand cmd = new MySqlCommand(query, conn);
-
-                                    //    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                                    //    DataTable dt = new DataTable();
-                                    //    da.Fill(dt);
-
-                                    //                        // Fecha a conexão com o banco de dados
-                                    //                        conn.Close();
-
-                                    //                        // Percorre os dados da DataTable para enviar os SMS
-                                    //                        foreach (DataRow row in dt.Rows)
-                                    //                        {
-                                    //                            string from = "+351910045307"; // Número de origem PASSAR DEPOIS PARA PARAMETRO
-                                    //    string to = row["Telemovel"].ToString();
-                                    //    string nome = row["Nome"].ToString();
-                                    //    string horario = row["Horario"].ToString();
-                                    //    string horaInicio = row["Horainicio"].ToString();
-                                    //    string content = $"Estimado {nome}, informamos que tem marcação no dia {horario} às {horaInicio}";
-                                    //    bool enviadoComSucesso = await EnviarSMS(from, to, content);
-
-                                    //                            if (enviadoComSucesso)
-                                    //                            {
-                                    //                                // Atualiza o status da mensagem SMS no banco de dados
-                                    //                                int idMarcacao = int.Parse(row["IdCliente"].ToString());
-                                    //    string updateQuery = $"UPDATE marcacoes SET SmsEnviada = 1 WHERE IdCliente = {idMarcacao}";
-
-                                    //    MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn);
-                                    //    conn.Open();
-                                    //                                updateCmd.ExecuteNonQuery();
-                                    //                                conn.Close();
-                                    //                            }
-                                    //                        }
-
-                                    //                        MessageBox.Show("Todos os SMS foram enviados com sucesso!");
-                                    //                    }
-                                    //                }
-
-
-                                    //                catch (Exception ex)
-                                    //{
-                                    //    MessageBox.Show($"Erro ao enviar SMS: {ex.Message}");
-                                    //}
-         
-                                    //                    }
-
-        //}
-
-
-
 
 
 
@@ -1989,13 +1815,45 @@ namespace Impar
             }
         }
 
+        private void kryptonButton12_Click(object sender, EventArgs e)
+        {
+            // Aplicando o filtro para mostrar apenas os resultados com a coluna 7 não vazia
+            (kryptonDataGridView2.DataSource as DataTable).DefaultView.RowFilter = "[Código Cliente] IS NOT NULL";
+        }
 
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Daqui para cima é codigo para enviar sms !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        private void kryptonButton13_Click(object sender, EventArgs e)
+        {
+            // Removendo o filtro para mostrar todos os resultados
+            (kryptonDataGridView2.DataSource as DataTable).DefaultView.RowFilter = string.Empty;
+        }
 
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Daqui para cima é codigo para enviar sms !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        private void btnzxca_Click(object sender, EventArgs e)
+        {
 
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Daqui para cima é codigo para enviar sms !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            
 
+
+
+                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Daqui para cima é codigo para enviar sms !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Daqui para cima é codigo para enviar sms !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Daqui para cima é codigo para enviar sms !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            Agenda form2 = new Agenda();  // Instancia o novo formulário
+            form2.ShowDialog();        // Abre o novo formulário como uma janela modal
+        }
+    }
     }
 
-}
+
+
+
+
+
+
+
