@@ -17,5 +17,17 @@
     <Setting Name="password" Type="System.String" Scope="User">
       <Value Profile="(Default)">xd</Value>
     </Setting>
+    <Setting Name="HorarioManha" Type="System.String" Scope="User">
+      <Value Profile="(Default)">08:00:00</Value>
+    </Setting>
+    <Setting Name="HorarioFimManha" Type="System.String" Scope="User">
+      <Value Profile="(Default)">12:00:00</Value>
+    </Setting>
+    <Setting Name="HorarioTarde" Type="System.String" Scope="User">
+      <Value Profile="(Default)">14:00:00</Value>
+    </Setting>
+    <Setting Name="HorarioFimTarde" Type="System.String" Scope="User">
+      <Value Profile="(Default)">18:00:00</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

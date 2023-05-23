@@ -26,23 +26,12 @@ namespace Impar
 {
     public partial class GoogleAgenda : Form
     {
+
+        private Font customFont;
+
         public GoogleAgenda()
         {
-            InitializeComponent();
-            dataGridView1.CellFormatting += DataGridView1_CellFormatting;
-
-
-            //dataGridView2.CellFormatting += dataGridView2_CellFormatting;
-            //dataGridView2.CellPainting += dataGridView2_CellPainting;
-
-            //DataGridViewButtonColumn agendarColumn = new DataGridViewButtonColumn();
-            //agendarColumn.HeaderText = "Agendar";
-
-            //dataGridView2.Columns.Add(agendarColumn);
-            //agendarColumn.DisplayIndex = 7; // Defina a posição da coluna para 7
-
-            //dataGridView2.CellContentClick += dataGridView2_CellContentClick;
-
+         
 
 
 
@@ -51,202 +40,62 @@ namespace Impar
 
 
 
-        private void DataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
-                DataGridViewCell statusCell = row.Cells["Status"];
-
-                if (statusCell != null && statusCell.Value != null)
-                {
-                    string status = statusCell.Value.ToString();
-
-                    if (status == "Ocupado")
-                    {
-                        row.DefaultCellStyle.BackColor = Color.Red;
-                    }
-                    else if (status == "Disponível")
-                    {
-                        row.DefaultCellStyle.BackColor = Color.Green;
-                    }
-                }
-            }
-        }
-
-
-
-        //private List<DateTime> GetOccupiedTimeSlotsInRange(List<Agendamento> agendamentos, DateTime inicio, DateTime fim)
-        //{
-        //    List<DateTime> horariosOcupados = new List<DateTime>();
-
-        //    foreach (Agendamento agendamento in agendamentos)
-        //    {
-        //        if (agendamento.Inicio.Date >= inicio.Date && agendamento.Fim.Date <= fim.Date)
-        //        {
-        //            DateTime horario = agendamento.Inicio;
-        //            while (horario < agendamento.Fim)
-        //            {
-        //                horariosOcupados.Add(horario);
-        //                horario = horario.AddMinutes(30);
-        //            }
-        //        }
-        //    }
-
-        //    return horariosOcupados;
-        //}
-
-
-
-
-        // !!!!!!!!!!!!!!!!!  EVENTO NO CALENDR BIER
-
-        //private List<Agendamento> agendamentos2 = new List<Agendamento>();
-
-
-        //private List<DateTime> GetAvailableTimeSlots2(DateTime inicio, DateTime fim, DateTime manhaInicio, DateTime manhaFim, DateTime tardeInicio, DateTime tardeFim, List<Agendamento> agendamentos)
-        //{
-        //    List<DateTime> horariosDisponiveis = new List<DateTime>();
-
-        //    foreach (DateTime horario in GetTimeSlots2(inicio, fim, manhaInicio, manhaFim, tardeInicio, tardeFim))
-        //    {
-        //        if (!IsHorarioOcupado2(horario, manhaInicio, manhaFim, tardeInicio, tardeFim, agendamentos))
-        //        {
-        //            horariosDisponiveis.Add(horario);
-        //        }
-        //    }
-
-        //    return horariosDisponiveis;
-        //}
-        //private List<DateTime> GetOccupiedTimeSlots2(DateTime inicio, DateTime fim, DateTime manhaInicio, DateTime manhaFim, DateTime tardeInicio, DateTime tardeFim, List<Agendamento> agendamentos)
-        //{
-        //    List<DateTime> horariosOcupados = new List<DateTime>();
-
-        //    foreach (DateTime horario in GetTimeSlots2(inicio, fim, manhaInicio, manhaFim, tardeInicio, tardeFim))
-        //    {
-        //        if (IsHorarioOcupado2(horario, manhaInicio, manhaFim, tardeInicio, tardeFim, agendamentos))
-        //        {
-        //            horariosOcupados.Add(horario);
-        //        }
-        //    }
-
-        //    return horariosOcupados;
-        //}
-
-        //private bool IsHorarioOcupado2(DateTime horario, DateTime manhaInicio, DateTime manhaFim, DateTime tardeInicio, DateTime tardeFim, List<Agendamento> agendamentos)
-        //{
-        //    foreach (var agendamento in agendamentos)
-        //    {
-        //        if (horario >= agendamento.Inicio && horario < agendamento.Fim)
-        //            return true;
-        //    }
-
-        //    return false;
-        //}
-
-        //private IEnumerable<DateTime> GetTimeSlots2(DateTime inicio, DateTime fim, DateTime manhaInicio, DateTime manhaFim, DateTime tardeInicio, DateTime tardeFim)
-        //{
-        //    DateTime horario = inicio;
-
-        //    while (horario < fim)
-        //    {
-        //        if ((horario.TimeOfDay >= manhaInicio.TimeOfDay && horario.TimeOfDay < manhaFim.TimeOfDay) ||
-        //            (horario.TimeOfDay >= tardeInicio.TimeOfDay && horario.TimeOfDay < tardeFim.TimeOfDay))
-        //        {
-        //            yield return horario;
-        //        }
-
-        //        horario = horario.AddMinutes(30);
-        //    }
-        //}
-
-
-
-
-        //    private List<DateTime> GetAvailableTimeSlots2(DateTime startDate, DateTime endDate, DateTime morningStartTime, DateTime morningEndTime, DateTime afternoonStartTime, DateTime afternoonEndTime)
-        //    {
-        //        List<DateTime> timeSlots = new List<DateTime>();
-
-        //        DateTime currentStartDate = startDate.Date;
-        //        DateTime currentEndDate = endDate.Date;
-
-        //        while (currentStartDate <= currentEndDate)
-        //        {
-        //            DateTime currentMorningStartTime = currentStartDate.Add(morningStartTime.TimeOfDay);
-        //            DateTime currentMorningEndTime = currentStartDate.Add(morningEndTime.TimeOfDay);
-        //            DateTime currentAfternoonStartTime = currentStartDate.Add(afternoonStartTime.TimeOfDay);
-        //            DateTime currentAfternoonEndTime = currentStartDate.Add(afternoonEndTime.TimeOfDay);
-
-        //            for (DateTime time = currentMorningStartTime; time < currentMorningEndTime; time = time.AddMinutes(30))
-        //            {
-        //                timeSlots.Add(time);
-        //            }
-
-        //            for (DateTime time = currentAfternoonStartTime; time < currentAfternoonEndTime; time = time.AddMinutes(30))
-        //            {
-        //                timeSlots.Add(time);
-        //            }
-
-        //            currentStartDate = currentStartDate.AddDays(1);
-        //        }
-
-        //        return timeSlots;
-
-        //}
-
-
-
-        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void kryptonDataGridView5_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             var senderGrid = (DataGridView)sender;
 
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
                 e.RowIndex >= 0)
             {
-                string buttonText = dataGridView2.Rows[e.RowIndex].Cells["Ação"].Value?.ToString();
+                var cell = kryptonDataGridView5.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
-                if (buttonText == "Marcar")
+                if (cell is DataGridViewButtonCell)
                 {
-                    string data = dataGridView2.Rows[e.RowIndex].Cells["Data"].Value?.ToString();
-                    string horario = dataGridView2.Rows[e.RowIndex].Cells["Horário"].Value?.ToString();
-                    DateTime horarioInicio = DateTime.ParseExact(horario, "HH:mm", CultureInfo.InvariantCulture);
-                    DateTime horarioFim = horarioInicio.AddMinutes(30);
-                    string ocupadoAte = horarioFim.ToString("HH:mm");
+                    string buttonText = cell.Value?.ToString();
 
-                    // Abrir o formulário Marcacoes e passar os valores
-                    Marcacoes marcacoesForm = new Marcacoes();
-                    marcacoesForm.tbhorario.Value = DateTime.Parse(data);
-                    marcacoesForm.tbhorainicio.Value = horarioInicio;
-                    marcacoesForm.tbhorafim.Value = horarioFim;
-                    marcacoesForm.Show();
-                }
-                else if (buttonText == "Editar")
-                {
-                    string data = dataGridView2.Rows[e.RowIndex].Cells["Data"].Value?.ToString();
-                    string horario = dataGridView2.Rows[e.RowIndex].Cells["Horário"].Value?.ToString();
-                    string ocupadoAte = dataGridView2.Rows[e.RowIndex].Cells["Ocupado até"].Value?.ToString();
-                    string titulo = dataGridView2.Rows[e.RowIndex].Cells["Título"].Value?.ToString();
-                    string descricao = dataGridView2.Rows[e.RowIndex].Cells["Descrição"].Value?.ToString();
-                    string eventId = dataGridView2.Rows[e.RowIndex].Cells["EventId"].Value?.ToString();
+                    if (buttonText == "Marcar")
+                    {
+                        string data = kryptonDataGridView5.Rows[e.RowIndex].Cells["Data"].Value?.ToString();
+                        string horario = kryptonDataGridView5.Rows[e.RowIndex].Cells["Horário"].Value?.ToString();
+                        DateTime horarioInicio = DateTime.ParseExact(horario, "HH:mm", CultureInfo.InvariantCulture);
+                        DateTime horarioFim = horarioInicio.AddMinutes(30);
+                        string ocupadoAte = horarioFim.ToString("HH:mm");
 
-                    // Abrir o formulário Marcacoes e passar os valores
-                    Marcacoes marcacoesForm = new Marcacoes();
-                    marcacoesForm.tbhorario.Value = DateTime.Parse(data);
-                    marcacoesForm.tbhorainicio.Value = DateTime.ParseExact(horario, "HH:mm", CultureInfo.InvariantCulture);
-                    marcacoesForm.tbhorafim.Value = DateTime.ParseExact(ocupadoAte, "HH:mm", CultureInfo.InvariantCulture);
-                    marcacoesForm.tbtitulogoogle.Text = titulo;
-                    marcacoesForm.tbdescricao.Text = descricao;
-                    marcacoesForm.tbidgoogle.Text = eventId;
-                    marcacoesForm.Show();
+                        // Abrir o formulário Marcacoes e passar os valores
+                        Marcacoes marcacoesForm = new Marcacoes();
+                        marcacoesForm.tbhorario.Value = DateTime.Parse(data);
+                        marcacoesForm.tbhorainicio.Value = horarioInicio;
+                        marcacoesForm.tbhorafim.Value = horarioFim;
+                        marcacoesForm.Show();
+                    }
+                    else if (buttonText == "Editar")
+                    {
+                        string data = kryptonDataGridView5.Rows[e.RowIndex].Cells["Data"].Value?.ToString();
+                        string horario = kryptonDataGridView5.Rows[e.RowIndex].Cells["Horário"].Value?.ToString();
+                        string ocupadoAte = kryptonDataGridView5.Rows[e.RowIndex].Cells["Ocupado até"].Value?.ToString();
+                        string titulo = kryptonDataGridView5.Rows[e.RowIndex].Cells["Título"].Value?.ToString();
+                        string descricao = kryptonDataGridView5.Rows[e.RowIndex].Cells["Descrição"].Value?.ToString();
+                        string eventId = kryptonDataGridView5.Rows[e.RowIndex].Cells["EventId"].Value?.ToString();
+
+                        // Abrir o formulário Marcacoes e passar os valores
+                        Marcacoes marcacoesForm = new Marcacoes();
+                        marcacoesForm.tbhorario.Value = DateTime.Parse(data);
+                        marcacoesForm.tbhorainicio.Value = DateTime.ParseExact(horario, "HH:mm", CultureInfo.InvariantCulture);
+                        marcacoesForm.tbhorafim.Value = DateTime.ParseExact(ocupadoAte, "HH:mm", CultureInfo.InvariantCulture);
+                        marcacoesForm.tbtitulogoogle.Text = titulo;
+                        marcacoesForm.tbdescricao.Text = descricao;
+                        marcacoesForm.tbidgoogle.Text = eventId;
+                        marcacoesForm.Show();
+                    }
                 }
             }
         }
 
-        private void dataGridView2_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void kryptonDataGridView5_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (e.ColumnIndex == dataGridView2.Columns["Ação"].Index && e.RowIndex >= 0)
+            if (e.ColumnIndex == kryptonDataGridView5.Columns["Ação"].Index && e.RowIndex >= 0)
             {
-                string buttonText = dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString() ?? string.Empty;
+                string buttonText = kryptonDataGridView5.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString() ?? string.Empty;
                 if (buttonText == "Editar")
                 {
                     e.Value = "Editar";
@@ -263,246 +112,43 @@ namespace Impar
 
 
 
-        //private void kryptonMonthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
-        //{
-        //    DateTime selectedStartDate = e.Start.Date;
-        //    DateTime selectedEndDate = e.End.Date;
-
-        //    selectedEndDate = selectedEndDate.AddDays(1).AddSeconds(-1);
-
-        //    GoogleCredential credential;
-        //    using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
-        //    {
-        //        credential = GoogleCredential.FromStream(stream)
-        //            .CreateScoped(CalendarService.Scope.Calendar);
-        //    }
-
-        //    var service = new CalendarService(new BaseClientService.Initializer()
-        //    {
-        //        HttpClientInitializer = credential,
-        //        ApplicationName = "GoogleAgenda"
-        //    });
-
-        //    EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
-        //    request.TimeMin = selectedStartDate;
-        //    request.TimeMax = selectedEndDate;
-        //    request.ShowDeleted = false;
-        //    request.SingleEvents = true;
-        //    request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-
-        //    Events events = request.Execute();
-
-        //    List<Agendamento> agendamentos = new List<Agendamento>();
-        //    if (events.Items != null && events.Items.Count > 0)
-        //    {
-        //        foreach (var eventItem in events.Items)
-        //        {
-        //            agendamentos.Add(new Agendamento()
-        //            {
-        //                Inicio = eventItem.Start.DateTime.Value,
-        //                Fim = eventItem.End.DateTime.Value
-        //            });
-        //        }
-        //    }
-
-        //    TimeSpan morningStartTime = DtHoraInicioManha.Value.TimeOfDay;
-        //    TimeSpan morningEndTime = DtHoraFimManha.Value.TimeOfDay;
-        //    TimeSpan afternoonStartTime = DtHoraInicioTarde.Value.TimeOfDay;
-        //    TimeSpan afternoonEndTime = DtHoraFimTarde.Value.TimeOfDay;
-
-        //    List<DateTime> horariosDisponiveis = new List<DateTime>();
-
-        //    for (DateTime currentDate = selectedStartDate.Date; currentDate <= selectedEndDate.Date; currentDate = currentDate.AddDays(1))
-        //    {
-        //        DateTime currentMorningStartTime = currentDate.Date + morningStartTime;
-        //        DateTime currentMorningEndTime = currentDate.Date + morningEndTime;
-        //        DateTime currentAfternoonStartTime = currentDate.Date + afternoonStartTime;
-        //        DateTime currentAfternoonEndTime = currentDate.Date + afternoonEndTime;
-
-        //        for (DateTime time = currentMorningStartTime; time < currentMorningEndTime; time = time.AddMinutes(30))
-        //        {
-        //            horariosDisponiveis.Add(time);
-        //        }
-
-        //        for (DateTime time = currentAfternoonStartTime; time < currentAfternoonEndTime; time = time.AddMinutes(30))
-        //        {
-        //            horariosDisponiveis.Add(time);
-        //        }
-        //    }
-
-        //    dataGridView2.Columns.Clear(); // Remove todas as colunas existentes
-
-        //    // Adicione as colunas ao dataGridView2
-        //    DataGridViewButtonColumn btnColumn = new DataGridViewButtonColumn();
-        //    btnColumn.HeaderText = "Ação";
-        //    btnColumn.Name = "Ação";
-        //    dataGridView2.Columns.Add(btnColumn);
-        //    dataGridView2.Columns.Add("Data", "Data");
-        //    dataGridView2.Columns.Add("Horário", "Horário");
-        //    dataGridView2.Columns.Add("Status", "Status");
-        //    dataGridView2.Columns.Add("Ocupado até", "Ocupado até");
-        //    dataGridView2.Columns.Add("Título", "Título");
-        //    dataGridView2.Columns.Add("Descrição", "Descrição");
-        //    dataGridView2.Columns.Add("EventId", "EventId");
-
-
-        //    foreach (DateTime horario in horariosDisponiveis)
-        //    {
-        //        var agendamento = agendamentos.FirstOrDefault(a => horario.Date == a.Inicio.Date && horario.TimeOfDay >= a.Inicio.TimeOfDay && horario.TimeOfDay < a.Fim.TimeOfDay);
-
-        //        if (agendamento != null)
-        //        {
-        //            var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
-
-        //            if (eventItem != null)
-        //            {
-        //                string eventId = eventItem.Id;
-        //                string titulo = eventItem.Summary;
-        //                string descricao = eventItem.Description;
-        //                dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), titulo, descricao, eventId);
-        //            }
-        //            else
-        //            {
-        //                dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), "", "", "");
-        //            }
-        //        }
-        //        else
-        //        {
-        //            dataGridView2.Rows.Add("Marcar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Disponível", "", "", "", "");
-        //        }
-        //    }
-
-        //    dataGridView2.CellFormatting += dataGridView2_CellFormatting;
-        //    dataGridView2.CellContentClick += dataGridView2_CellContentClick;
-        //}
-
-
 
 
 
         private void kryptonMonthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
         {
-            DateTime selectedStartDate = e.Start.Date;
-            DateTime selectedEndDate = e.End.Date;
-
-            selectedEndDate = selectedEndDate.AddDays(1).AddSeconds(-1);
-
-            GoogleCredential credential;
-            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
-            {
-                credential = GoogleCredential.FromStream(stream)
-                    .CreateScoped(CalendarService.Scope.Calendar);
-            }
-
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "GoogleAgenda"
-            });
-
-            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
-            request.TimeMin = selectedStartDate;
-            request.TimeMax = selectedEndDate;
-            request.ShowDeleted = false;
-            request.SingleEvents = true;
-            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-
-            Events events = request.Execute();
-
-            List<Agendamento> agendamentos = new List<Agendamento>();
-            if (events.Items != null && events.Items.Count > 0)
-            {
-                foreach (var eventItem in events.Items)
-                {
-                    agendamentos.Add(new Agendamento()
-                    {
-                        Inicio = eventItem.Start.DateTime.Value,
-                        Fim = eventItem.End.DateTime.Value
-                    });
-                }
-            }
-
-            TimeSpan morningStartTime = DtHoraInicioManha.Value.TimeOfDay;
-            TimeSpan morningEndTime = DtHoraFimManha.Value.TimeOfDay;
-            TimeSpan afternoonStartTime = DtHoraInicioTarde.Value.TimeOfDay;
-            TimeSpan afternoonEndTime = DtHoraFimTarde.Value.TimeOfDay;
-
-            List<DateTime> horariosDisponiveis = new List<DateTime>();
-
-            for (DateTime currentDate = selectedStartDate.Date; currentDate <= selectedEndDate.Date; currentDate = currentDate.AddDays(1))
-            {
-                DateTime currentMorningStartTime = currentDate.Date + morningStartTime;
-                DateTime currentMorningEndTime = currentDate.Date + morningEndTime;
-                DateTime currentAfternoonStartTime = currentDate.Date + afternoonStartTime;
-                DateTime currentAfternoonEndTime = currentDate.Date + afternoonEndTime;
-
-                for (DateTime time = currentMorningStartTime; time < currentMorningEndTime; time = time.AddMinutes(30))
-                {
-                    horariosDisponiveis.Add(time);
-                }
-
-                for (DateTime time = currentAfternoonStartTime; time < currentAfternoonEndTime; time = time.AddMinutes(30))
-                {
-                    horariosDisponiveis.Add(time);
-                }
-            }
-
-            dataGridView2.Columns.Clear(); // Remove todas as colunas existentes
-
-            // Adicione as colunas ao dataGridView2
-            DataGridViewButtonColumn btnColumn = new DataGridViewButtonColumn();
-            btnColumn.HeaderText = "Ação";
-            btnColumn.Name = "Ação";
-            dataGridView2.Columns.Add(btnColumn);
-            dataGridView2.Columns.Add("Data", "Data");
-            dataGridView2.Columns.Add("Horário", "Horário");
-            dataGridView2.Columns.Add("Status", "Status");
-            dataGridView2.Columns.Add("Ocupado até", "Ocupado até");
-            dataGridView2.Columns.Add("Título", "Título");
-            dataGridView2.Columns.Add("Descrição", "Descrição");
-            dataGridView2.Columns.Add("EventId", "EventId");
-
-            foreach (DateTime horario in horariosDisponiveis)
-            {
-                var agendamento = agendamentos.FirstOrDefault(a => horario.Date == a.Inicio.Date && horario.TimeOfDay >= a.Inicio.TimeOfDay && horario.TimeOfDay < a.Fim.TimeOfDay);
-
-                if (agendamento != null)
-                {
-                    var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
-
-                    if (eventItem != null)
-                    {
-                        string eventId = eventItem.Id;
-                        string titulo = eventItem.Summary;
-                        string descricao = eventItem.Description;
-                        dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), titulo, descricao, eventId);
-                    }
-                    else
-                    {
-                        dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), "", "", "");
-                    }
-                }
-                else
-                {
-                    dataGridView2.Rows.Add("Marcar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Disponível", "", "", "", "");
-                }
-            }
-
-            // Ocultar colunas "Título", "Descrição" e "EventId"
-            dataGridView2.Columns["Título"].Visible = false;
-            dataGridView2.Columns["Descrição"].Visible = false;
-            dataGridView2.Columns["EventId"].Visible = false;
-
-            dataGridView2.CellFormatting += dataGridView2_CellFormatting;
-            dataGridView2.CellContentClick += dataGridView2_CellContentClick;
+          
+         
         }
 
 
 
         private void GoogleAgenda_Load(object sender, EventArgs e)
         {
+            DataGridDesign.CustomizeKryptonDataGridView5(kryptonDataGridView5);
+          
+
+
+            // Atribuir valores aos DateTimePickers
+            // Convert string values to DateTime objects
+            DateTime horarioManha = DateTime.Parse(Properties.Settings.Default.HorarioManha);
+            DateTime horarioFimManha = DateTime.Parse(Properties.Settings.Default.HorarioFimManha);
+            DateTime horarioTarde = DateTime.Parse(Properties.Settings.Default.HorarioTarde);
+            DateTime horarioFimTarde = DateTime.Parse(Properties.Settings.Default.HorarioFimTarde);
+
+            // Assign values to DateTimePickers
+            DtHoraInicioManha.Value = horarioManha;
+            DtHoraFimManha.Value = horarioFimManha;
+            DtHoraInicioTarde.Value = horarioTarde;
+            DtHoraFimTarde.Value = horarioFimTarde;
+
+            // Set the values of DtDataInicio and DtDataFim to today's date
+            DtDataInicio.Value = DateTime.Today;
+            DtDataFim.Value = DateTime.Today;
+
 
         }
+
 
         private void kryptonButton1_Click(object sender, EventArgs e)
         {
@@ -533,289 +179,6 @@ namespace Impar
 
 
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-            // Criando uma nova instância do Google Credential
-            GoogleCredential credential;
-            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
-            {
-                credential = GoogleCredential.FromStream(stream)
-                    .CreateScoped(CalendarService.Scope.Calendar);
-            }
-
-            // Criando o serviço de calendário
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "GoogleAgenda"
-            });
-
-            // Definindo os parâmetros para a pesquisa do evento
-            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
-            request.TimeMin = DtDataInicio.Value.Date;
-            request.TimeMax = DtDataFim.Value.Date.AddDays(1);
-            request.ShowDeleted = false;
-            request.SingleEvents = true;
-            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-
-            // Executando a pesquisa
-            Events events = request.Execute();
-
-            // Processando os eventos encontrados
-            List<Agendamento> agendamentos = new List<Agendamento>();
-            if (events.Items != null && events.Items.Count > 0)
-            {
-                foreach (var eventItem in events.Items)
-                {
-                    agendamentos.Add(new Agendamento()
-                    {
-                        Inicio = eventItem.Start.DateTime.Value,
-                        Fim = eventItem.End.DateTime.Value
-                    });
-                }
-            }
-
-            DateTime startDate = DtDataInicio.Value.Date;
-            DateTime endDate = DtDataFim.Value.Date;
-            DateTime morningStartTime = DtHoraInicioManha.Value;
-            DateTime morningEndTime = DtHoraFimManha.Value;
-            DateTime afternoonStartTime = DtHoraInicioTarde.Value;
-            DateTime afternoonEndTime = DtHoraFimTarde.Value;
-
-            List<DateTime> horariosDisponiveis = GetAvailableTimeSlots(startDate, endDate, morningStartTime, morningEndTime, afternoonStartTime, afternoonEndTime);
-
-            foreach (Agendamento agendamento in agendamentos)
-            {
-                for (int i = horariosDisponiveis.Count - 1; i >= 0; i--)
-                {
-                    DateTime horarioDisponivel = horariosDisponiveis[i];
-                    if (horarioDisponivel >= agendamento.Inicio && horarioDisponivel < agendamento.Fim)
-                    {
-                        horariosDisponiveis.RemoveAt(i);
-                    }
-                }
-            }
-
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Horário");
-            dt.Columns.Add("Status");
-            dt.Columns.Add("Título"); // Adicionando a coluna "Título"
-            dt.Columns.Add("Descrição"); // Adicionando a coluna "Descrição"
-
-            foreach (DateTime horario in horariosDisponiveis)
-            {
-                dt.Rows.Add(horario.ToString("HH:mm"), "Disponível", "", ""); // Incluindo valores vazios para as colunas "Título" e "Descrição" quando o horário estiver disponível
-            }
-
-            foreach (Agendamento agendamento in agendamentos)
-            {
-                // Obtendo o evento correspondente ao agendamento
-                var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
-
-                if (eventItem != null)
-                {
-                    string titulo = eventItem.Summary;
-                    string descricao = eventItem.Description;
-
-                    dt.Rows.Add(agendamento.Inicio.ToString("HH:mm") + " - " + agendamento.Fim.ToString("HH:mm"), "Ocupado", titulo, descricao);
-                }
-                else
-                {
-                    dt.Rows.Add(agendamento.Inicio.ToString("HH:mm") + " - " + agendamento.Fim.ToString("HH:mm"), "Ocupado", "", "");
-                }
-            }
-
-            dataGridView1.DataSource = dt;
-        }
-
-
-        private TimeSpan intervaloMarcacoes;
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            DateTime dtDataInicio = DtDataInicio.Value.Date;
-            DateTime dtDataFim = DtDataFim.Value.Date;
-            TimeSpan dtHoraInicioManha = DtHoraInicioManha.Value.TimeOfDay;
-            TimeSpan dtHoraFimManha = DtHoraFimManha.Value.TimeOfDay;
-            TimeSpan dtHoraInicioTarde = DtHoraInicioTarde.Value.TimeOfDay;
-            TimeSpan dtHoraFimTarde = DtHoraFimTarde.Value.TimeOfDay;
-
-            //intervaloMarcacoes = Intervalomarcaçoes.Value.TimeOfDay;
-
-
-            //Criando uma nova instância do Google Credential
-            GoogleCredential credential;
-            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
-            {
-                credential = GoogleCredential.FromStream(stream)
-                    .CreateScoped(CalendarService.Scope.Calendar);
-            }
-
-            // Criando o serviço de calendário
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "GoogleAgenda"
-            });
-
-            // Definindo os parâmetros para a pesquisa do evento
-            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
-
-            request.TimeMin = dtDataInicio;
-            request.TimeMax = dtDataFim;
-            request.ShowDeleted = false;
-            request.SingleEvents = true;
-            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-
-            // Obtendo os eventos da agenda
-            Events events = request.Execute();
-
-            // Criando a lista de horários disponíveis
-            List<DateTime> horariosDisponiveis = new List<DateTime>();
-
-            // Criando a DataTable
-            DataTable dataTable = new DataTable();
-
-
-
-            // Adicionando as colunas na DataTable
-            dataTable.Columns.Add("Data", typeof(DateTime));
-            dataTable.Columns.Add("Horário", typeof(TimeSpan));
-            dataTable.Columns.Add("Duração", typeof(TimeSpan));
-            dataTable.Columns.Add("Status", typeof(string)); // Nova coluna "Status"
-            dataTable.Columns.Add("Intervalo", typeof(TimeSpan));
-
-            // Adicionando horários disponíveis no período da manhã
-            DateTime dtHorario = dtDataInicio + dtHoraInicioManha;
-            while (dtHorario < dtDataInicio + dtHoraFimManha)
-            {
-                bool horarioDisponivel = true;
-                string status = "Disponível";
-                TimeSpan duracao = new TimeSpan(1, 0, 0);
-
-                // Verificando se o horário está ocupado
-                foreach (var evento in events.Items)
-                {
-                    DateTime dtInicioEvento = evento.Start.DateTime ?? DateTime.Parse(evento.Start.Date);
-                    DateTime dtFimEvento = evento.End.DateTime ?? DateTime.Parse(evento.End.Date);
-
-                    if (dtHorario >= dtInicioEvento && dtHorario < dtFimEvento)
-                    {
-                        horarioDisponivel = false;
-                        status = "Ocupado";
-                        duracao = dtFimEvento - dtInicioEvento;
-                        break;
-                    }
-                }
-
-                // Definindo horários de início e término do intervalo de almoço
-                DateTime dtInicioAlmoco = dtDataInicio + dtHoraFimManha;
-                DateTime dtFimAlmoco = dtDataInicio + dtHoraInicioTarde;
-
-                // Se o horário estiver disponível, adiciona na lista de horários disponíveis
-                if (horarioDisponivel)
-                {
-                    horariosDisponiveis.Add(dtHorario);
-                }
-
-                // Calculando o intervalo
-                TimeSpan intervalo = new TimeSpan(0, 0, 0);
-                if (horarioDisponivel)
-                {
-                    if (dtHorario <= dtDataInicio + dtHoraFimManha || dtHorario >= dtDataInicio + dtHoraInicioTarde)
-                    {
-                        intervalo = intervaloMarcacoes;
-                    }
-                    else
-                    {
-                        intervalo = new TimeSpan(0, 0, 0);
-                    }
-                }
-                else
-                {
-                    intervalo = new TimeSpan(0, 0, 0);
-                }
-
-                // Adicionando o horário na DataTable com o status correspondente
-                dataTable.Rows.Add(dtHorario.Date, dtHorario.TimeOfDay, duracao, status, intervalo);
-            }
-
-            // Adicionando horários disponíveis no período da tarde
-            dtHorario = dtDataInicio + dtHoraInicioTarde;
-            while (dtHorario + new TimeSpan(1, 0, 0) <= dtDataFim + dtHoraFimTarde)
-            {
-                bool horarioDisponivel = true;
-                string status = "Disponível";
-                TimeSpan duracao = new TimeSpan(1, 0, 0);
-
-
-                // Verificando se o horário está ocupado
-
-                foreach (var evento in events.Items)
-                {
-                    DateTime dtInicioEvento = evento.Start.DateTime ?? DateTime.Parse(evento.Start.Date);
-                    DateTime dtFimEvento = evento.End.DateTime ?? DateTime.Parse(evento.End.Date);
-
-                    if (dtHorario >= dtInicioEvento && dtHorario < dtFimEvento)
-                    {
-                        horarioDisponivel = false;
-                        status = "Ocupado";
-                        break;
-                    }
-                }
-
-
-                // Definindo horários de início e término do intervalo de almoço
-                DateTime dtInicioAlmoco = dtDataInicio + dtHoraFimManha;
-                DateTime dtFimAlmoco = dtDataInicio + dtHoraInicioTarde;
-                if (dtHorario >= dtInicioAlmoco && dtHorario < dtFimAlmoco)
-                {
-                    horarioDisponivel = false;
-                    status = "Intervalo de almoço";
-                }
-
-                // Se o horário estiver disponível, adiciona na lista de horários disponíveis
-                if (horarioDisponivel)
-                {
-                    horariosDisponiveis.Add(dtHorario);
-                }
-
-                // Calculando o intervalo
-                TimeSpan intervalo = new TimeSpan(0, 0, 0);
-                if (horarioDisponivel)
-                {
-                    if (dtHorario + intervaloMarcacoes <= dtDataInicio + dtHoraFimManha || dtHorario + intervaloMarcacoes >= dtDataInicio + dtHoraInicioTarde)
-                    {
-                        intervalo = intervaloMarcacoes;
-                    }
-                    else
-                    {
-                        intervalo = new TimeSpan(0, 0, 0);
-                    }
-                }
-                else
-                {
-                    intervalo = new TimeSpan(0, 0, 0);
-                }
-
-                // Adicionando o horário na DataTable com o status correspondente
-                dataTable.Rows.Add(dtHorario.Date, dtHorario.TimeOfDay, duracao, status, intervalo);
-            }
-
-            // Exibindo os horários disponíveis no DataGridView
-            dataGridView1.DataSource = dataTable;
-
-            // Adicionando uma nova coluna com os botões de agendamento
-            DataGridViewButtonColumn agendarColumn = new DataGridViewButtonColumn();
-            agendarColumn.HeaderText = "";
-            agendarColumn.Text = "Agendar";
-            agendarColumn.UseColumnTextForButtonValue = true;
-            dataGridView1.Columns.Add(agendarColumn);
-
-            // Adicionando um handler para o evento CellContentClick
-            // dataGridView1.CellContentClick += dataGridView1_CellContentClick;
-        }
 
 
 
@@ -823,99 +186,7 @@ namespace Impar
         private void button4_Click(object sender, EventArgs e)
         {
 
-            // Criando uma nova instância do Google Credential
-            GoogleCredential credential;
-            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
-            {
-                credential = GoogleCredential.FromStream(stream)
-                    .CreateScoped(CalendarService.Scope.Calendar);
-            }
-
-            // Criando o serviço de calendário
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "GoogleAgenda"
-            });
-
-            // Definindo os parâmetros para a pesquisa do evento
-            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
-            request.TimeMin = DtDataInicio.Value.Date;
-            request.TimeMax = DtDataFim.Value.Date.AddDays(1);
-            request.ShowDeleted = false;
-            request.SingleEvents = true;
-            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-
-            // Executando a pesquisa
-            Events events = request.Execute();
-
-            // Processando os eventos encontrados
-            List<Agendamento> agendamentos = new List<Agendamento>();
-            if (events.Items != null && events.Items.Count > 0)
-            {
-                foreach (var eventItem in events.Items)
-                {
-                    agendamentos.Add(new Agendamento()
-                    {
-                        EventId = eventItem.Id, // Adicione esta linha
-                        Inicio = eventItem.Start.DateTime.Value,
-                        Fim = eventItem.End.DateTime.Value
-                    });
-                }
-            }
-
-            DateTime startDate = DtDataInicio.Value.Date;
-            DateTime endDate = DtDataFim.Value.Date;
-            DateTime morningStartTime = DtHoraInicioManha.Value;
-            DateTime morningEndTime = DtHoraFimManha.Value;
-            DateTime afternoonStartTime = DtHoraInicioTarde.Value;
-            DateTime afternoonEndTime = DtHoraFimTarde.Value;
-
-            List<DateTime> horariosDisponiveis = GetAvailableTimeSlots(startDate, endDate, morningStartTime, morningEndTime, afternoonStartTime, afternoonEndTime);
-
-            foreach (Agendamento agendamento in agendamentos)
-            {
-                for (int i = horariosDisponiveis.Count - 1; i >= 0; i--)
-                {
-                    DateTime horarioDisponivel = horariosDisponiveis[i];
-                    if (horarioDisponivel >= agendamento.Inicio && horarioDisponivel < agendamento.Fim)
-                    {
-                        horariosDisponiveis.RemoveAt(i);
-                    }
-                }
-            }
-
-            DataTable dt = new DataTable();
-            dt.Columns.Add("EventId"); // Adicionando a coluna "EventId"
-            dt.Columns.Add("Horário");
-            dt.Columns.Add("Status");
-            dt.Columns.Add("Título"); // Adicionando a coluna "Título"
-            dt.Columns.Add("Descrição"); // Adicionando a coluna "Descrição"
-
-            foreach (DateTime horario in horariosDisponiveis)
-            {
-                dt.Rows.Add("", horario.ToString("HH:mm"), "Disponível", "", ""); // Adicione um valor vazio para a coluna "EventId" quando o horário estiver disponível
-            }
-
-            foreach (Agendamento agendamento in agendamentos)
-            {
-                // Obtendo o evento correspondente ao agendamento
-                var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
-
-                if (eventItem != null)
-                {
-                    string titulo = eventItem.Summary;
-                    string descricao = eventItem.Description;
-
-                    dt.Rows.Add(agendamento.EventId, agendamento.Inicio.ToString("HH:mm") + " - " + agendamento.Fim.ToString("HH:mm"), "Ocupado", titulo, descricao);
-                }
-                else
-                {
-                    dt.Rows.Add(agendamento.EventId, agendamento.Inicio.ToString("HH:mm") + " - " + agendamento.Fim.ToString("HH:mm"), "Ocupado", "", "");
-                }
-            }
-
-            dataGridView1.DataSource = dt;
+          
 
         }
       
@@ -976,88 +247,7 @@ namespace Impar
 
         private void button5_Click(object sender, EventArgs e)
         {
-            const int MANHA_INICIO = 9;
-            const int MANHA_FIM = 12;
-            const int TARDE_INICIO = 14;
-            const int TARDE_FIM = 19;
-
-            //Criando uma nova instância do Google Credential
-            GoogleCredential credential;
-            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
-            {
-                credential = GoogleCredential.FromStream(stream)
-                    .CreateScoped(CalendarService.Scope.Calendar);
-            }
-
-            // Criando o serviço de calendário
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "GoogleAgenda"
-            });
-
-            // Definindo os parâmetros para a pesquisa do evento
-            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
-            request.TimeMin = DtDataInicio.Value.Date;
-            request.TimeMax = DtDataFim.Value.Date.AddDays(1);
-            request.ShowDeleted = false;
-            request.SingleEvents = true;
-            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-
-            // Executando a pesquisa
-            Events events = request.Execute();
-
-            // Processando os eventos encontrados
-            List<Agendamento> agendamentos = new List<Agendamento>();
-            if (events.Items != null && events.Items.Count > 0)
-            {
-                foreach (var eventItem in events.Items)
-                {
-                    agendamentos.Add(new Agendamento()
-                    {
-                        Inicio = eventItem.Start.DateTime.Value,
-                        Fim = eventItem.End.DateTime.Value
-                    });
-                }
-            }
-
-            List<DateTime> horariosDisponiveis = new List<DateTime>();
-
-            for (int hora = MANHA_INICIO; hora <= MANHA_FIM; hora++)
-            {
-                DateTime horario = new DateTime(DtDataInicio.Value.Year, DtDataInicio.Value.Month, DtDataInicio.Value.Day, hora, 0, 0);
-                horariosDisponiveis.Add(horario);
-            }
-
-            for (int hora = TARDE_INICIO; hora <= TARDE_FIM; hora++)
-            {
-                DateTime horario = new DateTime(DtDataInicio.Value.Year, DtDataInicio.Value.Month, DtDataInicio.Value.Day, hora, 0, 0);
-                horariosDisponiveis.Add(horario);
-            }
-
-            foreach (Agendamento agendamento in agendamentos)
-            {
-                for (int i = horariosDisponiveis.Count - 1; i >= 0; i--)
-                {
-                    DateTime horarioDisponivel = horariosDisponiveis[i];
-                    if (horarioDisponivel >= agendamento.Inicio && horarioDisponivel < agendamento.Fim)
-                    {
-                        horariosDisponiveis.RemoveAt(i);
-                    }
-                }
-            }
-
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Horário");
-            dt.Columns.Add("Status");
-
-            foreach (Agendamento agendamento in agendamentos)
-            {
-                dt.Rows.Add(agendamento.Inicio.ToString("HH:mm") + " - " + agendamento.Fim.ToString("HH:mm"), "Ocupado");
-            }
-
-            dataGridView1.DataSource = dt;
-
+          
         }
 
 
@@ -1094,97 +284,6 @@ namespace Impar
         private void button6_Click(object sender, EventArgs e)
         {
 
-            // Criando uma nova instância do Google Credential
-            GoogleCredential credential;
-            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
-            {
-                credential = GoogleCredential.FromStream(stream)
-                    .CreateScoped(CalendarService.Scope.Calendar);
-            }
-
-            // Criando o serviço de calendário
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "GoogleAgenda"
-            });
-
-            // Definindo os parâmetros para a pesquisa do evento
-            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
-            request.TimeMin = DtDataInicio.Value.Date;
-            request.TimeMax = DtDataFim.Value.Date.AddDays(1);
-            request.ShowDeleted = false;
-            request.SingleEvents = true;
-            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-
-            // Executando a pesquisa
-            Events events = request.Execute();
-
-            // Processando os eventos encontrados
-            List<Agendamento> agendamentos = new List<Agendamento>();
-            if (events.Items != null && events.Items.Count > 0)
-            {
-                foreach (var eventItem in events.Items)
-                {
-                    agendamentos.Add(new Agendamento()
-                    {
-                        Inicio = eventItem.Start.DateTime.Value,
-                        Fim = eventItem.End.DateTime.Value
-                    });
-                }
-            }
-
-            DateTime startDate = DtDataInicio.Value.Date;
-            DateTime endDate = DtDataFim.Value.Date;
-            DateTime morningStartTime = DtHoraInicioManha.Value;
-            DateTime morningEndTime = DtHoraFimManha.Value;
-            DateTime afternoonStartTime = DtHoraInicioTarde.Value;
-            DateTime afternoonEndTime = DtHoraFimTarde.Value;
-
-            List<DateTime> horariosDisponiveis = GetAvailableTimeSlots(startDate, endDate, morningStartTime, morningEndTime, afternoonStartTime, afternoonEndTime);
-
-            foreach (Agendamento agendamento in agendamentos)
-            {
-                for (int i = horariosDisponiveis.Count - 1; i >= 0; i--)
-                {
-                    DateTime horarioDisponivel = horariosDisponiveis[i];
-                    if (horarioDisponivel >= agendamento.Inicio && horarioDisponivel < agendamento.Fim)
-                    {
-                        horariosDisponiveis.RemoveAt(i);
-                    }
-                }
-            }
-
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Horário");
-            dt.Columns.Add("Status");
-            dt.Columns.Add("Título"); // Adicionando a coluna "Título"
-            dt.Columns.Add("Descrição"); // Adicionando a coluna "Descrição"
-
-            foreach (DateTime horario in horariosDisponiveis)
-            {
-                dt.Rows.Add(horario.ToString("HH:mm"), "Disponível", "", ""); // Incluindo valores vazios para as colunas "Título" e "Descrição" quando o horário estiver disponível
-            }
-
-            foreach (Agendamento agendamento in agendamentos)
-            {
-                // Obtendo o evento correspondente ao agendamento
-                var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
-
-                if (eventItem != null)
-                {
-                    string titulo = eventItem.Summary;
-                    string descricao = eventItem.Description;
-
-                    dt.Rows.Add(agendamento.Inicio.ToString("HH:mm") + " - " + agendamento.Fim.ToString("HH:mm"), "Ocupado", titulo, descricao);
-                }
-                else
-                {
-                    dt.Rows.Add(agendamento.Inicio.ToString("HH:mm") + " - " + agendamento.Fim.ToString("HH:mm"), "Ocupado", "", "");
-                }
-            }
-
-            dataGridView1.DataSource = dt;
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -1846,6 +945,406 @@ namespace Impar
         {
             Agenda form2 = new Agenda();  // Instancia o novo formulário
             form2.ShowDialog();        // Abre o novo formulário como uma janela modal
+        }
+
+
+    
+
+
+
+
+        private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
+        {
+            //DateTime selectedStartDate = e.Start.Date;
+            //DateTime selectedEndDate = e.End.Date;
+
+            //selectedEndDate = selectedEndDate.AddDays(1).AddSeconds(-1);
+
+            //GoogleCredential credential;
+            //using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
+            //{
+            //    credential = GoogleCredential.FromStream(stream)
+            //        .CreateScoped(CalendarService.Scope.Calendar);
+            //}
+
+            //var service = new CalendarService(new BaseClientService.Initializer()
+            //{
+            //    HttpClientInitializer = credential,
+            //    ApplicationName = "GoogleAgenda"
+            //});
+
+            //EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
+            //request.TimeMin = selectedStartDate;
+            //request.TimeMax = selectedEndDate;
+            //request.ShowDeleted = false;
+            //request.SingleEvents = true;
+            //request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+            //Events events = request.Execute();
+
+            //List<Agendamento> agendamentos = new List<Agendamento>();
+            //if (events.Items != null && events.Items.Count > 0)
+            //{
+            //    foreach (var eventItem in events.Items)
+            //    {
+            //        agendamentos.Add(new Agendamento()
+            //        {
+            //            Inicio = eventItem.Start.DateTime.Value,
+            //            Fim = eventItem.End.DateTime.Value
+            //        });
+            //    }
+            //}
+
+            //TimeSpan morningStartTime = DtHoraInicioManha.Value.TimeOfDay;
+            //TimeSpan morningEndTime = DtHoraFimManha.Value.TimeOfDay;
+            //TimeSpan afternoonStartTime = DtHoraInicioTarde.Value.TimeOfDay;
+            //TimeSpan afternoonEndTime = DtHoraFimTarde.Value.TimeOfDay;
+
+            //List<DateTime> horariosDisponiveis = new List<DateTime>();
+
+            //for (DateTime currentDate = selectedStartDate.Date; currentDate <= selectedEndDate.Date; currentDate = currentDate.AddDays(1))
+            //{
+            //    DateTime currentMorningStartTime = currentDate.Date + morningStartTime;
+            //    DateTime currentMorningEndTime = currentDate.Date + morningEndTime;
+            //    DateTime currentAfternoonStartTime = currentDate.Date + afternoonStartTime;
+            //    DateTime currentAfternoonEndTime = currentDate.Date + afternoonEndTime;
+
+            //    for (DateTime time = currentMorningStartTime; time < currentMorningEndTime; time = time.AddMinutes(30))
+            //    {
+            //        horariosDisponiveis.Add(time);
+            //    }
+
+            //    for (DateTime time = currentAfternoonStartTime; time < currentAfternoonEndTime; time = time.AddMinutes(30))
+            //    {
+            //        horariosDisponiveis.Add(time);
+            //    }
+            //}
+
+            //dataGridView2.Columns.Clear(); // Remove todas as colunas existentes
+
+            //// Adicione as colunas ao dataGridView2
+            //DataGridViewButtonColumn btnColumn = new DataGridViewButtonColumn();
+            //btnColumn.HeaderText = "Ação";
+            //btnColumn.Name = "Ação";
+            //dataGridView2.Columns.Add(btnColumn);
+            //dataGridView2.Columns.Add("Data", "Data");
+            //dataGridView2.Columns.Add("Horário", "Horário");
+            //dataGridView2.Columns.Add("Status", "Status");
+            //dataGridView2.Columns.Add("Ocupado até", "Ocupado até");
+            //dataGridView2.Columns.Add("Título", "Título");
+            //dataGridView2.Columns.Add("Descrição", "Descrição");
+            //dataGridView2.Columns.Add("EventId", "EventId");
+
+            //foreach (DateTime horario in horariosDisponiveis)
+            //{
+            //    var agendamento = agendamentos.FirstOrDefault(a => horario.Date == a.Inicio.Date && horario.TimeOfDay >= a.Inicio.TimeOfDay && horario.TimeOfDay < a.Fim.TimeOfDay);
+
+            //    if (agendamento != null)
+            //    {
+            //        var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
+
+            //        if (eventItem != null)
+            //        {
+            //            string eventId = eventItem.Id;
+            //            string titulo = eventItem.Summary;
+            //            string descricao = eventItem.Description;
+            //            dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), titulo, descricao, eventId);
+            //        }
+            //        else
+            //        {
+            //            dataGridView2.Rows.Add("Editar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Ocupado", agendamento.Fim.ToString("HH:mm"), "", "", "");
+            //        }
+            //    }
+            //    else
+            //    {
+            //        dataGridView2.Rows.Add("Marcar", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "Disponível", "", "", "", "");
+            //    }
+            //}
+
+            //// Ocultar colunas "Título", "Descrição" e "EventId"
+            //dataGridView2.Columns["Título"].Visible = false;
+            //dataGridView2.Columns["Descrição"].Visible = false;
+            //dataGridView2.Columns["EventId"].Visible = false;
+
+            //dataGridView2.CellFormatting += dataGridView2_CellFormatting;
+            //dataGridView2.CellContentClick += dataGridView2_CellContentClick;
+        }
+
+        private void monthView1_SelectionChanged(object sender, EventArgs e)
+        {
+            //DateTime selectedStartDate = e.Start.Date;
+            //DateTime selectedEndDate = e.End.Date;
+            DateTime selectedStartDate = monthView1.SelectionStart.Date;
+            DateTime selectedEndDate = monthView1.SelectionEnd.Date;
+
+            selectedEndDate = selectedEndDate.AddDays(1).AddSeconds(-1);
+
+            GoogleCredential credential;
+            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
+            {
+                credential = GoogleCredential.FromStream(stream)
+                    .CreateScoped(CalendarService.Scope.Calendar);
+            }
+
+            var service = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = "GoogleAgenda"
+            });
+
+            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
+            request.TimeMin = selectedStartDate;
+            request.TimeMax = selectedEndDate;
+            request.ShowDeleted = false;
+            request.SingleEvents = true;
+            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+            Events events = request.Execute();
+
+            List<Agendamento> agendamentos = new List<Agendamento>();
+            if (events.Items != null && events.Items.Count > 0)
+            {
+                foreach (var eventItem in events.Items)
+                {
+                    agendamentos.Add(new Agendamento()
+                    {
+                        Inicio = eventItem.Start.DateTime.Value,
+                        Fim = eventItem.End.DateTime.Value
+                    });
+                }
+            }
+
+            TimeSpan morningStartTime = DtHoraInicioManha.Value.TimeOfDay;
+            TimeSpan morningEndTime = DtHoraFimManha.Value.TimeOfDay;
+            TimeSpan afternoonStartTime = DtHoraInicioTarde.Value.TimeOfDay;
+            TimeSpan afternoonEndTime = DtHoraFimTarde.Value.TimeOfDay;
+
+            List<DateTime> horariosDisponiveis = new List<DateTime>();
+
+            for (DateTime currentDate = selectedStartDate.Date; currentDate <= selectedEndDate.Date; currentDate = currentDate.AddDays(1))
+            {
+                DateTime currentMorningStartTime = currentDate.Date + morningStartTime;
+                DateTime currentMorningEndTime = currentDate.Date + morningEndTime;
+                DateTime currentAfternoonStartTime = currentDate.Date + afternoonStartTime;
+                DateTime currentAfternoonEndTime = currentDate.Date + afternoonEndTime;
+
+                for (DateTime time = currentMorningStartTime; time < currentMorningEndTime; time = time.AddMinutes(30))
+                {
+                    horariosDisponiveis.Add(time);
+                }
+
+                for (DateTime time = currentAfternoonStartTime; time < currentAfternoonEndTime; time = time.AddMinutes(30))
+                {
+                    horariosDisponiveis.Add(time);
+                }
+            }
+
+            kryptonDataGridView5.Columns.Clear(); // Remove todas as colunas existentes
+
+            // Adicione as colunas ao dataGridView2
+            DataGridViewButtonColumn btnColumn = new DataGridViewButtonColumn();
+            btnColumn.HeaderText = "Ação";
+            btnColumn.Name = "Ação";
+            kryptonDataGridView5.Columns.Add(btnColumn);
+            kryptonDataGridView5.Columns.Add("Status", "Status");
+            kryptonDataGridView5.Columns.Add("Data", "Data");
+            kryptonDataGridView5.Columns.Add("Horário", "Horário");
+            kryptonDataGridView5.Columns.Add("Ocupado até", "Ocupado até");
+            kryptonDataGridView5.Columns.Add("Título", "Título");
+            kryptonDataGridView5.Columns.Add("Descrição", "Descrição");
+            kryptonDataGridView5.Columns.Add("EventId", "EventId");
+
+            foreach (DateTime horario in horariosDisponiveis)
+            {
+                var agendamento = agendamentos.FirstOrDefault(a => horario.Date == a.Inicio.Date && horario.TimeOfDay >= a.Inicio.TimeOfDay && horario.TimeOfDay < a.Fim.TimeOfDay);
+
+                if (agendamento != null)
+                {
+                    var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
+
+                    if (eventItem != null)
+                    {
+                        string eventId = eventItem.Id;
+                        string titulo = eventItem.Summary;
+                        string descricao = eventItem.Description;
+                        kryptonDataGridView5.Rows.Add("Editar", "Ocupado", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), agendamento.Fim.ToString("HH:mm"), titulo, descricao, eventId);
+                    }
+                    else
+                    {
+                        kryptonDataGridView5.Rows.Add("Editar", "Ocupado", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), agendamento.Fim.ToString("HH:mm"), "", "", "");
+                    }
+                }
+                else
+                {
+                    kryptonDataGridView5.Rows.Add("Marcar", "Disponível", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "", "", "", "");
+                }
+            }
+            // Ocultar colunas "Título", "Descrição" e "EventId"
+            kryptonDataGridView5.Columns["Título"].Visible = false;
+            kryptonDataGridView5.Columns["Descrição"].Visible = false;
+            kryptonDataGridView5.Columns["EventId"].Visible = false;
+
+            kryptonDataGridView5.CellFormatting += kryptonDataGridView5_CellFormatting;
+            kryptonDataGridView5.CellContentClick += kryptonDataGridView5_CellContentClick;
+            DataGridDesign.CustomizeKryptonDataGridView5(kryptonDataGridView5);
+        }
+
+
+        private void FiltrarPorStatus(string status)
+        {
+            foreach (DataGridViewRow row in kryptonDataGridView5.Rows)
+            {
+                if (row.Cells["Status"].Value.ToString() == status)
+                {
+                    row.Visible = true;
+                    DataGridDesign.CustomizeKryptonDataGridView5(kryptonDataGridView5);
+                }
+                else
+                {
+                    row.Visible = false;
+                    DataGridDesign.CustomizeKryptonDataGridView5(kryptonDataGridView5);
+                }
+            }
+        }
+
+        private void btndisponivel_Click(object sender, EventArgs e)
+        {
+            FiltrarPorStatus("Disponível");
+        }
+
+        private void btnocupado_Click(object sender, EventArgs e)
+        {
+            FiltrarPorStatus("Ocupado");
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnFiltroEntreData_Click(object sender, EventArgs e)
+        {
+            //DateTime selectedStartDate = e.Start.Date;
+            //DateTime selectedEndDate = e.End.Date;
+            DateTime selectedStartDate = DtDataInicio.Value.Date;
+            DateTime selectedEndDate = DtDataFim.Value.Date;
+
+
+            selectedEndDate = selectedEndDate.AddDays(1).AddSeconds(-1);
+
+            GoogleCredential credential;
+            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
+            {
+                credential = GoogleCredential.FromStream(stream)
+                    .CreateScoped(CalendarService.Scope.Calendar);
+            }
+
+            var service = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = "GoogleAgenda"
+            });
+
+            EventsResource.ListRequest request = service.Events.List("marcosmagalhaes86@gmail.com");
+            request.TimeMin = selectedStartDate;
+            request.TimeMax = selectedEndDate;
+            request.ShowDeleted = false;
+            request.SingleEvents = true;
+            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+            Events events = request.Execute();
+
+            List<Agendamento> agendamentos = new List<Agendamento>();
+            if (events.Items != null && events.Items.Count > 0)
+            {
+                foreach (var eventItem in events.Items)
+                {
+                    agendamentos.Add(new Agendamento()
+                    {
+                        Inicio = eventItem.Start.DateTime.Value,
+                        Fim = eventItem.End.DateTime.Value
+                    });
+                }
+            }
+
+            TimeSpan morningStartTime = DtHoraInicioManha.Value.TimeOfDay;
+            TimeSpan morningEndTime = DtHoraFimManha.Value.TimeOfDay;
+            TimeSpan afternoonStartTime = DtHoraInicioTarde.Value.TimeOfDay;
+            TimeSpan afternoonEndTime = DtHoraFimTarde.Value.TimeOfDay;
+
+            List<DateTime> horariosDisponiveis = new List<DateTime>();
+
+            for (DateTime currentDate = selectedStartDate.Date; currentDate <= selectedEndDate.Date; currentDate = currentDate.AddDays(1))
+            {
+                DateTime currentMorningStartTime = currentDate.Date + morningStartTime;
+                DateTime currentMorningEndTime = currentDate.Date + morningEndTime;
+                DateTime currentAfternoonStartTime = currentDate.Date + afternoonStartTime;
+                DateTime currentAfternoonEndTime = currentDate.Date + afternoonEndTime;
+
+                for (DateTime time = currentMorningStartTime; time < currentMorningEndTime; time = time.AddMinutes(30))
+                {
+                    horariosDisponiveis.Add(time);
+                }
+
+                for (DateTime time = currentAfternoonStartTime; time < currentAfternoonEndTime; time = time.AddMinutes(30))
+                {
+                    horariosDisponiveis.Add(time);
+                }
+            }
+
+            kryptonDataGridView5.Columns.Clear(); // Remove todas as colunas existentes
+
+            // Adicione as colunas ao dataGridView2
+            DataGridViewButtonColumn btnColumn = new DataGridViewButtonColumn();
+            btnColumn.HeaderText = "Ação";
+            btnColumn.Name = "Ação";
+            kryptonDataGridView5.Columns.Add(btnColumn);
+            kryptonDataGridView5.Columns.Add("Status", "Status");
+            kryptonDataGridView5.Columns.Add("Data", "Data");
+            kryptonDataGridView5.Columns.Add("Horário", "Horário");
+            kryptonDataGridView5.Columns.Add("Ocupado até", "Ocupado até");
+            kryptonDataGridView5.Columns.Add("Título", "Título");
+            kryptonDataGridView5.Columns.Add("Descrição", "Descrição");
+            kryptonDataGridView5.Columns.Add("EventId", "EventId");
+
+            foreach (DateTime horario in horariosDisponiveis)
+            {
+                var agendamento = agendamentos.FirstOrDefault(a => horario.Date == a.Inicio.Date && horario.TimeOfDay >= a.Inicio.TimeOfDay && horario.TimeOfDay < a.Fim.TimeOfDay);
+
+                if (agendamento != null)
+                {
+                    var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
+
+                    if (eventItem != null)
+                    {
+                        string eventId = eventItem.Id;
+                        string titulo = eventItem.Summary;
+                        string descricao = eventItem.Description;
+                        kryptonDataGridView5.Rows.Add("Editar", "Ocupado", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), agendamento.Fim.ToString("HH:mm"), titulo, descricao, eventId);
+                    }
+                    else
+                    {
+                        kryptonDataGridView5.Rows.Add("Editar", "Ocupado", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), agendamento.Fim.ToString("HH:mm"), "", "", "");
+                    }
+                }
+                else
+                {
+                    kryptonDataGridView5.Rows.Add("Marcar", "Disponível", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "", "", "", "");
+                }
+            }
+            // Ocultar colunas "Título", "Descrição" e "EventId"
+            kryptonDataGridView5.Columns["Título"].Visible = false;
+            kryptonDataGridView5.Columns["Descrição"].Visible = false;
+            kryptonDataGridView5.Columns["EventId"].Visible = false;
+
+            kryptonDataGridView5.CellFormatting += kryptonDataGridView5_CellFormatting;
+            kryptonDataGridView5.CellContentClick += kryptonDataGridView5_CellContentClick;
+            DataGridDesign.CustomizeKryptonDataGridView5(kryptonDataGridView5);
+        }
+
+        private void kryptonPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
     }

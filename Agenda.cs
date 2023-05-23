@@ -177,6 +177,11 @@ namespace Impar
         {
 
         }
+
+        private void monthView1_SelectionChanged(object sender, EventArgs e)
+        {
+         
+        }
         //private void dataGridView2_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         //{
         //    if (e.ColumnIndex == dataGridView2.Columns["Ação"].Index && e.RowIndex >= 0) // Verifica se é a coluna "Ação" e não é o cabeçalho

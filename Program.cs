@@ -12,7 +12,7 @@ namespace Impar
             Application.SetCompatibleTextRenderingDefault(false);
 
             // Crie uma instância do formulário Agenda
-            GoogleAgenda agendaForm = new GoogleAgenda();
+            FrmAgenda agendaForm = new FrmAgenda();
 
             // Verifique se a instância não é nula
             if (agendaForm != null)

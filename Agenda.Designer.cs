@@ -42,6 +42,7 @@ namespace Impar
             this.DtHoraInicioTarde = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
             this.DtHoraFimManha = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
             this.DtHoraInicioManha = new ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker();
+            this.monthView1 = new WindowsFormsCalendar.MonthView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -75,14 +76,14 @@ namespace Impar
             // 
             this.dataGridView2.AllowUserToOrderColumns = true;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(395, 138);
+            this.dataGridView2.Location = new System.Drawing.Point(732, 72);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(696, 377);
+            this.dataGridView2.Size = new System.Drawing.Size(433, 119);
             this.dataGridView2.TabIndex = 77;
             // 
             // kryptonMonthCalendar1
             // 
-            this.kryptonMonthCalendar1.Location = new System.Drawing.Point(98, 200);
+            this.kryptonMonthCalendar1.Location = new System.Drawing.Point(474, 26);
             this.kryptonMonthCalendar1.Name = "kryptonMonthCalendar1";
             this.kryptonMonthCalendar1.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.SparklePurple;
             this.kryptonMonthCalendar1.Size = new System.Drawing.Size(230, 184);
@@ -147,11 +148,35 @@ namespace Impar
             this.DtHoraInicioManha.TabIndex = 83;
             this.DtHoraInicioManha.ValueNullable = new System.DateTime(2023, 5, 6, 8, 0, 0, 0);
             // 
+            // monthView1
+            // 
+            this.monthView1.ArrowsColor = System.Drawing.SystemColors.Window;
+            this.monthView1.ArrowsSelectedColor = System.Drawing.Color.Gold;
+            this.monthView1.DayBackgroundColor = System.Drawing.Color.Empty;
+            this.monthView1.DayGrayedText = System.Drawing.SystemColors.GrayText;
+            this.monthView1.DaySelectedBackgroundColor = System.Drawing.SystemColors.Highlight;
+            this.monthView1.DaySelectedColor = System.Drawing.SystemColors.WindowText;
+            this.monthView1.DaySelectedTextColor = System.Drawing.SystemColors.HighlightText;
+            this.monthView1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.monthView1.ItemPadding = new System.Windows.Forms.Padding(2);
+            this.monthView1.Location = new System.Drawing.Point(120, 147);
+            this.monthView1.MonthTitleColor = System.Drawing.SystemColors.ActiveCaption;
+            this.monthView1.MonthTitleColorInactive = System.Drawing.SystemColors.InactiveCaption;
+            this.monthView1.MonthTitleTextColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.monthView1.MonthTitleTextColorInactive = System.Drawing.SystemColors.InactiveCaptionText;
+            this.monthView1.Name = "monthView1";
+            this.monthView1.Size = new System.Drawing.Size(333, 296);
+            this.monthView1.TabIndex = 85;
+            this.monthView1.Text = "monthView1";
+            this.monthView1.TodayBorderColor = System.Drawing.Color.Maroon;
+            this.monthView1.SelectionChanged += new System.EventHandler(this.monthView1_SelectionChanged);
+            // 
             // Agenda
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1573, 724);
+            this.Controls.Add(this.monthView1);
             this.Controls.Add(this.kryptonWrapLabel5);
             this.Controls.Add(this.kryptonWrapLabel6);
             this.Controls.Add(this.DtHoraFimTarde);
@@ -185,5 +210,6 @@ namespace Impar
         private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker DtHoraInicioTarde;
         private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker DtHoraFimManha;
         private ComponentFactory.Krypton.Toolkit.KryptonDateTimePicker DtHoraInicioManha;
+        private WindowsFormsCalendar.MonthView monthView1;
     }
 }
