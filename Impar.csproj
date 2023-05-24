@@ -966,6 +966,12 @@
     <Compile Include="listagemPacientesMarcacoes.Designer.cs">
       <DependentUpon>listagemPacientesMarcacoes.cs</DependentUpon>
     </Compile>
+    <Compile Include="lsttratamento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="lsttratamento.Designer.cs">
+      <DependentUpon>lsttratamento.cs</DependentUpon>
+    </Compile>
     <Compile Include="Marcacoes.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1001,6 +1007,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="listagemPacientesMarcacoes.resx">
       <DependentUpon>listagemPacientesMarcacoes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="lsttratamento.resx">
+      <DependentUpon>lsttratamento.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Marcacoes.resx">
       <DependentUpon>Marcacoes.cs</DependentUpon>

@@ -37,32 +37,11 @@ namespace Impar
 
         private void Marcacoes_Load(object sender, EventArgs e)
         {
-            // Cria um BindingSource e define a sua fonte de dados como sendo a tabela "marcacoes"
-            // Cria um BindingSource e define a sua fonte de dados como sendo a tabela "marcacoes"
-            bindingSource = new BindingSource();
-            AtualizarBindingSource();
+            kryptonCheckBox1.Size = new Size(106, 40);
 
-            // Define o Text da label para mostrar o número total de registros
-            kryptonLabel2.Text = "Registros: " + bindingSource.Count.ToString();
-
-            // Define os eventos Click dos botões para navegar pelos registros
-            btanterior.Click += btanterior_Click;
-            btprimeiro.Click += btprimeiro_Click;
-            btseguinte.Click += btseguinte_Click;
-            tbultimo.Click += tbultimo_Click;
-
-            // Obtém o ID seguinte ao último registro na base de dados
-            connection.Open();
-            string selectQuery = "SELECT MAX(ID) FROM marcacoes";
-            MySqlCommand command = new MySqlCommand(selectQuery, connection);
-            int idSeguinte = (int)command.ExecuteScalar() + 1;
-            connection.Close();
-
-            // Define o Text do KryptonTextBox com o valor do ID seguinte
-            kryptonTextBox1.Text = idSeguinte.ToString();
         }
-        
- 
+
+
         //   MySqlConnection connection = new MySqlConnection(@"server=localhost;database=ContabSysDB;port=3308;userid=root;password=xd");
         MySqlConnection connection = new MySqlConnection(@"server=" + Properties.Settings.Default.server + ";database=" + Properties.Settings.Default.basedados + ";port=" + Properties.Settings.Default.porta + ";userid=" + Properties.Settings.Default.username + ";password=" + Properties.Settings.Default.password);
 
@@ -82,9 +61,7 @@ namespace Impar
             // Define o DataSource do BindingSource como sendo a nova tabela de dados
             bindingSource.DataSource = dataTable;
 
-            // Atualiza o Text da label para mostrar o número total de registros
-            kryptonLabel2.Text = "Registros: " + bindingSource.Count.ToString();
-
+         
             // Fecha a conexão com o banco de dados
             connection.Close();
         }
@@ -140,8 +117,8 @@ namespace Impar
         {
 
             string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
-            string insertQuery = "INSERT INTO marcacoes (Idcliente, IDGoogle, Horario, TipoTratamento, Obs, Descricao, TituloGoogle, Horainicio, Horafim, Nome, telemovel, SmsEnviada) " +
-                         "VALUES('" + tbcodcliente.Text + "','" + tbidgoogle.Text + "','" + tbhorario.Text + "','" + tbtipotratamento.Text + "','" + tbobs.Text + "','" + tbdescricao.Text + "','" + tbtitulogoogle.Text + "','" + tbhorainicio.Text + "','" + tbhorafim.Text + "','" + tbnomepaciente.Text + "','" + tbtlmpaciente.Text + "','" + smsEnviada + "');";
+            string insertQuery = "INSERT INTO marcacoes (Idcliente, IDGoogle, Horario, TipoTratamento, Obs, Descricao, TituloGoogle, Horainicio, Horafim, Nome, telemovel, SmsEnviada,IdTipoTratamento) " +
+                         "VALUES('" + tbcodcliente.Text + "','" + tbidgoogle.Text + "','" + tbhorario.Text + "','" + tbtipotratamento.Text + "','" + tbobs.Text + "','" + tbdescricao.Text + "','" + tbtitulogoogle.Text + "','" + tbhorainicio.Text + "','" + tbhorafim.Text + "','" + tbnomepaciente.Text + "','" + tbtlmpaciente.Text + "','" + smsEnviada + "','" + tbidtipotratamento.Text + "');"; 
             executeMyQuery(insertQuery);
 
 
@@ -152,14 +129,10 @@ namespace Impar
         {
 
             string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
-            string updateQuery = "UPDATE marcacoes SET Idcliente = '" + tbcodcliente.Text + "', Horario = '" + tbhorario.Text + "', TipoTratamento = '" + tbtipotratamento.Text + "', Obs = '" + tbobs.Text + "', Descricao = '" + tbdescricao.Text + "', TituloGoogle = '" + tbtitulogoogle.Text + "', Horainicio = '" + tbhorainicio.Text + "', Horafim = '" + tbhorafim.Text + "', Nome = '" + tbnomepaciente.Text + "', telemovel = '" + tbtlmpaciente.Text + "', SmsEnviada = '" + smsEnviada + "' WHERE IDGoogle = '" + tbidgoogle.Text + "';";
+            string updateQuery = "UPDATE marcacoes SET Idcliente = '" + tbcodcliente.Text + "', Horario = '" + tbhorario.Text + "', TipoTratamento = '" + tbtipotratamento.Text + "', Obs = '" + tbobs.Text + "', Descricao = '" + tbdescricao.Text + "', TituloGoogle = '" + tbtitulogoogle.Text + "', Horainicio = '" + tbhorainicio.Text + "', Horafim = '" + tbhorafim.Text + "', Nome = '" + tbnomepaciente.Text + "', telemovel = '" + tbtlmpaciente.Text + "', SmsEnviada = '" + smsEnviada + "', IdTipoTratamento = '" + tbidtipotratamento.Text + "' WHERE IDGoogle = '" + tbidgoogle.Text + "';";
             executeMyQuery(updateQuery);
 
-
-            // a ESTUDAR NAO ESTA CORRETO AINDA
-
-            //string updateQuery = "UPDATE marcacoes SET Idcliente='" + tbcodcliente.Text + "', Horario='" + tbhorario2.Text + "', TipoTratamento='" + tbtipotratamento.Text + "', Obs='" + tbobs.Text + "', Descricao='" + tbdescricao.Text + "', TituloGoogle='" + tbtitulogoogle.Text + "', Horainicio='" + tbhorainicio.Text + "', Horafim='" + tbhorafim.Text + "', Nome='" + tbnomepaciente.Text + "', telemovel='" + tbtlmpaciente.Text + "' WHERE IDGoogle='" + tbidgoogle.Text + "';";
-            //executeMyQuery(updateQuery);
+         
         }
 
 
@@ -269,9 +242,7 @@ namespace Impar
 
         private void button3_Click(object sender, EventArgs e)
         {
-            // Abre o FormAdicionarEvento sem passar nenhum parâmetro
-            listagemPacientesMarcacoes form = new listagemPacientesMarcacoes();
-            form.Show();
+         
         }
 
         private void btatualizar_Click(object sender, EventArgs e)
@@ -281,110 +252,23 @@ namespace Impar
 
         private void btanterior_Click(object sender, EventArgs e)
         {
-            // Move para o registro anterior
-            bindingSource.MovePrevious();
-
-            // Atualiza as caixas de texto com os valores do registro atual
-            DataRowView currentRow = (DataRowView)bindingSource.Current;
-            if (currentRow != null)
-            {
-                kryptonTextBox1.Text = currentRow["ID"].ToString();
-                tbcodcliente.Text = currentRow["Idcliente"].ToString();
-                tbhorario.Text = currentRow["Horario"].ToString();
-                tbtipotratamento.Text = currentRow["TipoTratamento"].ToString();
-                tbobs.Text = currentRow["Obs"].ToString();
-                tbdescricao.Text = currentRow["Descricao"].ToString();
-                tbtitulogoogle.Text = currentRow["TituloGoogle"].ToString();
-                tbhorainicio.Text = currentRow["Horainicio"].ToString();
-                tbhorafim.Text = currentRow["Horafim"].ToString();
-                tbnomepaciente.Text = currentRow["Nome"].ToString();
-                tbtlmpaciente.Text = currentRow["telemovel"].ToString();
-                kryptonCheckBox1.Checked = (bool)currentRow["SmsEnviada"];
-            }
-
-            // Atualiza o BindingSource
-            AtualizarBindingSource();
+          
+       
         }
 
         private void btseguinte_Click(object sender, EventArgs e)
         {
-            // Move para o próximo registro
-            bindingSource.MoveNext();
-
-            // Atualiza as caixas de texto com os valores do registro atual
-            DataRowView currentRow = (DataRowView)bindingSource.Current;
-            if (currentRow != null)
-            {
-                kryptonTextBox1.Text = currentRow["ID"].ToString();
-                tbcodcliente.Text = currentRow["Idcliente"].ToString();
-                tbhorario.Text = currentRow["Horario"].ToString();
-                tbtipotratamento.Text = currentRow["TipoTratamento"].ToString();
-                tbobs.Text = currentRow["Obs"].ToString();
-                tbdescricao.Text = currentRow["Descricao"].ToString();
-                tbtitulogoogle.Text = currentRow["TituloGoogle"].ToString();
-                tbhorainicio.Text = currentRow["Horainicio"].ToString();
-                tbhorafim.Text = currentRow["Horafim"].ToString();
-                tbnomepaciente.Text = currentRow["Nome"].ToString();
-                tbtlmpaciente.Text = currentRow["telemovel"].ToString();
-                kryptonCheckBox1.Checked = (bool)currentRow["SmsEnviada"];
-            }
-
-            // Atualiza o BindingSource
-            AtualizarBindingSource();
+         
         }
 
         private void btprimeiro_Click(object sender, EventArgs e)
         {
-            // Move para o primeiro registro
-            bindingSource.MoveFirst();
-
-            // Atualiza as caixas de texto com os valores do registro atual
-            DataRowView currentRow = (DataRowView)bindingSource.Current;
-            if (currentRow != null)
-            {
-                kryptonTextBox1.Text = currentRow["ID"].ToString();
-                tbcodcliente.Text = currentRow["Idcliente"].ToString();
-                tbhorario.Text = currentRow["Horario"].ToString();
-                tbtipotratamento.Text = currentRow["TipoTratamento"].ToString();
-                tbobs.Text = currentRow["Obs"].ToString();
-                tbdescricao.Text = currentRow["Descricao"].ToString();
-                tbtitulogoogle.Text = currentRow["TituloGoogle"].ToString();
-                tbhorainicio.Text = currentRow["Horainicio"].ToString();
-                tbhorafim.Text = currentRow["Horafim"].ToString();
-                tbnomepaciente.Text = currentRow["Nome"].ToString();
-                tbtlmpaciente.Text = currentRow["telemovel"].ToString();
-                kryptonCheckBox1.Checked = (bool)currentRow["SmsEnviada"];
-            }
-
-            // Atualiza o BindingSource
-            AtualizarBindingSource();
+          
         }
 
         private void tbultimo_Click(object sender, EventArgs e)
         {
-            // Move para o último registro
-            bindingSource.MoveLast();
-
-            // Atualiza as caixas de texto com os valores do registro atual
-            DataRowView currentRow = (DataRowView)bindingSource.Current;
-            if (currentRow != null)
-            {
-                kryptonTextBox1.Text = currentRow["ID"].ToString();
-                tbcodcliente.Text = currentRow["Idcliente"].ToString();
-                tbhorario.Text = currentRow["Horario"].ToString();
-                tbtipotratamento.Text = currentRow["TipoTratamento"].ToString();
-                tbobs.Text = currentRow["Obs"].ToString();
-                tbdescricao.Text = currentRow["Descricao"].ToString();
-                tbtitulogoogle.Text = currentRow["TituloGoogle"].ToString();
-                tbhorainicio.Text = currentRow["Horainicio"].ToString();
-                tbhorafim.Text = currentRow["Horafim"].ToString();
-                tbnomepaciente.Text = currentRow["Nome"].ToString();
-                tbtlmpaciente.Text = currentRow["telemovel"].ToString();
-                kryptonCheckBox1.Checked = (bool)currentRow["SmsEnviada"];
-            }
-
-            // Atualiza o BindingSource
-            AtualizarBindingSource();
+         
         }
 
 
@@ -521,6 +405,25 @@ namespace Impar
             }
         }
 
+        private void kryptonTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            // Abre o FormAdicionarEvento sem passar nenhum parâmetro
+            listagemPacientesMarcacoes form = new listagemPacientesMarcacoes();
+            form.Show();
+        }
+
+        private void kryptonButton1_Click(object sender, EventArgs e)
+        {
+            // Abre o FormAdicionarEvento sem passar nenhum parâmetro
+            lsttratamento form = new lsttratamento();
+            form.Show();
+        }
     }
-}
+    }
+
 

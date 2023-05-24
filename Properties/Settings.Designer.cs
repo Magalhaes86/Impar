@@ -130,5 +130,17 @@ namespace Impar.Properties {
                 this["HorarioFimTarde"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("xdclinica")]
+        public string basedadosXD {
+            get {
+                return ((string)(this["basedadosXD"]));
+            }
+            set {
+                this["basedadosXD"] = value;
+            }
+        }
     }
 }

@@ -29,5 +29,8 @@
     <Setting Name="HorarioFimTarde" Type="System.String" Scope="User">
       <Value Profile="(Default)">18:00:00</Value>
     </Setting>
+    <Setting Name="basedadosXD" Type="System.String" Scope="User">
+      <Value Profile="(Default)">xdclinica</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
