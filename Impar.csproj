@@ -925,6 +925,7 @@
     <Compile Include="Agenda.Designer.cs">
       <DependentUpon>Agenda.cs</DependentUpon>
     </Compile>
+    <Compile Include="AgendamentoSms.cs" />
     <Compile Include="CustomMonthCalendar.cs">
       <SubType>Component</SubType>
     </Compile>
