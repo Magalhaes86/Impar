@@ -99,72 +99,7 @@ namespace Impar
                         await EnviarSMS("+351910045307", row["telemovel"].ToString(), row["Sms3CorpoSMS"].ToString());
                         AtualizarSmsEnviada(row["IDGoogle"].ToString(), "Sms3Enviada");
                     }
-                    //string query = "SELECT * FROM agendamentos;";
-                    //MySqlCommand command = new MySqlCommand(query, connection);
-                    //MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-                    //DataTable dataTable = new DataTable();
-
-                    //try
-                    //{
-                    //    connection.Open();
-                    //    adapter.Fill(dataTable);
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    MessageBox.Show("Erro ao carregar os agendamentos: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //    return;
-                    //}
-                    //finally
-                    //{
-                    //    connection.Close();
-                    //}
-
-                    //foreach (DataRow row in dataTable.Rows)
-                    //{
-                    //    bool sms1Ativa = Convert.ToBoolean(row["Sms1"]);
-                    //    bool sms2Ativa = Convert.ToBoolean(row["Sms2"]);
-                    //    bool sms3Ativa = Convert.ToBoolean(row["Sms3"]);
-
-                    //    if (sms1Ativa)
-                    //    {
-                    //        DateTime sms1Data = Convert.ToDateTime(row["Sms1Data"]);
-                    //        DateTime sms1Hora = Convert.ToDateTime(row["Sms1Hora"]);
-
-                    //        if (VerificarDataHoraAtual(sms1Data, sms1Hora))
-                    //        {
-                    //            //   EnviarSMS("+351910045307", row["telemovel"].ToString(), row["Sms1CorpoSMS"].ToString());
-                    //            await EnviarSMS("+351910045307", row["telemovel"].ToString(), row["Sms1CorpoSMS"].ToString());
-
-                    //            AtualizarSmsEnviada(row["IDGoogle"].ToString(), "Sms1Enviada");
-                    //        }
-                    //    }
-
-                    //    if (sms2Ativa)
-                    //    {
-                    //        DateTime sms2Data = Convert.ToDateTime(row["Sms2Data"]);
-                    //        DateTime sms2Hora = Convert.ToDateTime(row["Sms2Hora"]);
-
-                    //        if (VerificarDataHoraAtual(sms2Data, sms2Hora))
-                    //        {
-                    //            //  EnviarSMS("+351910045307", row["telemovel"].ToString(), row["Sms2CorpoSMS"].ToString());
-                    //            await EnviarSMS("+351910045307", row["telemovel"].ToString(), row["Sms2CorpoSMS"].ToString());
-
-                    //            AtualizarSmsEnviada(row["IDGoogle"].ToString(), "Sms2Enviada");
-                    //        }
-                    //    }
-
-                    //    if (sms3Ativa)
-                    //    {
-                    //        DateTime sms3Data = Convert.ToDateTime(row["Sms3Data"]);
-                    //        DateTime sms3Hora = Convert.ToDateTime(row["Sms3Hora"]);
-
-                    //        if (VerificarDataHoraAtual(sms3Data, sms3Hora))
-                    //        {
-                    //            //  EnviarSMS("+351910045307", row["telemovel"].ToString(), row["Sms3CorpoSMS"].ToString());
-                    //            await EnviarSMS("+351910045307", row["telemovel"].ToString(), row["Sms3CorpoSMS"].ToString());
-
-                    //            AtualizarSmsEnviada(row["IDGoogle"].ToString(), "Sms3Enviada");
-                    //        }
+            
                 }
             }
         }

@@ -19,11 +19,14 @@ using System.Threading;
 
 using System.Net.Http;
 using System.Threading.Tasks;
+using ComponentFactory.Krypton.Toolkit;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Impar
 {
     public partial class Marcacoes : Form
     {
+        public bool ChamadaDoFrmAgenda { get; set; }
 
         private BindingSource bindingSource = new BindingSource();
 
@@ -47,9 +50,149 @@ namespace Impar
 
         private void Marcacoes_Load(object sender, EventArgs e)
         {
+            DataGridDesign.CustomizeKryptonDataGridView5(kryptonDataGridView1);
+            //  kryptonDataGridView1.CellFormatting += kryptonDataGridView1_CellFormatting;
             kryptonCheckBox1.Size = new Size(106, 40);
 
+            // Verifica o valor da propriedade ChamadaDoFrmAgenda
+            if (ChamadaDoFrmAgenda)
+            {
+                // Chamada feita pelo FrmAgenda
+                return;
+            }
+
+            // Chame a função DefinirValoresPadrao()
+
+            DefinirValoresPadrao();
         }
+
+    
+
+
+        public void DefinirValoresPadrao()
+        {
+
+            // Verifica se a chamada é feita pelo FrmAgenda
+            if (ChamadaDoFrmAgenda)
+            {
+                // Verifica o estado do kryptonCheckBox3
+                if (!kryptonCheckBox3.Checked)
+                {
+                    kryptonDateTimePicker1.Value = DateTime.Today;
+                    kryptonDateTimePicker2.Value = DateTime.Now;
+                }
+
+                // Verifica o estado do kryptonCheckBox4
+                if (!kryptonCheckBox4.Checked)
+                {
+                    kryptonDateTimePicker3.Value = DateTime.Today.AddDays(1);
+                    kryptonDateTimePicker4.Value = DateTime.Now;
+                }
+
+                // Verifica o estado do kryptonCheckBox5
+                if (!kryptonCheckBox5.Checked)
+                {
+                    kryptonDateTimePicker5.Value = DateTime.Today.AddDays(2);
+                    kryptonDateTimePicker6.Value = DateTime.Now;
+                }
+            }
+            else
+            {
+                // Verifica se o tbidgoogle está vazio
+                if (string.IsNullOrEmpty(tbidgoogle.Text))
+                {
+                    // Define os valores padrão
+                    tbhorario.Value = DateTime.Today;
+                    tbhorainicio.Value = DateTime.Now;
+                    tbhorafim.Value = DateTime.Now.AddMinutes(30);
+                }
+            }
+
+
+
+            //// Verifica se a chamada é feita pelo FrmAgenda
+            //if (ChamadaDoFrmAgenda)
+            //{
+            //    return;
+            //}
+
+            //// Verifica se o tbidgoogle está vazio
+            //if (string.IsNullOrEmpty(tbidgoogle.Text))
+            //{
+            //    // Define os valores padrão
+            //    tbhorario.Value = DateTime.Today;
+            //    tbhorainicio.Value = DateTime.Now;
+            //    tbhorafim.Value = DateTime.Now.AddMinutes(30);
+            //}
+
+            //// Verifica o estado do kryptonCheckBox3
+            //if (!kryptonCheckBox3.Checked)
+            //{
+            //    kryptonDateTimePicker1.Value = DateTime.Today;
+            //    kryptonDateTimePicker2.Value = DateTime.Now;
+            //}
+
+            //// Verifica o estado do kryptonCheckBox4
+            //if (!kryptonCheckBox4.Checked)
+            //{
+            //    kryptonDateTimePicker3.Value = DateTime.Today.AddDays(1);
+            //    kryptonDateTimePicker4.Value = DateTime.Now;
+            //}
+
+            //// Verifica o estado do kryptonCheckBox5
+            //if (!kryptonCheckBox5.Checked)
+            //{
+            //    kryptonDateTimePicker5.Value = DateTime.Today.AddDays(2);
+            //    kryptonDateTimePicker6.Value = DateTime.Now;
+            //}
+        }
+
+
+
+
+
+
+
+
+
+
+
+        //    // Verifica se o tbidgoogle está vazio
+        //    if (string.IsNullOrEmpty(tbidgoogle.Text))
+        //    {
+        //        // Define os valores padrão
+        //        tbhorario.Value = DateTime.Today;
+        //        tbhorainicio.Value = DateTime.Now;
+        //        tbhorafim.Value = DateTime.Now.AddMinutes(30);
+        //    }
+
+        //    // Verifica o estado do kryptonCheckBox3
+        //    if (!kryptonCheckBox3.Checked)
+        //    {
+        //        kryptonDateTimePicker1.Value = DateTime.Today;
+        //        kryptonDateTimePicker2.Value = DateTime.Now;
+        //    }
+
+        //    // Verifica o estado do kryptonCheckBox4
+        //    if (!kryptonCheckBox4.Checked)
+        //    {
+        //        kryptonDateTimePicker3.Value = DateTime.Today.AddDays(1);
+        //        kryptonDateTimePicker4.Value = DateTime.Now;
+        //    }
+
+        //    // Verifica o estado do kryptonCheckBox5
+        //    if (!kryptonCheckBox5.Checked)
+        //    {
+        //        kryptonDateTimePicker5.Value = DateTime.Today.AddDays(2);
+        //        kryptonDateTimePicker6.Value = DateTime.Now;
+        //    }
+        //}
+
+
+
+
+
+
 
 
         //   MySqlConnection connection = new MySqlConnection(@"server=localhost;database=ContabSysDB;port=3308;userid=root;password=xd");
@@ -125,29 +268,51 @@ namespace Impar
         }
         private void GravarNovaMarcacao()
         {
-            
 
-      string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
+            string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
             string agendarSms = kryptonCheckBox2.Checked ? "1" : "0";
+
+            // Verifica se o número de telefone começa com "+351"
+            if (!tbtlmpaciente.Text.StartsWith("+351"))
+            {
+                tbtlmpaciente.Text = "+351" + tbtlmpaciente.Text;
+            }
 
             string insertQuery = "INSERT INTO marcacoes (Idcliente, IDGoogle, Horario, TipoTratamento, Obs, Descricao, TituloGoogle, Horainicio, Horafim, Nome, telemovel, SmsEnviada, IdTipoTratamento, AgendarSms) " +
                 "VALUES('" + tbcodcliente.Text + "','" + tbidgoogle.Text + "','" + tbhorario.Text + "','" + tbtipotratamento.Text + "','" + tbobs.Text + "','" + tbdescricao.Text + "','" + tbtitulogoogle.Text + "','" + tbhorainicio.Text + "','" + tbhorafim.Text + "','" + tbnomepaciente.Text + "','" + tbtlmpaciente.Text + "','" + smsEnviada + "','" + tbidtipotratamento.Text + "','" + agendarSms + "');";
             executeMyQuery(insertQuery);
+            //string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
+            //      string agendarSms = kryptonCheckBox2.Checked ? "1" : "0";
+
+            //      string insertQuery = "INSERT INTO marcacoes (Idcliente, IDGoogle, Horario, TipoTratamento, Obs, Descricao, TituloGoogle, Horainicio, Horafim, Nome, telemovel, SmsEnviada, IdTipoTratamento, AgendarSms) " +
+            //          "VALUES('" + tbcodcliente.Text + "','" + tbidgoogle.Text + "','" + tbhorario.Text + "','" + tbtipotratamento.Text + "','" + tbobs.Text + "','" + tbdescricao.Text + "','" + tbtitulogoogle.Text + "','" + tbhorainicio.Text + "','" + tbhorafim.Text + "','" + tbnomepaciente.Text + "','" + tbtlmpaciente.Text + "','" + smsEnviada + "','" + tbidtipotratamento.Text + "','" + agendarSms + "');";
+            //      executeMyQuery(insertQuery);
 
 
         }
 
         private void atualizarMarcacoes()
         {
-
-            //string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
-            //string updateQuery = "UPDATE marcacoes SET Idcliente = '" + tbcodcliente.Text + "', Horario = '" + tbhorario.Text + "', TipoTratamento = '" + tbtipotratamento.Text + "', Obs = '" + tbobs.Text + "', Descricao = '" + tbdescricao.Text + "', TituloGoogle = '" + tbtitulogoogle.Text + "', Horainicio = '" + tbhorainicio.Text + "', Horafim = '" + tbhorafim.Text + "', Nome = '" + tbnomepaciente.Text + "', telemovel = '" + tbtlmpaciente.Text + "', SmsEnviada = '" + smsEnviada + "', IdTipoTratamento = '" + tbidtipotratamento.Text + "' WHERE IDGoogle = '" + tbidgoogle.Text + "';";
-            //executeMyQuery(updateQuery);
             string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
             string agendarSms = kryptonCheckBox2.Checked ? "1" : "0";
 
+            // Verifica se o número de telefone começa com "+351"
+            if (!tbtlmpaciente.Text.StartsWith("+351"))
+            {
+                tbtlmpaciente.Text = "+351" + tbtlmpaciente.Text;
+            }
+
             string updateQuery = "UPDATE marcacoes SET Idcliente = '" + tbcodcliente.Text + "', Horario = '" + tbhorario.Text + "', TipoTratamento = '" + tbtipotratamento.Text + "', Obs = '" + tbobs.Text + "', Descricao = '" + tbdescricao.Text + "', TituloGoogle = '" + tbtitulogoogle.Text + "', Horainicio = '" + tbhorainicio.Text + "', Horafim = '" + tbhorafim.Text + "', Nome = '" + tbnomepaciente.Text + "', telemovel = '" + tbtlmpaciente.Text + "', SmsEnviada = '" + smsEnviada + "', IdTipoTratamento = '" + tbidtipotratamento.Text + "', AgendarSms = '" + agendarSms + "' WHERE IDGoogle = '" + tbidgoogle.Text + "';";
             executeMyQuery(updateQuery);
+
+            ////string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
+            ////string updateQuery = "UPDATE marcacoes SET Idcliente = '" + tbcodcliente.Text + "', Horario = '" + tbhorario.Text + "', TipoTratamento = '" + tbtipotratamento.Text + "', Obs = '" + tbobs.Text + "', Descricao = '" + tbdescricao.Text + "', TituloGoogle = '" + tbtitulogoogle.Text + "', Horainicio = '" + tbhorainicio.Text + "', Horafim = '" + tbhorafim.Text + "', Nome = '" + tbnomepaciente.Text + "', telemovel = '" + tbtlmpaciente.Text + "', SmsEnviada = '" + smsEnviada + "', IdTipoTratamento = '" + tbidtipotratamento.Text + "' WHERE IDGoogle = '" + tbidgoogle.Text + "';";
+            ////executeMyQuery(updateQuery);
+            //string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
+            //string agendarSms = kryptonCheckBox2.Checked ? "1" : "0";
+
+            //string updateQuery = "UPDATE marcacoes SET Idcliente = '" + tbcodcliente.Text + "', Horario = '" + tbhorario.Text + "', TipoTratamento = '" + tbtipotratamento.Text + "', Obs = '" + tbobs.Text + "', Descricao = '" + tbdescricao.Text + "', TituloGoogle = '" + tbtitulogoogle.Text + "', Horainicio = '" + tbhorainicio.Text + "', Horafim = '" + tbhorafim.Text + "', Nome = '" + tbnomepaciente.Text + "', telemovel = '" + tbtlmpaciente.Text + "', SmsEnviada = '" + smsEnviada + "', IdTipoTratamento = '" + tbidtipotratamento.Text + "', AgendarSms = '" + agendarSms + "' WHERE IDGoogle = '" + tbidgoogle.Text + "';";
+            //executeMyQuery(updateQuery);
 
 
         }
@@ -170,9 +335,28 @@ namespace Impar
             string sms2Enviada = kryptonCheckBox7.Checked ? "1" : "0";
             string sms3Enviada = kryptonCheckBox6.Checked ? "1" : "0";
 
+            // Verifica se o número de telefone começa com "+351"
+            if (!tbtlmpaciente.Text.StartsWith("+351"))
+            {
+                tbtlmpaciente.Text = "+351" + tbtlmpaciente.Text;
+            }
+
             string insertQuery = "INSERT INTO agendamentos (Idcliente, IDGoogle, Horario, TipoTratamento, Obs, Descricao, TituloGoogle, Horainicio, Horafim, Nome, telemovel, SmsEnviada, IdTipoTratamento, Sms1, Sms1Data, Sms1Hora, Sms1CorpoSMS, Sms2, Sms2Data, Sms2Hora, Sms2CorpoSMS, Sms3, Sms3Data, Sms3Hora, Sms3CorpoSMS, AgendamentoDeSms, Sms1Enviada, Sms2Enviada, Sms3Enviada) " +
                 "VALUES ('" + tbcodcliente.Text + "','" + tbidgoogle.Text + "','" + tbhorario.Text + "','" + tbtipotratamento.Text + "','" + tbobs.Text + "','" + tbdescricao.Text + "','" + tbtitulogoogle.Text + "','" + tbhorainicio.Text + "','" + tbhorafim.Text + "','" + tbnomepaciente.Text + "','" + tbtlmpaciente.Text + "','" + smsEnviada + "','" + tbidtipotratamento.Text + "','" + sms1 + "','" + kryptonDateTimePicker1.Text + "','" + kryptonDateTimePicker2.Text + "','" + kryptonTextBox2.Text + "','" + sms2 + "','" + kryptonDateTimePicker3.Text + "','" + kryptonDateTimePicker4.Text + "','" + kryptonTextBox3.Text + "','" + sms3 + "','" + kryptonDateTimePicker5.Text + "','" + kryptonDateTimePicker6.Text + "','" + kryptonTextBox5.Text + "','" + agendamentoDeSms + "','" + sms1Enviada + "','" + sms2Enviada + "','" + sms3Enviada + "');";
             executeMyQuery(insertQuery);
+
+            //string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
+            //string sms1 = kryptonCheckBox3.Checked ? "1" : "0";
+            //string sms2 = kryptonCheckBox4.Checked ? "1" : "0";
+            //string sms3 = kryptonCheckBox5.Checked ? "1" : "0";
+            //string agendamentoDeSms = kryptonCheckBox2.Checked ? "1" : "0";
+            //string sms1Enviada = kryptonCheckBox8.Checked ? "1" : "0";
+            //string sms2Enviada = kryptonCheckBox7.Checked ? "1" : "0";
+            //string sms3Enviada = kryptonCheckBox6.Checked ? "1" : "0";
+
+            //string insertQuery = "INSERT INTO agendamentos (Idcliente, IDGoogle, Horario, TipoTratamento, Obs, Descricao, TituloGoogle, Horainicio, Horafim, Nome, telemovel, SmsEnviada, IdTipoTratamento, Sms1, Sms1Data, Sms1Hora, Sms1CorpoSMS, Sms2, Sms2Data, Sms2Hora, Sms2CorpoSMS, Sms3, Sms3Data, Sms3Hora, Sms3CorpoSMS, AgendamentoDeSms, Sms1Enviada, Sms2Enviada, Sms3Enviada) " +
+            //    "VALUES ('" + tbcodcliente.Text + "','" + tbidgoogle.Text + "','" + tbhorario.Text + "','" + tbtipotratamento.Text + "','" + tbobs.Text + "','" + tbdescricao.Text + "','" + tbtitulogoogle.Text + "','" + tbhorainicio.Text + "','" + tbhorafim.Text + "','" + tbnomepaciente.Text + "','" + tbtlmpaciente.Text + "','" + smsEnviada + "','" + tbidtipotratamento.Text + "','" + sms1 + "','" + kryptonDateTimePicker1.Text + "','" + kryptonDateTimePicker2.Text + "','" + kryptonTextBox2.Text + "','" + sms2 + "','" + kryptonDateTimePicker3.Text + "','" + kryptonDateTimePicker4.Text + "','" + kryptonTextBox3.Text + "','" + sms3 + "','" + kryptonDateTimePicker5.Text + "','" + kryptonDateTimePicker6.Text + "','" + kryptonTextBox5.Text + "','" + agendamentoDeSms + "','" + sms1Enviada + "','" + sms2Enviada + "','" + sms3Enviada + "');";
+            //executeMyQuery(insertQuery);
         }
 
 
@@ -190,8 +374,26 @@ namespace Impar
             string sms2Enviada = kryptonCheckBox7.Checked ? "1" : "0";
             string sms3Enviada = kryptonCheckBox6.Checked ? "1" : "0";
 
+            // Verifica se o número de telefone começa com "+351"
+            if (!tbtlmpaciente.Text.StartsWith("+351"))
+            {
+                tbtlmpaciente.Text = "+351" + tbtlmpaciente.Text;
+            }
+
             string updateQuery = "UPDATE agendamentos SET Idcliente = '" + tbcodcliente.Text + "', Horario = '" + tbhorario.Text + "', TipoTratamento = '" + tbtipotratamento.Text + "', Obs = '" + tbobs.Text + "', Descricao = '" + tbdescricao.Text + "', TituloGoogle = '" + tbtitulogoogle.Text + "', Horainicio = '" + tbhorainicio.Text + "', Horafim = '" + tbhorafim.Text + "', Nome = '" + tbnomepaciente.Text + "', telemovel = '" + tbtlmpaciente.Text + "', SmsEnviada = '" + smsEnviada + "', IdTipoTratamento = '" + tbidtipotratamento.Text + "', Sms1 = '" + sms1 + "', Sms1Data = '" + kryptonDateTimePicker1.Text + "', Sms1Hora = '" + kryptonDateTimePicker2.Text + "', Sms1CorpoSMS = '" + kryptonTextBox2.Text + "', Sms2 = '" + sms2 + "', Sms2Data = '" + kryptonDateTimePicker3.Text + "', Sms2Hora = '" + kryptonDateTimePicker4.Text + "', Sms2CorpoSMS = '" + kryptonTextBox3.Text + "', Sms3 = '" + sms3 + "', Sms3Data = '" + kryptonDateTimePicker5.Text + "', Sms3Hora = '" + kryptonDateTimePicker6.Text + "', Sms3CorpoSMS = '" + kryptonTextBox5.Text + "', AgendamentoDeSms = '" + agendamentoDeSms + "', Sms1Enviada = '" + sms1Enviada + "', Sms2Enviada = '" + sms2Enviada + "', Sms3Enviada = '" + sms3Enviada + "' WHERE IDGoogle = '" + tbidgoogle.Text + "';";
             executeMyQuery(updateQuery);
+
+            //string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
+            //string sms1 = kryptonCheckBox3.Checked ? "1" : "0";
+            //string sms2 = kryptonCheckBox4.Checked ? "1" : "0";
+            //string sms3 = kryptonCheckBox5.Checked ? "1" : "0";
+            //string agendamentoDeSms = kryptonCheckBox2.Checked ? "1" : "0";
+            //string sms1Enviada = kryptonCheckBox8.Checked ? "1" : "0";
+            //string sms2Enviada = kryptonCheckBox7.Checked ? "1" : "0";
+            //string sms3Enviada = kryptonCheckBox6.Checked ? "1" : "0";
+
+            //string updateQuery = "UPDATE agendamentos SET Idcliente = '" + tbcodcliente.Text + "', Horario = '" + tbhorario.Text + "', TipoTratamento = '" + tbtipotratamento.Text + "', Obs = '" + tbobs.Text + "', Descricao = '" + tbdescricao.Text + "', TituloGoogle = '" + tbtitulogoogle.Text + "', Horainicio = '" + tbhorainicio.Text + "', Horafim = '" + tbhorafim.Text + "', Nome = '" + tbnomepaciente.Text + "', telemovel = '" + tbtlmpaciente.Text + "', SmsEnviada = '" + smsEnviada + "', IdTipoTratamento = '" + tbidtipotratamento.Text + "', Sms1 = '" + sms1 + "', Sms1Data = '" + kryptonDateTimePicker1.Text + "', Sms1Hora = '" + kryptonDateTimePicker2.Text + "', Sms1CorpoSMS = '" + kryptonTextBox2.Text + "', Sms2 = '" + sms2 + "', Sms2Data = '" + kryptonDateTimePicker3.Text + "', Sms2Hora = '" + kryptonDateTimePicker4.Text + "', Sms2CorpoSMS = '" + kryptonTextBox3.Text + "', Sms3 = '" + sms3 + "', Sms3Data = '" + kryptonDateTimePicker5.Text + "', Sms3Hora = '" + kryptonDateTimePicker6.Text + "', Sms3CorpoSMS = '" + kryptonTextBox5.Text + "', AgendamentoDeSms = '" + agendamentoDeSms + "', Sms1Enviada = '" + sms1Enviada + "', Sms2Enviada = '" + sms2Enviada + "', Sms3Enviada = '" + sms3Enviada + "' WHERE IDGoogle = '" + tbidgoogle.Text + "';";
+            //executeMyQuery(updateQuery);
         }
 
 
@@ -352,10 +554,8 @@ namespace Impar
         {
             InserirMarcacoesnoGoogle();
             Thread.Sleep(1000); // Aguarda 1 segundo
-
             GravarNovaMarcacao();
-
-                GravarNovoAgendamento();
+            GravarNovoAgendamento();
             }
         }
 
@@ -597,7 +797,206 @@ namespace Impar
         {
 
         }
+
+        private void kryptonDataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+
+        }
+
+
+        private void kryptonDataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.ColumnIndex == 0 && e.RowIndex >= 0)
+            {
+                // Define o texto do botão como "Editar"
+                kryptonDataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "Editar";
+
+                // Define a cor de fundo para o botão "Editar"
+                kryptonDataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Yellow;
+                DataGridDesign.CustomizeKryptonDataGridView5(kryptonDataGridView1);
+            }
+        }
+
+        private bool isEditButtonColumnAdded = false;
+
+
+
+
+
+        private void obterHistoricoMarcacoes()
+        {
+
+         
+           // string query = "SELECT Horario, TipoTratamento, Obs, Descricao, TituloGoogle, Horainicio, Horafim, telemovel, SmsEnviada, AgendarSms, IDGoogle FROM marcacoes WHERE Idcliente = '" + tbcodcliente.Text + "' ORDER BY Horario DESC;";
+
+            string query = "SELECT ID, Idcliente, Horario, TipoTratamento, Obs, Descricao, TituloGoogle, Horainicio, Horafim,Nome, telemovel, SmsEnviada,IdTipoTratamento, AgendarSms, IDGoogle FROM marcacoes WHERE Idcliente = '" + tbcodcliente.Text + "' ORDER BY Horario DESC;";
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+            DataTable dataTable = new DataTable();
+
+            try
+            {
+                connection.Open();
+                adapter.Fill(dataTable);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar os dados da tabela 'marcacoes': " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            kryptonDataGridView1.DataSource = dataTable;
+
+            // Ocultar as colunas indesejadas
+            foreach (DataGridViewColumn column in kryptonDataGridView1.Columns)
+            {
+                if (column.Name == "ID" || column.Name == "Idcliente" || column.Name == "Nome" || column.Name == "IdTipoTratamento" || column.Name == "IdAgendamento")
+                {
+                    column.Visible = false;
+                }
+            }
+
+            // Movendo a coluna "IDGoogle" para a última posição
+            if (kryptonDataGridView1.Columns.Contains("IDGoogle"))
+            {
+                DataGridViewColumn idGoogleColumn = kryptonDataGridView1.Columns["IDGoogle"];
+                idGoogleColumn.Visible = true;
+                kryptonDataGridView1.Columns.Remove(idGoogleColumn);
+                kryptonDataGridView1.Columns.Add(idGoogleColumn);
+            }
+
+            // Adicionar o botão "Editar" na primeira coluna se ainda não tiver sido adicionado
+            if (!isEditButtonColumnAdded)
+            {
+                DataGridViewButtonColumn editButtonColumn = new DataGridViewButtonColumn();
+                editButtonColumn.Name = "Editar";
+                editButtonColumn.Text = "Editar";
+                editButtonColumn.UseColumnTextForButtonValue = true;
+                kryptonDataGridView1.Columns.Insert(0, editButtonColumn);
+                isEditButtonColumnAdded = true;
+            }
+
+            // Associar o manipulador de eventos ao evento CellFormatting
+            DataGridDesign.CustomizeKryptonDataGridView5(kryptonDataGridView1);
+            kryptonDataGridView1.CellFormatting += kryptonDataGridView1_CellFormatting;
+
+
+        }
+
+
+
+        private void LimparValoresAgendamentos()
+        {
+            
+            kryptonTextBox5.Text = string.Empty;
+            kryptonTextBox3.Text = string.Empty;
+            kryptonTextBox2.Text = string.Empty;
+            kryptonTextBox7.Text = string.Empty;
+            kryptonDateTimePicker1.Value = DateTime.Today;
+            kryptonDateTimePicker2.Value = DateTime.Now;
+            kryptonDateTimePicker3.Value = DateTime.Today.AddDays(1);
+            kryptonDateTimePicker4.Value = DateTime.Now;
+            kryptonDateTimePicker5.Value = DateTime.Today.AddDays(2);
+            kryptonDateTimePicker6.Value = DateTime.Now;
+            kryptonCheckBox3.Checked = false;
+            kryptonCheckBox4.Checked = false;
+            kryptonCheckBox5.Checked = false;
+            kryptonCheckBox8.Checked = false;
+            kryptonCheckBox7.Checked = false;
+            kryptonCheckBox6.Checked = false;
+        }
+
+        private void PreencherValoresAgendamentos()
+        {
+            // Limpar os valores anteriores
+            LimparValoresAgendamentos();
+
+            string idGoogle = tbidgoogle.Text;
+
+            string agendamentosQuery = "SELECT ID, Sms1, Sms1Data, Sms1Hora, Sms1CorpoSMS, Sms2, Sms2Data, Sms2Hora, Sms2CorpoSMS, Sms3, Sms3Data, Sms3Hora, Sms3CorpoSMS, Sms1Enviada, Sms2Enviada, Sms3Enviada FROM agendamentos WHERE IDGoogle = @idGoogle;";
+            MySqlCommand agendamentosCommand = new MySqlCommand(agendamentosQuery, connection);
+            agendamentosCommand.Parameters.AddWithValue("@idGoogle", idGoogle);
+            MySqlDataAdapter agendamentosAdapter = new MySqlDataAdapter(agendamentosCommand);
+            DataTable agendamentosDataTable = new DataTable();
+
+            try
+            {
+                connection.Open();
+                agendamentosAdapter.Fill(agendamentosDataTable);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar os dados da tabela 'agendamentos': " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            if (agendamentosDataTable.Rows.Count > 0)
+            {
+                DataRow agendamentosRow = agendamentosDataTable.Rows[0];
+                kryptonTextBox7.Text = agendamentosRow["ID"].ToString();
+                kryptonCheckBox3.Checked = Convert.ToBoolean(agendamentosRow["Sms1"]);
+                kryptonDateTimePicker1.Value = Convert.ToDateTime(agendamentosRow["Sms1Data"]);
+                kryptonDateTimePicker2.Value = Convert.ToDateTime(agendamentosRow["Sms1Hora"]);
+                kryptonTextBox2.Text = agendamentosRow["Sms1CorpoSMS"].ToString();
+                kryptonCheckBox4.Checked = Convert.ToBoolean(agendamentosRow["Sms2"]);
+                kryptonDateTimePicker3.Value = Convert.ToDateTime(agendamentosRow["Sms2Data"]);
+                kryptonDateTimePicker4.Value = Convert.ToDateTime(agendamentosRow["Sms2Hora"]);
+                kryptonTextBox3.Text = agendamentosRow["Sms2CorpoSMS"].ToString();
+                kryptonCheckBox5.Checked = Convert.ToBoolean(agendamentosRow["Sms3"]);
+                kryptonDateTimePicker5.Value = Convert.ToDateTime(agendamentosRow["Sms3Data"]);
+                kryptonDateTimePicker6.Value = Convert.ToDateTime(agendamentosRow["Sms3Hora"]);
+                kryptonTextBox5.Text = agendamentosRow["Sms3CorpoSMS"].ToString();
+                kryptonCheckBox8.Checked = Convert.ToBoolean(agendamentosRow["Sms1Enviada"]);
+                kryptonCheckBox7.Checked = Convert.ToBoolean(agendamentosRow["Sms2Enviada"]);
+                kryptonCheckBox6.Checked = Convert.ToBoolean(agendamentosRow["Sms3Enviada"]);
+            }
+        }
+
+
+       
+
+
+        private void kryptonButton10_Click(object sender, EventArgs e)
+        {
+            obterHistoricoMarcacoes();
+        }
+
+        private void kryptonDataGridView1_CellClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == kryptonDataGridView1.Columns["Editar"].Index)
+            {
+                DataGridViewRow row = kryptonDataGridView1.Rows[e.RowIndex];
+
+                tbIdMarcacao.Text = row.Cells["ID"].Value.ToString();
+                tbcodcliente.Text = row.Cells["Idcliente"].Value.ToString();
+                tbidgoogle.Text = row.Cells["IDGoogle"].Value.ToString();
+                tbhorario.Text = row.Cells["Horario"].Value.ToString();
+                tbtipotratamento.Text = row.Cells["TipoTratamento"].Value.ToString();
+                tbobs.Text = row.Cells["Obs"].Value.ToString();
+                tbdescricao.Text = row.Cells["Descricao"].Value.ToString();
+                tbtitulogoogle.Text = row.Cells["TituloGoogle"].Value.ToString();
+                tbhorainicio.Text = row.Cells["Horainicio"].Value.ToString();
+                tbhorafim.Text = row.Cells["Horafim"].Value.ToString();
+                tbnomepaciente.Text = row.Cells["Nome"].Value.ToString();
+                tbtlmpaciente.Text = row.Cells["telemovel"].Value.ToString();
+                kryptonCheckBox1.Checked = row.Cells["SmsEnviada"].Value != DBNull.Value && Convert.ToInt32(row.Cells["SmsEnviada"].Value) != 0;
+                tbidtipotratamento.Text = row.Cells["IdTipoTratamento"].Value.ToString();
+                kryptonCheckBox2.Checked = row.Cells["AgendarSms"].Value != DBNull.Value && Convert.ToInt32(row.Cells["AgendarSms"].Value) != 0;
+            }
+        }
+
+        private void kryptonButton11_Click(object sender, EventArgs e)
+        {
+            PreencherValoresAgendamentos();
+        }
     }
-
 }
-

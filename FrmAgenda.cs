@@ -81,21 +81,25 @@ namespace Impar
 
             //    kryptonDataGridView2.RowTemplate.Height = 40; // Aumenta a altura das linhas para 40
             await obterTODASmarcacoes();
-        
+            filtrocalendario();
 
 
         }
 
 
-    
 
-      
+
+        private void AbrirFormularioMarcacoes()
+        {
+            Marcacoes marcacoesForm = new Marcacoes();
+            marcacoesForm.ChamadaDoFrmAgenda = true;
+            marcacoesForm.Show();
+        }
 
 
 
         private void kryptonDataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
 
             var senderGrid = (DataGridView)sender;
 
@@ -103,19 +107,275 @@ namespace Impar
                 e.RowIndex >= 0 &&
                 senderGrid.Columns[e.ColumnIndex].Name == "Agendar")
             {
-                // Recuperando os valores das colunas
-                string data = senderGrid.Rows[e.RowIndex].Cells["Data"].Value.ToString();
-                string horaInicio = senderGrid.Rows[e.RowIndex].Cells["Hora Início"].Value.ToString();
-                string horaFim = senderGrid.Rows[e.RowIndex].Cells["Hora Fim"].Value.ToString();
-                string Idgoogle = senderGrid.Rows[e.RowIndex].Cells["EventId"].Value.ToString();
-                string descricao = senderGrid.Rows[e.RowIndex].Cells["Descrição"].Value.ToString();
-                string titulo = senderGrid.Rows[e.RowIndex].Cells["Título"].Value.ToString();
-                string CodCliente = senderGrid.Rows[e.RowIndex].Cells["Código Cliente"].Value.ToString();
+                var cell = senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
-                // Abre o FormAdicionarEvento passando os valores como parâmetros
-                FormAdicionarEvento form = new FormAdicionarEvento(data, horaInicio, horaFim, Idgoogle, descricao, titulo, CodCliente);
-                form.Show();
+                if (cell is DataGridViewButtonCell && cell.Value != null)
+                {
+                    string buttonText = cell.Value.ToString();
+
+                    if (buttonText == "Agendar" || buttonText == "Editar")
+                    {
+                        string data = senderGrid.Rows[e.RowIndex].Cells["Data"].Value.ToString();
+                        string horarioInicio = senderGrid.Rows[e.RowIndex].Cells["Hora Início"].Value.ToString();
+                        string horarioFim = senderGrid.Rows[e.RowIndex].Cells["Hora Fim"].Value.ToString();
+                        string idGoogle = senderGrid.Rows[e.RowIndex].Cells["EventId"].Value?.ToString();
+                        string descricao = senderGrid.Rows[e.RowIndex].Cells["Descrição"].Value.ToString();
+                        string titulo = senderGrid.Rows[e.RowIndex].Cells["Título"].Value.ToString();
+
+                        // Converter as strings de horário para DateTime
+                        DateTime horarioInicioDt;
+                        DateTime horarioFimDt;
+
+                        if (!DateTime.TryParseExact(horarioInicio, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out horarioInicioDt))
+                        {
+                            // O formato do horário de início é inválido
+                            // Exibir mensagem de erro ou tratar de acordo com a necessidade
+                            return;
+                        }
+
+                        if (!DateTime.TryParseExact(horarioFim, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out horarioFimDt))
+                        {
+                            // O formato do horário de fim é inválido
+                            // Exibir mensagem de erro ou tratar de acordo com a necessidade
+                            return;
+                        }
+
+                        // Verifica se o formulário já está aberto
+                        if (Application.OpenForms.OfType<Marcacoes>().Any())
+                        {
+                            // Formulário já está aberto, não faz nada
+                            return;
+                        }
+
+                        // Abrir o formulário Marcacoes e passar os valores
+                        Marcacoes marcacoesForm = new Marcacoes();
+                        marcacoesForm.ChamadaDoFrmAgenda = true; // Define a propriedade ChamadaDoFrmAgenda como true
+                        marcacoesForm.DefinirValoresPadrao(); // Chama o método DefinirValoresPadrao para configurar os valores padrão
+                        marcacoesForm.tbhorario.Value = DateTime.Parse(data);
+                        marcacoesForm.tbhorainicio.Value = horarioInicioDt;
+                        marcacoesForm.tbhorafim.Value = horarioFimDt;
+                        marcacoesForm.tbidgoogle.Text = idGoogle;
+                        marcacoesForm.tbdescricao.Text = descricao;
+                        marcacoesForm.tbtitulogoogle.Text = titulo;
+
+                        // Buscar os valores da tabela 'marcacoes' com base no idGoogle
+                        string query = "SELECT Idcliente, Nome, telemovel, SmsEnviada, AgendarSms FROM marcacoes WHERE idGoogle = @idGoogle;";
+                        MySqlCommand command = new MySqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@idGoogle", idGoogle);
+                        MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+                        DataTable dataTable = new DataTable();
+
+                        try
+                        {
+                            connection.Open();
+                            adapter.Fill(dataTable);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Erro ao carregar os dados da tabela 'marcacoes': " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        finally
+                        {
+                            connection.Close();
+                        }
+
+                        if (dataTable.Rows.Count > 0)
+                        {
+                            DataRow row = dataTable.Rows[0];
+                            marcacoesForm.tbcodcliente.Text = row["Idcliente"] != DBNull.Value ? row["Idcliente"].ToString() : "";
+                            marcacoesForm.tbnomepaciente.Text = row["Nome"] != DBNull.Value ? row["Nome"].ToString() : "";
+                            marcacoesForm.tbtlmpaciente.Text = row["telemovel"] != DBNull.Value ? row["telemovel"].ToString() : "";
+                            marcacoesForm.kryptonCheckBox1.Checked = row["SmsEnviada"] != DBNull.Value && Convert.ToBoolean(row["SmsEnviada"]);
+                            marcacoesForm.kryptonCheckBox2.Checked = row["AgendarSms"] != DBNull.Value && Convert.ToBoolean(row["AgendarSms"]);
+                        }
+
+
+                     
+                        // Buscar os valores da tabela 'agendamentos' com base no idGoogle
+                        string agendamentosQuery = "SELECT Sms1, Sms1Data, Sms1Hora, Sms1CorpoSMS, Sms2, Sms2Data, Sms2Hora, Sms2CorpoSMS, Sms3, Sms3Data, Sms3Hora, Sms3CorpoSMS, Sms1Enviada, Sms2Enviada, Sms3Enviada FROM agendamentos WHERE IDGoogle = @idGoogle;";
+                        MySqlCommand agendamentosCommand = new MySqlCommand(agendamentosQuery, connection);
+                        agendamentosCommand.Parameters.AddWithValue("@idGoogle", idGoogle);
+                        MySqlDataAdapter agendamentosAdapter = new MySqlDataAdapter(agendamentosCommand);
+                        DataTable agendamentosDataTable = new DataTable();
+
+                        try
+                        {
+                            connection.Open();
+                            agendamentosAdapter.Fill(agendamentosDataTable);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Erro ao carregar os dados da tabela 'agendamentos': " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        finally
+                        {
+                            connection.Close();
+                        }
+
+                        if (agendamentosDataTable.Rows.Count > 0)
+                        {
+                            DataRow agendamentosRow = agendamentosDataTable.Rows[0];
+                            marcacoesForm.kryptonCheckBox3.Checked = agendamentosRow["Sms1"] != DBNull.Value && Convert.ToBoolean(agendamentosRow["Sms1"]);
+                            marcacoesForm.kryptonDateTimePicker1.Value = agendamentosRow["Sms1Data"] != DBNull.Value ? Convert.ToDateTime(agendamentosRow["Sms1Data"]) : DateTime.MinValue;
+                            marcacoesForm.kryptonDateTimePicker2.Value = agendamentosRow["Sms1Hora"] != DBNull.Value ? Convert.ToDateTime(agendamentosRow["Sms1Hora"]) : DateTime.MinValue;
+                            marcacoesForm.kryptonTextBox2.Text = agendamentosRow["Sms1CorpoSMS"] != DBNull.Value ? agendamentosRow["Sms1CorpoSMS"].ToString() : "";
+                            marcacoesForm.kryptonCheckBox4.Checked = agendamentosRow["Sms2"] != DBNull.Value && Convert.ToBoolean(agendamentosRow["Sms2"]);
+                            marcacoesForm.kryptonDateTimePicker3.Value = agendamentosRow["Sms2Data"] != DBNull.Value ? Convert.ToDateTime(agendamentosRow["Sms2Data"]) : DateTime.MinValue;
+                            marcacoesForm.kryptonDateTimePicker4.Value = agendamentosRow["Sms2Hora"] != DBNull.Value ? Convert.ToDateTime(agendamentosRow["Sms2Hora"]) : DateTime.MinValue;
+                            marcacoesForm.kryptonTextBox3.Text = agendamentosRow["Sms2CorpoSMS"] != DBNull.Value ? agendamentosRow["Sms2CorpoSMS"].ToString() : "";
+                            marcacoesForm.kryptonCheckBox5.Checked = agendamentosRow["Sms3"] != DBNull.Value && Convert.ToBoolean(agendamentosRow["Sms3"]);
+                            marcacoesForm.kryptonDateTimePicker5.Value = agendamentosRow["Sms3Data"] != DBNull.Value ? Convert.ToDateTime(agendamentosRow["Sms3Data"]) : DateTime.MinValue;
+                            marcacoesForm.kryptonDateTimePicker6.Value = agendamentosRow["Sms3Hora"] != DBNull.Value ? Convert.ToDateTime(agendamentosRow["Sms3Hora"]) : DateTime.MinValue;
+                            marcacoesForm.kryptonTextBox5.Text = agendamentosRow["Sms3CorpoSMS"] != DBNull.Value ? agendamentosRow["Sms3CorpoSMS"].ToString() : "";
+                            marcacoesForm.kryptonCheckBox8.Checked = agendamentosRow["Sms1Enviada"] != DBNull.Value && Convert.ToBoolean(agendamentosRow["Sms1Enviada"]);
+                            marcacoesForm.kryptonCheckBox7.Checked = agendamentosRow["Sms2Enviada"] != DBNull.Value && Convert.ToBoolean(agendamentosRow["Sms2Enviada"]);
+                            marcacoesForm.kryptonCheckBox6.Checked = agendamentosRow["Sms3Enviada"] != DBNull.Value && Convert.ToBoolean(agendamentosRow["Sms3Enviada"]);
+                        }
+
+                        marcacoesForm.Show();
+                    }
+
+
+
+
+                    //var senderGrid = (DataGridView)sender;
+
+                    //if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
+                    //    e.RowIndex >= 0 &&
+                    //    senderGrid.Columns[e.ColumnIndex].Name == "Agendar")
+                    //{
+                    //    var cell = senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                    //    if (cell is DataGridViewButtonCell && cell.Value != null)
+                    //    {
+                    //        string buttonText = cell.Value.ToString();
+
+                    //        if (buttonText == "Agendar" || buttonText == "Editar")
+                    //        {
+                    //            string data = senderGrid.Rows[e.RowIndex].Cells["Data"].Value.ToString();
+                    //            string horarioInicio = senderGrid.Rows[e.RowIndex].Cells["Hora Início"].Value.ToString();
+                    //            string horarioFim = senderGrid.Rows[e.RowIndex].Cells["Hora Fim"].Value.ToString();
+                    //            string idGoogle = senderGrid.Rows[e.RowIndex].Cells["EventId"].Value?.ToString();
+                    //            string descricao = senderGrid.Rows[e.RowIndex].Cells["Descrição"].Value.ToString();
+                    //            string titulo = senderGrid.Rows[e.RowIndex].Cells["Título"].Value.ToString();
+
+                    //            // Converter as strings de horário para DateTime
+                    //            DateTime horarioInicioDt;
+                    //            DateTime horarioFimDt;
+
+                    //            if (!DateTime.TryParseExact(horarioInicio, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out horarioInicioDt))
+                    //            {
+                    //                // O formato do horário de início é inválido
+                    //                // Exibir mensagem de erro ou tratar de acordo com a necessidade
+                    //                return;
+                    //            }
+
+                    //            if (!DateTime.TryParseExact(horarioFim, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out horarioFimDt))
+                    //            {
+                    //                // O formato do horário de fim é inválido
+                    //                // Exibir mensagem de erro ou tratar de acordo com a necessidade
+                    //                return;
+                    //            }
+
+                    //            // Verifica se o formulário já está aberto
+                    //            if (Application.OpenForms.OfType<Marcacoes>().Any())
+                    //            {
+                    //                // Formulário já está aberto, não faz nada
+                    //                return;
+                    //            }
+
+                    //            // Abrir o formulário Marcacoes e passar os valores
+                    //            Marcacoes marcacoesForm = new Marcacoes();
+                    //            marcacoesForm.ChamadaDoFrmAgenda = true; // Define a propriedade ChamadaDoFrmAgenda como true
+                    //            marcacoesForm.tbhorario.Value = DateTime.Parse(data);
+                    //            marcacoesForm.tbhorainicio.Value = horarioInicioDt;
+                    //            marcacoesForm.tbhorafim.Value = horarioFimDt;
+                    //            marcacoesForm.tbidgoogle.Text = idGoogle;
+                    //            marcacoesForm.tbdescricao.Text = descricao;
+                    //            marcacoesForm.tbtitulogoogle.Text = titulo;
+
+                    //            // Buscar os valores da tabela 'marcacoes' com base no idGoogle
+                    //            string query = "SELECT Idcliente, Nome, telemovel, SmsEnviada, AgendarSms FROM marcacoes WHERE idGoogle = @idGoogle;";
+                    //            MySqlCommand command = new MySqlCommand(query, connection);
+                    //            command.Parameters.AddWithValue("@idGoogle", idGoogle);
+                    //            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+                    //            DataTable dataTable = new DataTable();
+
+                    //            try
+                    //            {
+                    //                connection.Open();
+                    //                adapter.Fill(dataTable);
+                    //            }
+                    //            catch (Exception ex)
+                    //            {
+                    //                MessageBox.Show("Erro ao carregar os dados da tabela 'marcacoes': " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //                return;
+                    //            }
+                    //            finally
+                    //            {
+                    //                connection.Close();
+                    //            }
+
+                    //            if (dataTable.Rows.Count > 0)
+                    //            {
+                    //                DataRow row = dataTable.Rows[0];
+                    //                marcacoesForm.tbcodcliente.Text = row["Idcliente"] != DBNull.Value ? row["Idcliente"].ToString() : "";
+                    //                marcacoesForm.tbnomepaciente.Text = row["Nome"] != DBNull.Value ? row["Nome"].ToString() : "";
+                    //                marcacoesForm.tbtlmpaciente.Text = row["telemovel"] != DBNull.Value ? row["telemovel"].ToString() : "";
+                    //                marcacoesForm.kryptonCheckBox1.Checked = row["SmsEnviada"] != DBNull.Value && Convert.ToBoolean(row["SmsEnviada"]);
+                    //                marcacoesForm.kryptonCheckBox2.Checked = row["AgendarSms"] != DBNull.Value && Convert.ToBoolean(row["AgendarSms"]);
+                    //            }
+
+                    //            // Buscar os valores da tabela 'agendamentos' com base no idGoogle
+                    //            string agendamentosQuery = "SELECT Sms1, Sms1Data, Sms1Hora, Sms1CorpoSMS, Sms2, Sms2Data, Sms2Hora, Sms2CorpoSMS, Sms3, Sms3Data, Sms3Hora, Sms3CorpoSMS, Sms1Enviada, Sms2Enviada, Sms3Enviada FROM agendamentos WHERE IDGoogle = @idGoogle;";
+                    //            MySqlCommand agendamentosCommand = new MySqlCommand(agendamentosQuery, connection);
+                    //            agendamentosCommand.Parameters.AddWithValue("@idGoogle", idGoogle);
+                    //            MySqlDataAdapter agendamentosAdapter = new MySqlDataAdapter(agendamentosCommand);
+                    //            DataTable agendamentosDataTable = new DataTable();
+
+                    //            try
+                    //            {
+                    //                connection.Open();
+                    //                agendamentosAdapter.Fill(agendamentosDataTable);
+                    //            }
+                    //            catch (Exception ex)
+                    //            {
+                    //                MessageBox.Show("Erro ao carregar os dados da tabela 'agendamentos': " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //                return;
+                    //            }
+                    //            finally
+                    //            {
+                    //                connection.Close();
+                    //            }
+
+                    //            if (agendamentosDataTable.Rows.Count > 0)
+                    //            {
+                    //                DataRow agendamentosRow = agendamentosDataTable.Rows[0];
+                    //                marcacoesForm.kryptonCheckBox3.Checked = agendamentosRow["Sms1"] != DBNull.Value && Convert.ToBoolean(agendamentosRow["Sms1"]);
+                    //                marcacoesForm.kryptonDateTimePicker1.Value = agendamentosRow["Sms1Data"] != DBNull.Value ? Convert.ToDateTime(agendamentosRow["Sms1Data"]) : DateTime.MinValue;
+                    //                marcacoesForm.kryptonDateTimePicker2.Value = agendamentosRow["Sms1Hora"] != DBNull.Value ? Convert.ToDateTime(agendamentosRow["Sms1Hora"]) : DateTime.MinValue;
+                    //                marcacoesForm.kryptonTextBox2.Text = agendamentosRow["Sms1CorpoSMS"] != DBNull.Value ? agendamentosRow["Sms1CorpoSMS"].ToString() : "";
+                    //                marcacoesForm.kryptonCheckBox4.Checked = agendamentosRow["Sms2"] != DBNull.Value && Convert.ToBoolean(agendamentosRow["Sms2"]);
+                    //                marcacoesForm.kryptonDateTimePicker3.Value = agendamentosRow["Sms2Data"] != DBNull.Value ? Convert.ToDateTime(agendamentosRow["Sms2Data"]) : DateTime.MinValue;
+                    //                marcacoesForm.kryptonDateTimePicker4.Value = agendamentosRow["Sms2Hora"] != DBNull.Value ? Convert.ToDateTime(agendamentosRow["Sms2Hora"]) : DateTime.MinValue;
+                    //                marcacoesForm.kryptonTextBox3.Text = agendamentosRow["Sms2CorpoSMS"] != DBNull.Value ? agendamentosRow["Sms2CorpoSMS"].ToString() : "";
+                    //                marcacoesForm.kryptonCheckBox5.Checked = agendamentosRow["Sms3"] != DBNull.Value && Convert.ToBoolean(agendamentosRow["Sms3"]);
+                    //                marcacoesForm.kryptonDateTimePicker5.Value = agendamentosRow["Sms3Data"] != DBNull.Value ? Convert.ToDateTime(agendamentosRow["Sms3Data"]) : DateTime.MinValue;
+                    //                marcacoesForm.kryptonDateTimePicker6.Value = agendamentosRow["Sms3Hora"] != DBNull.Value ? Convert.ToDateTime(agendamentosRow["Sms3Hora"]) : DateTime.MinValue;
+                    //                marcacoesForm.kryptonTextBox5.Text = agendamentosRow["Sms3CorpoSMS"] != DBNull.Value ? agendamentosRow["Sms3CorpoSMS"].ToString() : "";
+                    //                marcacoesForm.kryptonCheckBox8.Checked = agendamentosRow["Sms1Enviada"] != DBNull.Value && Convert.ToBoolean(agendamentosRow["Sms1Enviada"]);
+                    //                marcacoesForm.kryptonCheckBox7.Checked = agendamentosRow["Sms2Enviada"] != DBNull.Value && Convert.ToBoolean(agendamentosRow["Sms2Enviada"]);
+                    //                marcacoesForm.kryptonCheckBox6.Checked = agendamentosRow["Sms3Enviada"] != DBNull.Value && Convert.ToBoolean(agendamentosRow["Sms3Enviada"]);
+                    //            }
+
+                    //            marcacoesForm.Show();
+                    //        }
+                }
             }
+           
+
 
         }
 
@@ -255,7 +515,6 @@ namespace Impar
 
         private void kryptonDataGridView5_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
             var senderGrid = (DataGridView)sender;
 
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
@@ -288,6 +547,9 @@ namespace Impar
                         marcacoesForm.tbhorario.Value = DateTime.Parse(data);
                         marcacoesForm.tbhorainicio.Value = horarioInicio;
                         marcacoesForm.tbhorafim.Value = horarioFim;
+
+                        // Definir a propriedade ChamadaDoFrmAgenda como true
+                        marcacoesForm.ChamadaDoFrmAgenda = true;
 
                         // Buscar os valores da tabela 'marcacoes' com base no tbidgoogle.Text
                         string idGoogle = kryptonDataGridView5.Rows[e.RowIndex].Cells["EventId"].Value?.ToString();
@@ -363,6 +625,8 @@ namespace Impar
                             marcacoesForm.kryptonCheckBox7.Checked = Convert.ToBoolean(agendamentosRow["Sms2Enviada"]);
                             marcacoesForm.kryptonCheckBox6.Checked = Convert.ToBoolean(agendamentosRow["Sms3Enviada"]);
                         }
+
+                        marcacoesForm.DefinirValoresPadrao(); // Chamada do método DefinirValoresPadrao()
 
                         marcacoesForm.Show();
                     }
@@ -466,74 +730,233 @@ namespace Impar
                             marcacoesForm.kryptonCheckBox6.Checked = Convert.ToBoolean(agendamentosRow["Sms3Enviada"]);
                         }
 
+                        marcacoesForm.ChamadaDoFrmAgenda = false; // Definir a propriedade ChamadaDoFrmAgenda como false
                         marcacoesForm.Show();
                     }
+
+
+
+                    //var senderGrid = (DataGridView)sender;
+
+                    //if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
+                    //    e.RowIndex >= 0 &&
+                    //    senderGrid.Columns[e.ColumnIndex].Name == "Ação")
+                    //{
+                    //    var cell = kryptonDataGridView5.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                    //    if (cell is DataGridViewButtonCell && cell.Value != null)
+                    //    {
+                    //        string buttonText = cell.Value.ToString();
+
+                    //        if (buttonText == "Marcar")
+                    //        {
+                    //            string data = kryptonDataGridView5.Rows[e.RowIndex].Cells["Data"].Value?.ToString();
+                    //            string horario = kryptonDataGridView5.Rows[e.RowIndex].Cells["Horário"].Value?.ToString();
+                    //            DateTime horarioInicio = DateTime.ParseExact(horario, "HH:mm", CultureInfo.InvariantCulture);
+                    //            DateTime horarioFim = horarioInicio.AddMinutes(30);
+                    //            string ocupadoAte = horarioFim.ToString("HH:mm");
+
+                    //            // Verifica se o formulário já está aberto
+                    //            if (Application.OpenForms.OfType<Marcacoes>().Any())
+                    //            {
+                    //                // Formulário já está aberto, não faz nada
+                    //                return;
+                    //            }
+
+                    //            // Abrir o formulário Marcacoes e passar os valores
+                    //            Marcacoes marcacoesForm = new Marcacoes();
+                    //            marcacoesForm.tbhorario.Value = DateTime.Parse(data);
+                    //            marcacoesForm.tbhorainicio.Value = horarioInicio;
+                    //            marcacoesForm.tbhorafim.Value = horarioFim;
+
+                    //            // Buscar os valores da tabela 'marcacoes' com base no tbidgoogle.Text
+                    //            string idGoogle = kryptonDataGridView5.Rows[e.RowIndex].Cells["EventId"].Value?.ToString();
+                    //            string query = "SELECT Idcliente, Nome, telemovel, SmsEnviada, AgendarSms FROM marcacoes WHERE idGoogle = @idGoogle;";
+                    //            MySqlCommand command = new MySqlCommand(query, connection);
+                    //            command.Parameters.AddWithValue("@idGoogle", idGoogle);
+                    //            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+                    //            DataTable dataTable = new DataTable();
+
+                    //            try
+                    //            {
+                    //                connection.Open();
+                    //                adapter.Fill(dataTable);
+                    //            }
+                    //            catch (Exception ex)
+                    //            {
+                    //                MessageBox.Show("Erro ao carregar os dados da tabela 'marcacoes': " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //                return;
+                    //            }
+                    //            finally
+                    //            {
+                    //                connection.Close();
+                    //            }
+
+                    //            if (dataTable.Rows.Count > 0)
+                    //            {
+                    //                DataRow row = dataTable.Rows[0];
+                    //                marcacoesForm.tbcodcliente.Text = row["Idcliente"].ToString();
+                    //                marcacoesForm.tbnomepaciente.Text = row["Nome"].ToString();
+                    //                marcacoesForm.tbtlmpaciente.Text = row["telemovel"].ToString();
+                    //                marcacoesForm.kryptonCheckBox1.Checked = Convert.ToBoolean(row["SmsEnviada"]);
+                    //                marcacoesForm.kryptonCheckBox2.Checked = Convert.ToBoolean(row["AgendarSms"]);
+                    //            }
+
+                    //            // Buscar os valores da tabela 'agendamentos' com base no tbidgoogle.Text
+                    //            string agendamentosQuery = "SELECT Sms1, Sms1Data, Sms1Hora, Sms1CorpoSMS, Sms2, Sms2Data, Sms2Hora, Sms2CorpoSMS, Sms3, Sms3Data, Sms3Hora, Sms3CorpoSMS, Sms1Enviada, Sms2Enviada, Sms3Enviada FROM agendamentos WHERE IDGoogle = @idGoogle;";
+                    //            MySqlCommand agendamentosCommand = new MySqlCommand(agendamentosQuery, connection);
+                    //            agendamentosCommand.Parameters.AddWithValue("@idGoogle", idGoogle);
+                    //            MySqlDataAdapter agendamentosAdapter = new MySqlDataAdapter(agendamentosCommand);
+                    //            DataTable agendamentosDataTable = new DataTable();
+
+                    //            try
+                    //            {
+                    //                connection.Open();
+                    //                agendamentosAdapter.Fill(agendamentosDataTable);
+                    //            }
+                    //            catch (Exception ex)
+                    //            {
+                    //                MessageBox.Show("Erro ao carregar os dados da tabela 'agendamentos': " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //                return;
+                    //            }
+                    //            finally
+                    //            {
+                    //                connection.Close();
+                    //            }
+
+                    //            if (agendamentosDataTable.Rows.Count > 0)
+                    //            {
+                    //                DataRow agendamentosRow = agendamentosDataTable.Rows[0];
+                    //                marcacoesForm.kryptonCheckBox3.Checked = Convert.ToBoolean(agendamentosRow["Sms1"]);
+                    //                marcacoesForm.kryptonDateTimePicker1.Value = Convert.ToDateTime(agendamentosRow["Sms1Data"]);
+                    //                marcacoesForm.kryptonDateTimePicker2.Value = Convert.ToDateTime(agendamentosRow["Sms1Hora"]);
+                    //                marcacoesForm.kryptonTextBox2.Text = agendamentosRow["Sms1CorpoSMS"].ToString();
+                    //                marcacoesForm.kryptonCheckBox4.Checked = Convert.ToBoolean(agendamentosRow["Sms2"]);
+                    //                marcacoesForm.kryptonDateTimePicker3.Value = Convert.ToDateTime(agendamentosRow["Sms2Data"]);
+                    //                marcacoesForm.kryptonDateTimePicker4.Value = Convert.ToDateTime(agendamentosRow["Sms2Hora"]);
+                    //                marcacoesForm.kryptonTextBox3.Text = agendamentosRow["Sms2CorpoSMS"].ToString();
+                    //                marcacoesForm.kryptonCheckBox5.Checked = Convert.ToBoolean(agendamentosRow["Sms3"]);
+                    //                marcacoesForm.kryptonDateTimePicker5.Value = Convert.ToDateTime(agendamentosRow["Sms3Data"]);
+                    //                marcacoesForm.kryptonDateTimePicker6.Value = Convert.ToDateTime(agendamentosRow["Sms3Hora"]);
+                    //                marcacoesForm.kryptonTextBox5.Text = agendamentosRow["Sms3CorpoSMS"].ToString();
+                    //                marcacoesForm.kryptonCheckBox8.Checked = Convert.ToBoolean(agendamentosRow["Sms1Enviada"]);
+                    //                marcacoesForm.kryptonCheckBox7.Checked = Convert.ToBoolean(agendamentosRow["Sms2Enviada"]);
+                    //                marcacoesForm.kryptonCheckBox6.Checked = Convert.ToBoolean(agendamentosRow["Sms3Enviada"]);
+                    //            }
+
+                    //            marcacoesForm.ChamadaDoFrmAgenda = true; // Definir a propriedade ChamadaDoFrmAgenda como true
+                    //            marcacoesForm.Show();
+                    //        }
+                    //        else if (buttonText == "Editar")
+                    //        {
+                    //            string data = kryptonDataGridView5.Rows[e.RowIndex].Cells["Data"].Value?.ToString();
+                    //            string horario = kryptonDataGridView5.Rows[e.RowIndex].Cells["Horário"].Value?.ToString();
+                    //            string ocupadoAte = kryptonDataGridView5.Rows[e.RowIndex].Cells["Ocupado até"].Value?.ToString();
+                    //            string titulo = kryptonDataGridView5.Rows[e.RowIndex].Cells["Título"].Value?.ToString();
+                    //            string descricao = kryptonDataGridView5.Rows[e.RowIndex].Cells["Descrição"].Value?.ToString();
+                    //            string eventId = kryptonDataGridView5.Rows[e.RowIndex].Cells["EventId"].Value?.ToString();
+
+                    //            // Verifica se o formulário já está aberto
+                    //            if (Application.OpenForms.OfType<Marcacoes>().Any())
+                    //            {
+                    //                // Formulário já está aberto, não faz nada
+                    //                return;
+                    //            }
+
+                    //            // Abrir o formulário Marcacoes e passar os valores
+                    //            Marcacoes marcacoesForm = new Marcacoes();
+                    //            marcacoesForm.tbhorario.Value = DateTime.Parse(data);
+                    //            marcacoesForm.tbhorainicio.Value = DateTime.ParseExact(horario, "HH:mm", CultureInfo.InvariantCulture);
+                    //            marcacoesForm.tbhorafim.Value = DateTime.ParseExact(ocupadoAte, "HH:mm", CultureInfo.InvariantCulture);
+                    //            marcacoesForm.tbtitulogoogle.Text = titulo;
+                    //            marcacoesForm.tbdescricao.Text = descricao;
+                    //            marcacoesForm.tbidgoogle.Text = eventId;
+
+                    //            // Buscar os valores da tabela 'marcacoes' com base no tbidgoogle.Text
+                    //            string idGoogle = kryptonDataGridView5.Rows[e.RowIndex].Cells["EventId"].Value?.ToString();
+                    //            string query = "SELECT Idcliente, Nome, telemovel, SmsEnviada, AgendarSms FROM marcacoes WHERE Idcliente = @idGoogle;";
+                    //            MySqlCommand command = new MySqlCommand(query, connection);
+                    //            command.Parameters.AddWithValue("@idGoogle", idGoogle);
+                    //            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+                    //            DataTable dataTable = new DataTable();
+
+                    //            try
+                    //            {
+                    //                connection.Open();
+                    //                adapter.Fill(dataTable);
+                    //            }
+                    //            catch (Exception ex)
+                    //            {
+                    //                MessageBox.Show("Erro ao carregar os dados da tabela 'marcacoes': " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //                return;
+                    //            }
+                    //            finally
+                    //            {
+                    //                connection.Close();
+                    //            }
+
+                    //            if (dataTable.Rows.Count > 0)
+                    //            {
+                    //                DataRow row = dataTable.Rows[0];
+                    //                marcacoesForm.tbcodcliente.Text = row["Idcliente"].ToString();
+                    //                marcacoesForm.tbnomepaciente.Text = row["Nome"].ToString();
+                    //                marcacoesForm.tbtlmpaciente.Text = row["telemovel"].ToString();
+                    //                marcacoesForm.kryptonCheckBox1.Checked = Convert.ToBoolean(row["SmsEnviada"]);
+                    //                marcacoesForm.kryptonCheckBox2.Checked = Convert.ToBoolean(row["AgendarSms"]);
+                    //            }
+
+                    //            // Buscar os valores da tabela 'agendamentos' com base no tbidgoogle.Text
+                    //            string agendamentosQuery = "SELECT Sms1, Sms1Data, Sms1Hora, Sms1CorpoSMS, Sms2, Sms2Data, Sms2Hora, Sms2CorpoSMS, Sms3, Sms3Data, Sms3Hora, Sms3CorpoSMS, Sms1Enviada, Sms2Enviada, Sms3Enviada FROM agendamentos WHERE IDGoogle = @idGoogle;";
+                    //            MySqlCommand agendamentosCommand = new MySqlCommand(agendamentosQuery, connection);
+                    //            agendamentosCommand.Parameters.AddWithValue("@idGoogle", idGoogle);
+                    //            MySqlDataAdapter agendamentosAdapter = new MySqlDataAdapter(agendamentosCommand);
+                    //            DataTable agendamentosDataTable = new DataTable();
+
+                    //            try
+                    //            {
+                    //                connection.Open();
+                    //                agendamentosAdapter.Fill(agendamentosDataTable);
+                    //            }
+                    //            catch (Exception ex)
+                    //            {
+                    //                MessageBox.Show("Erro ao carregar os dados da tabela 'agendamentos': " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //                return;
+                    //            }
+                    //            finally
+                    //            {
+                    //                connection.Close();
+                    //            }
+
+                    //            if (agendamentosDataTable.Rows.Count > 0)
+                    //            {
+                    //                DataRow agendamentosRow = agendamentosDataTable.Rows[0];
+                    //                marcacoesForm.kryptonCheckBox3.Checked = Convert.ToBoolean(agendamentosRow["Sms1"]);
+                    //                marcacoesForm.kryptonDateTimePicker1.Value = Convert.ToDateTime(agendamentosRow["Sms1Data"]);
+                    //                marcacoesForm.kryptonDateTimePicker2.Value = Convert.ToDateTime(agendamentosRow["Sms1Hora"]);
+                    //                marcacoesForm.kryptonTextBox2.Text = agendamentosRow["Sms1CorpoSMS"].ToString();
+                    //                marcacoesForm.kryptonCheckBox4.Checked = Convert.ToBoolean(agendamentosRow["Sms2"]);
+                    //                marcacoesForm.kryptonDateTimePicker3.Value = Convert.ToDateTime(agendamentosRow["Sms2Data"]);
+                    //                marcacoesForm.kryptonDateTimePicker4.Value = Convert.ToDateTime(agendamentosRow["Sms2Hora"]);
+                    //                marcacoesForm.kryptonTextBox3.Text = agendamentosRow["Sms2CorpoSMS"].ToString();
+                    //                marcacoesForm.kryptonCheckBox5.Checked = Convert.ToBoolean(agendamentosRow["Sms3"]);
+                    //                marcacoesForm.kryptonDateTimePicker5.Value = Convert.ToDateTime(agendamentosRow["Sms3Data"]);
+                    //                marcacoesForm.kryptonDateTimePicker6.Value = Convert.ToDateTime(agendamentosRow["Sms3Hora"]);
+                    //                marcacoesForm.kryptonTextBox5.Text = agendamentosRow["Sms3CorpoSMS"].ToString();
+                    //                marcacoesForm.kryptonCheckBox8.Checked = Convert.ToBoolean(agendamentosRow["Sms1Enviada"]);
+                    //                marcacoesForm.kryptonCheckBox7.Checked = Convert.ToBoolean(agendamentosRow["Sms2Enviada"]);
+                    //                marcacoesForm.kryptonCheckBox6.Checked = Convert.ToBoolean(agendamentosRow["Sms3Enviada"]);
+                    //            }
+
+                    //            marcacoesForm.ChamadaDoFrmAgenda = false; // Definir a propriedade ChamadaDoFrmAgenda como false
+                    //            marcacoesForm.Show();
+                    //        }
+
+
+
                 }
             }
 
 
-            //var senderGrid = (DataGridView)sender;
-
-            //if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
-            //    e.RowIndex >= 0 &&
-            //    senderGrid.Columns[e.ColumnIndex].Name == "Ação")
-            //{
-            //    var cell = kryptonDataGridView5.Rows[e.RowIndex].Cells[e.ColumnIndex];
-
-            //    if (cell is DataGridViewButtonCell && cell.Value != null)
-            //    {
-            //        string buttonText = cell.Value.ToString();
-
-            //        if (buttonText == "Marcar")
-            //        {
-            //            string data = kryptonDataGridView5.Rows[e.RowIndex].Cells["Data"].Value?.ToString();
-            //            string horario = kryptonDataGridView5.Rows[e.RowIndex].Cells["Horário"].Value?.ToString();
-            //            DateTime horarioInicio = DateTime.ParseExact(horario, "HH:mm", CultureInfo.InvariantCulture);
-            //            DateTime horarioFim = horarioInicio.AddMinutes(30);
-            //            string ocupadoAte = horarioFim.ToString("HH:mm");
-
-            //            // Verifica se o formulário já está aberto
-            //            if (Application.OpenForms.OfType<Marcacoes>().Any())
-            //            {
-            //                // Formulário já está aberto, não faz nada
-            //                return;
-            //            }
-
-            //            // Abrir o formulário Marcacoes e passar os valores
-            //            Marcacoes marcacoesForm = new Marcacoes();
-            //            marcacoesForm.tbhorario.Value = DateTime.Parse(data);
-            //            marcacoesForm.tbhorainicio.Value = horarioInicio;
-            //            marcacoesForm.tbhorafim.Value = horarioFim;
-            //            marcacoesForm.Show();
-            //        }
-            //        else if (buttonText == "Editar")
-            //        {
-            //            string data = kryptonDataGridView5.Rows[e.RowIndex].Cells["Data"].Value?.ToString();
-            //            string horario = kryptonDataGridView5.Rows[e.RowIndex].Cells["Horário"].Value?.ToString();
-            //            string ocupadoAte = kryptonDataGridView5.Rows[e.RowIndex].Cells["Ocupado até"].Value?.ToString();
-            //            string titulo = kryptonDataGridView5.Rows[e.RowIndex].Cells["Título"].Value?.ToString();
-            //            string descricao = kryptonDataGridView5.Rows[e.RowIndex].Cells["Descrição"].Value?.ToString();
-            //            string eventId = kryptonDataGridView5.Rows[e.RowIndex].Cells["EventId"].Value?.ToString();
-
-            //            // Verifica se o formulário já está aberto
-            //            if (Application.OpenForms.OfType<Marcacoes>().Any())
-            //            {
-            //                // Formulário já está aberto, não faz nada
-            //                return;
-            //            }
-
-            //            // Abrir o formulário Marcacoes e passar os valores
-            //            Marcacoes marcacoesForm = new Marcacoes();
-            //            marcacoesForm.tbhorario.Value = DateTime.Parse(data);
-            //            marcacoesForm.tbhorainicio.Value = DateTime.ParseExact(horario, "HH:mm", CultureInfo.InvariantCulture);
-            //            marcacoesForm.tbhorafim.Value = DateTime.ParseExact(ocupadoAte, "HH:mm", CultureInfo.InvariantCulture);
-            //            marcacoesForm.tbtitulogoogle.Text = titulo;
-            //            marcacoesForm.tbdescricao.Text = descricao;
-            //            marcacoesForm.tbidgoogle.Text = eventId;
-            //            marcacoesForm.Show();
-            //        }
-            //    }
-            //}
         }
     
 
@@ -1779,6 +2202,145 @@ namespace Impar
       
         }
 
+
+        private async void filtrocalendario()
+        {
+            //DateTime selectedStartDate = e.Start.Date;
+            //DateTime selectedEndDate = e.End.Date;
+            DateTime selectedStartDate = DtDataInicio.Value.Date;
+            DateTime selectedEndDate = DtDataFim.Value.Date;
+
+            selectedEndDate = selectedEndDate.AddDays(1).AddSeconds(-1);
+
+            GoogleCalendarService googleCalendarService = null;
+
+            try
+            {
+                // Cria uma instância da classe GoogleCalendarService
+                googleCalendarService = new GoogleCalendarService();
+                bool connected = await googleCalendarService.Connect();
+
+                if (connected)
+                {
+                    EventsResource.ListRequest request = googleCalendarService.Service.Events.List("marcosmagalhaes86@gmail.com");
+                    request.TimeMin = selectedStartDate;
+                    request.TimeMax = selectedEndDate;
+                    request.ShowDeleted = false;
+                    request.SingleEvents = true;
+                    request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+                    Events events = request.Execute();
+
+                    List<Agendamento> agendamentos = new List<Agendamento>();
+                    if (events.Items != null && events.Items.Count > 0)
+                    {
+                        foreach (var eventItem in events.Items)
+                        {
+                            agendamentos.Add(new Agendamento()
+                            {
+                                Inicio = eventItem.Start.DateTime.Value,
+                                Fim = eventItem.End.DateTime.Value
+                            });
+                        }
+                    }
+
+                    TimeSpan morningStartTime = DtHoraInicioManha.Value.TimeOfDay;
+                    TimeSpan morningEndTime = DtHoraFimManha.Value.TimeOfDay;
+                    TimeSpan afternoonStartTime = DtHoraInicioTarde.Value.TimeOfDay;
+                    TimeSpan afternoonEndTime = DtHoraFimTarde.Value.TimeOfDay;
+
+                    List<DateTime> horariosDisponiveis = new List<DateTime>();
+
+                    for (DateTime currentDate = selectedStartDate.Date; currentDate <= selectedEndDate.Date; currentDate = currentDate.AddDays(1))
+                    {
+                        DateTime currentMorningStartTime = currentDate.Date + morningStartTime;
+                        DateTime currentMorningEndTime = currentDate.Date + morningEndTime;
+                        DateTime currentAfternoonStartTime = currentDate.Date + afternoonStartTime;
+                        DateTime currentAfternoonEndTime = currentDate.Date + afternoonEndTime;
+
+                        for (DateTime time = currentMorningStartTime; time < currentMorningEndTime; time = time.AddMinutes(30))
+                        {
+                            horariosDisponiveis.Add(time);
+                        }
+
+                        for (DateTime time = currentAfternoonStartTime; time < currentAfternoonEndTime; time = time.AddMinutes(30))
+                        {
+                            horariosDisponiveis.Add(time);
+                        }
+                    }
+
+                    kryptonDataGridView5.Columns.Clear(); // Remove todas as colunas existentes
+
+                    // Adicione as colunas ao dataGridView2
+                    DataGridViewButtonColumn btnColumn = new DataGridViewButtonColumn();
+                    btnColumn.HeaderText = "Ação";
+                    btnColumn.Name = "Ação";
+                    kryptonDataGridView5.Columns.Add(btnColumn);
+                    kryptonDataGridView5.Columns.Add("Status", "Status");
+                    kryptonDataGridView5.Columns.Add("Data", "Data");
+                    kryptonDataGridView5.Columns.Add("Horário", "Horário");
+                    kryptonDataGridView5.Columns.Add("Ocupado até", "Ocupado até");
+                    kryptonDataGridView5.Columns.Add("Título", "Título");
+                    kryptonDataGridView5.Columns.Add("Descrição", "Descrição");
+                    kryptonDataGridView5.Columns.Add("EventId", "EventId");
+
+                    foreach (DateTime horario in horariosDisponiveis)
+                    {
+                        var agendamento = agendamentos.FirstOrDefault(a => horario.Date == a.Inicio.Date && horario.TimeOfDay >= a.Inicio.TimeOfDay && horario.TimeOfDay < a.Fim.TimeOfDay);
+
+                        if (agendamento != null)
+                        {
+                            var eventItem = events.Items.FirstOrDefault(ev => ev.Start.DateTime.Value == agendamento.Inicio && ev.End.DateTime.Value == agendamento.Fim);
+
+                            if (eventItem != null)
+                            {
+                                string eventId = eventItem.Id;
+                                string titulo = eventItem.Summary;
+                                string descricao = eventItem.Description;
+                                kryptonDataGridView5.Rows.Add("Editar", "Ocupado", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), agendamento.Fim.ToString("HH:mm"), titulo, descricao, eventId);
+                            }
+                            else
+                            {
+                                kryptonDataGridView5.Rows.Add("Editar", "Ocupado", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), agendamento.Fim.ToString("HH:mm"), "", "", "");
+                            }
+                        }
+                        else
+                        {
+                            kryptonDataGridView5.Rows.Add("Marcar", "Disponível", horario.ToString("dd/MM/yyyy"), horario.ToString("HH:mm"), "", "", "", "");
+                        }
+                    }
+                    // Ocultar colunas "Título", "Descrição" e "EventId"
+                    kryptonDataGridView5.Columns["Título"].Visible = false;
+                    kryptonDataGridView5.Columns["Descrição"].Visible = false;
+                    kryptonDataGridView5.Columns["EventId"].Visible = false;
+
+                    kryptonDataGridView5.CellFormatting += kryptonDataGridView5_CellFormatting;
+                    kryptonDataGridView5.CellContentClick += kryptonDataGridView5_CellContentClick;
+                    DataGridDesign.CustomizeKryptonDataGridView5(kryptonDataGridView5);
+                }
+                else
+                {
+                    // Lidere com o caso de falha na conexão, se necessário
+                    MessageBox.Show("Falha na conexão com o Google Calendar.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Trate a exceção de alguma forma apropriada, por exemplo, mostrando uma mensagem de erro
+                MessageBox.Show("Ocorreu um erro ao obter as marcações: " + ex.Message);
+            }
+            finally
+            {
+                if (googleCalendarService != null)
+                {
+                    // Termina a conexão com o Google Calendar
+                    googleCalendarService.Service.Dispose();
+                }
+            }
+        }
+
+
+
         private async void btnFiltroEntreData_Click_1(object sender, EventArgs e)
         {
             //DateTime selectedStartDate = e.Start.Date;
@@ -2102,6 +2664,180 @@ namespace Impar
         {
             Marcacoes form = new Marcacoes();
             form.Show();
+        }
+
+
+       
+
+        private void LerDadosTabelaAgendamentoSMS()
+        {
+            string agendamentosQuery = "SELECT ID, IDGoogle, Nome, Telemovel, Sms1, Sms1Data, Sms1Hora, Sms1CorpoSMS, Sms2, Sms2Data, Sms2Hora, Sms2CorpoSMS, Sms3, Sms3Data, Sms3Hora, Sms3CorpoSMS, Sms1Enviada, Sms2Enviada, Sms3Enviada FROM agendamentos";
+            MySqlCommand agendamentosCommand = new MySqlCommand(agendamentosQuery, connection);
+            MySqlDataAdapter agendamentosAdapter = new MySqlDataAdapter(agendamentosCommand);
+            DataTable agendamentosDataTable = new DataTable();
+
+            try
+            {
+                connection.Open();
+                agendamentosAdapter.Fill(agendamentosDataTable);
+
+                // Configurar as colunas como checkboxes
+                kryptonDataGridView1.AutoGenerateColumns = false;
+
+                // Adicionar as colunas manualmente
+                kryptonDataGridView1.Columns.Clear();
+
+                // Adicionar a coluna "Editar" na primeira posição
+                DataGridViewButtonColumn editarColumn = new DataGridViewButtonColumn();
+                editarColumn.Name = "Editar";
+                editarColumn.HeaderText = "Editar";
+                editarColumn.Text = "Editar";
+                editarColumn.UseColumnTextForButtonValue = true;
+                kryptonDataGridView1.Columns.Add(editarColumn);
+
+                kryptonDataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "ID",
+                    Name = "ID",
+                    HeaderText = "ID"
+                });
+
+                kryptonDataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "IDGoogle",
+                    Name = "IDGoogle",
+                    HeaderText = "IDGoogle"
+                });
+
+                kryptonDataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "Nome",
+                    Name = "Nome",
+                    HeaderText = "Nome"
+                });
+
+                kryptonDataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "Telemovel",
+                    Name = "Telemovel",
+                    HeaderText = "Telemovel"
+                });
+
+                // Configurar as colunas de checkbox
+                kryptonDataGridView1.Columns.Add(new DataGridViewCheckBoxColumn
+                {
+                    DataPropertyName = "Sms1",
+                    Name = "Sms1",
+                    HeaderText = "Sms1",
+                    TrueValue = true,
+                    FalseValue = false
+                });
+
+                kryptonDataGridView1.Columns.Add(new DataGridViewCheckBoxColumn
+                {
+                    DataPropertyName = "Sms2",
+                    Name = "Sms2",
+                    HeaderText = "Sms2",
+                    TrueValue = true,
+                    FalseValue = false
+                });
+
+                kryptonDataGridView1.Columns.Add(new DataGridViewCheckBoxColumn
+                {
+                    DataPropertyName = "Sms3",
+                    Name = "Sms3",
+                    HeaderText = "Sms3",
+                    TrueValue = true,
+                    FalseValue = false
+                });
+
+                kryptonDataGridView1.Columns.Add(new DataGridViewCheckBoxColumn
+                {
+                    DataPropertyName = "Sms1Enviada",
+                    Name = "Sms1Enviada",
+                    HeaderText = "Sms1 Enviada",
+                    TrueValue = true,
+                    FalseValue = false
+                });
+
+                kryptonDataGridView1.Columns.Add(new DataGridViewCheckBoxColumn
+                {
+                    DataPropertyName = "Sms2Enviada",
+                    Name = "Sms2Enviada",
+                    HeaderText = "Sms2 Enviada",
+                    TrueValue = true,
+                    FalseValue = false
+                });
+
+                kryptonDataGridView1.Columns.Add(new DataGridViewCheckBoxColumn
+                {
+                    DataPropertyName = "Sms3Enviada",
+                    Name = "Sms3Enviada",
+                    HeaderText = "Sms3 Enviada",
+                    TrueValue = true,
+                    FalseValue = false
+                });
+
+                // Preencher os dados do DataTable no kryptonDataGridView1
+                kryptonDataGridView1.DataSource = agendamentosDataTable;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao ler os dados da tabela 'agendamentos': " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                connection.Close();
+            }
+           
+        }
+
+        private void FiltrarSMSNaoEnviadas()
+        {
+            // Obter o DataTable associado ao DataGridView
+            DataTable dataTable = (DataTable)kryptonDataGridView1.DataSource;
+
+            // Criar um novo DataTable para armazenar as linhas filtradas
+            DataTable dataTableFiltrado = dataTable.Clone();
+
+            // Filtrar as linhas para exibir apenas as SMS não enviadas
+            foreach (DataRow row in dataTable.Rows)
+            {
+                bool sms1Checked = Convert.ToBoolean(row["Sms1"]);
+                bool sms1Enviada = Convert.ToBoolean(row["Sms1Enviada"]);
+                bool sms2Checked = Convert.ToBoolean(row["Sms2"]);
+                bool sms2Enviada = Convert.ToBoolean(row["Sms2Enviada"]);
+                bool sms3Checked = Convert.ToBoolean(row["Sms3"]);
+                bool sms3Enviada = Convert.ToBoolean(row["Sms3Enviada"]);
+
+                // Verificar as condições de filtragem
+                if ((sms1Checked && !sms1Enviada) ||
+                    (sms2Checked && !sms2Enviada && (!sms1Checked || (sms1Checked && sms1Enviada))) ||
+                    (sms3Checked && !sms3Enviada && (!sms1Checked || (sms1Checked && sms1Enviada)) && (!sms2Checked || (sms2Checked && sms2Enviada))))
+                {
+                    // Adicionar a linha filtrada ao novo DataTable
+                    dataTableFiltrado.Rows.Add(row.ItemArray);
+                }
+            }
+
+            // Atribuir o novo DataTable como DataSource do DataGridView
+            kryptonDataGridView1.DataSource = dataTableFiltrado;
+
+        }
+
+
+
+
+
+        private void kryptonButton8_Click(object sender, EventArgs e)
+        {
+            LerDadosTabelaAgendamentoSMS();
+        }
+
+        private void kryptonButton9_Click(object sender, EventArgs e)
+        {
+         
+            FiltrarSMSNaoEnviadas();
         }
     }
     }

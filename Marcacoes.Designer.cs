@@ -36,6 +36,7 @@ namespace Impar
             this.kryptonButton3 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.kryptonButton2 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.kryptonButton9 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.kryptonButton1 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.button3 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.tbobs = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
@@ -112,16 +113,24 @@ namespace Impar
             this.kryptonCheckBox8 = new ComponentFactory.Krypton.Toolkit.KryptonCheckBox();
             this.kryptonCheckBox3 = new ComponentFactory.Krypton.Toolkit.KryptonCheckBox();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.kryptonButton9 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.kryptonDataGridView1 = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
+            this.kryptonButton10 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
+            this.kryptonButton11 = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonNavigator1)).BeginInit();
             this.kryptonNavigator1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPage2)).BeginInit();
+            this.kryptonPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPage1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPage4)).BeginInit();
             this.kryptonPage4.SuspendLayout();
+            this.panel5.SuspendLayout();
+            this.panel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonDataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -201,6 +210,15 @@ namespace Impar
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(648, 611);
             this.panel2.TabIndex = 56;
+            // 
+            // kryptonButton9
+            // 
+            this.kryptonButton9.Location = new System.Drawing.Point(192, 472);
+            this.kryptonButton9.Name = "kryptonButton9";
+            this.kryptonButton9.Size = new System.Drawing.Size(304, 44);
+            this.kryptonButton9.TabIndex = 87;
+            this.kryptonButton9.Values.Text = "Atualizar no google e base de dados";
+            this.kryptonButton9.Click += new System.EventHandler(this.kryptonButton9_Click);
             // 
             // kryptonButton1
             // 
@@ -520,6 +538,8 @@ namespace Impar
             // kryptonPage2
             // 
             this.kryptonPage2.AutoHiddenSlideSize = new System.Drawing.Size(200, 200);
+            this.kryptonPage2.Controls.Add(this.panel6);
+            this.kryptonPage2.Controls.Add(this.panel5);
             this.kryptonPage2.Flags = 65534;
             this.kryptonPage2.LastVisibleSet = true;
             this.kryptonPage2.MinimumSize = new System.Drawing.Size(50, 50);
@@ -544,6 +564,7 @@ namespace Impar
             // kryptonPage4
             // 
             this.kryptonPage4.AutoHiddenSlideSize = new System.Drawing.Size(200, 200);
+            this.kryptonPage4.Controls.Add(this.kryptonButton11);
             this.kryptonPage4.Controls.Add(this.kryptonButton8);
             this.kryptonPage4.Controls.Add(this.kryptonButton7);
             this.kryptonPage4.Controls.Add(this.kryptonButton6);
@@ -928,14 +949,54 @@ namespace Impar
             this.panel4.Size = new System.Drawing.Size(10, 611);
             this.panel4.TabIndex = 0;
             // 
-            // kryptonButton9
+            // panel5
             // 
-            this.kryptonButton9.Location = new System.Drawing.Point(192, 472);
-            this.kryptonButton9.Name = "kryptonButton9";
-            this.kryptonButton9.Size = new System.Drawing.Size(304, 44);
-            this.kryptonButton9.TabIndex = 87;
-            this.kryptonButton9.Values.Text = "Atualizar no google e base de dados";
-            this.kryptonButton9.Click += new System.EventHandler(this.kryptonButton9_Click);
+            this.panel5.Controls.Add(this.kryptonButton10);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel5.Location = new System.Drawing.Point(0, 0);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(683, 56);
+            this.panel5.TabIndex = 0;
+            // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.kryptonDataGridView1);
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel6.Location = new System.Drawing.Point(0, 56);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(683, 528);
+            this.panel6.TabIndex = 1;
+            // 
+            // kryptonDataGridView1
+            // 
+            this.kryptonDataGridView1.AllowUserToAddRows = false;
+            this.kryptonDataGridView1.AllowUserToDeleteRows = false;
+            this.kryptonDataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.kryptonDataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.kryptonDataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.kryptonDataGridView1.Name = "kryptonDataGridView1";
+            this.kryptonDataGridView1.ReadOnly = true;
+            this.kryptonDataGridView1.Size = new System.Drawing.Size(683, 528);
+            this.kryptonDataGridView1.TabIndex = 0;
+            this.kryptonDataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.kryptonDataGridView1_CellClick_1);
+            // 
+            // kryptonButton10
+            // 
+            this.kryptonButton10.Location = new System.Drawing.Point(26, 14);
+            this.kryptonButton10.Name = "kryptonButton10";
+            this.kryptonButton10.Size = new System.Drawing.Size(30, 29);
+            this.kryptonButton10.TabIndex = 0;
+            this.kryptonButton10.Values.Text = "kryptonButton10";
+            this.kryptonButton10.Click += new System.EventHandler(this.kryptonButton10_Click);
+            // 
+            // kryptonButton11
+            // 
+            this.kryptonButton11.Location = new System.Drawing.Point(598, 527);
+            this.kryptonButton11.Name = "kryptonButton11";
+            this.kryptonButton11.Size = new System.Drawing.Size(63, 42);
+            this.kryptonButton11.TabIndex = 95;
+            this.kryptonButton11.Values.Text = "kryptonButton11";
+            this.kryptonButton11.Click += new System.EventHandler(this.kryptonButton11_Click);
             // 
             // Marcacoes
             // 
@@ -955,10 +1016,14 @@ namespace Impar
             ((System.ComponentModel.ISupportInitialize)(this.kryptonNavigator1)).EndInit();
             this.kryptonNavigator1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPage2)).EndInit();
+            this.kryptonPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPage1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPage4)).EndInit();
             this.kryptonPage4.ResumeLayout(false);
             this.kryptonPage4.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            this.panel6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonDataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1047,5 +1112,10 @@ namespace Impar
         internal ComponentFactory.Krypton.Toolkit.KryptonCheckBox kryptonCheckBox7;
         internal ComponentFactory.Krypton.Toolkit.KryptonCheckBox kryptonCheckBox8;
         private ComponentFactory.Krypton.Toolkit.KryptonButton kryptonButton9;
+        private System.Windows.Forms.Panel panel6;
+        private ComponentFactory.Krypton.Toolkit.KryptonDataGridView kryptonDataGridView1;
+        private System.Windows.Forms.Panel panel5;
+        private ComponentFactory.Krypton.Toolkit.KryptonButton kryptonButton10;
+        private ComponentFactory.Krypton.Toolkit.KryptonButton kryptonButton11;
     }
 }
