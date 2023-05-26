@@ -21,6 +21,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using ComponentFactory.Krypton.Toolkit;
 using static System.Reflection.Metadata.BlobBuilder;
+using System.Linq;
 
 namespace Impar
 {
@@ -997,6 +998,60 @@ namespace Impar
         private void kryptonButton11_Click(object sender, EventArgs e)
         {
             PreencherValoresAgendamentos();
+        }
+
+        private void kryptonButton5_Click(object sender, EventArgs e)
+        {
+
+            // Obtém a instância do formulário lsttiposms, se já estiver aberto
+            lsttiposms form = Application.OpenForms.OfType<lsttiposms>().FirstOrDefault();
+
+            if (form == null)
+            {
+                // O formulário lsttiposms não está aberto, cria uma nova instância
+                form = new lsttiposms();
+            }
+
+            // Define a propriedade Checked do kryptonCheckBox3 como true
+            form.kryptonCheckBox3.Checked = true;
+
+            // Exibe o formulário lsttiposms
+            form.Show();
+        }
+
+        private void kryptonButton6_Click(object sender, EventArgs e)
+        { // Obtém a instância do formulário lsttiposms, se já estiver aberto
+            lsttiposms form = Application.OpenForms.OfType<lsttiposms>().FirstOrDefault();
+
+            if (form == null)
+            {
+                // O formulário lsttiposms não está aberto, cria uma nova instância
+                form = new lsttiposms();
+            }
+
+            // Define a propriedade Checked do kryptonCheckBox3 como true
+            form.kryptonCheckBox1.Checked = true;
+
+            // Exibe o formulário lsttiposms
+            form.Show();
+        }
+
+        private void kryptonButton7_Click(object sender, EventArgs e)
+        {
+            // Obtém a instância do formulário lsttiposms, se já estiver aberto
+            lsttiposms form = Application.OpenForms.OfType<lsttiposms>().FirstOrDefault();
+
+            if (form == null)
+            {
+                // O formulário lsttiposms não está aberto, cria uma nova instância
+                form = new lsttiposms();
+            }
+
+            // Define a propriedade Checked do kryptonCheckBox3 como true
+            form.kryptonCheckBox2.Checked = true;
+
+            // Exibe o formulário lsttiposms
+            form.Show();
         }
     }
 }
