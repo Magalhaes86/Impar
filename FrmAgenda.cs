@@ -19,7 +19,7 @@ using Google.Apis.Services;
 using Google.Apis.Calendar.v3.Data;
 using System.Net.Http;
 using WindowsFormsCalendar;
-using static Impar.GoogleAgenda;
+
 using System.Globalization;
 using DDay.iCal;
 using ComponentFactory.Krypton.Toolkit;
@@ -976,6 +976,14 @@ namespace Impar
                     kryptonDataGridView5.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Green;
                 }
             }
+        }
+
+
+        public class Agendamento
+        {
+            public string EventId { get; set; } // Adicione esta linha
+            public DateTime Inicio { get; set; }
+            public DateTime Fim { get; set; }
         }
 
 

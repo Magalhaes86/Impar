@@ -930,23 +930,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataGridDesign.cs" />
-    <Compile Include="EventDetails.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EventDetails.Designer.cs">
-      <DependentUpon>EventDetails.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormAdicionarEvento.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormAdicionarEvento.Designer.cs">
-      <DependentUpon>FormAdicionarEvento.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmAgenda.cs">
       <SubType>Form</SubType>
@@ -954,11 +942,11 @@
     <Compile Include="FrmAgenda.Designer.cs">
       <DependentUpon>FrmAgenda.cs</DependentUpon>
     </Compile>
-    <Compile Include="GoogleAgenda.cs">
+    <Compile Include="frmTipoSms.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GoogleAgenda.Designer.cs">
-      <DependentUpon>GoogleAgenda.cs</DependentUpon>
+    <Compile Include="frmTipoSms.Designer.cs">
+      <DependentUpon>frmTipoSms.cs</DependentUpon>
     </Compile>
     <Compile Include="GoogleCalendarService.cs" />
     <Compile Include="listagemPacientesMarcacoes.cs">
@@ -966,6 +954,12 @@
     </Compile>
     <Compile Include="listagemPacientesMarcacoes.Designer.cs">
       <DependentUpon>listagemPacientesMarcacoes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="lsttiposms.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="lsttiposms.Designer.cs">
+      <DependentUpon>lsttiposms.cs</DependentUpon>
     </Compile>
     <Compile Include="lsttratamento.cs">
       <SubType>Form</SubType>
@@ -991,23 +985,20 @@
     <EmbeddedResource Include="Agenda.resx">
       <DependentUpon>Agenda.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EventDetails.resx">
-      <DependentUpon>EventDetails.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormAdicionarEvento.resx">
-      <DependentUpon>FormAdicionarEvento.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmAgenda.resx">
       <DependentUpon>FrmAgenda.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GoogleAgenda.resx">
-      <DependentUpon>GoogleAgenda.cs</DependentUpon>
+    <EmbeddedResource Include="frmTipoSms.resx">
+      <DependentUpon>frmTipoSms.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="listagemPacientesMarcacoes.resx">
       <DependentUpon>listagemPacientesMarcacoes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="lsttiposms.resx">
+      <DependentUpon>lsttiposms.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="lsttratamento.resx">
       <DependentUpon>lsttratamento.cs</DependentUpon>

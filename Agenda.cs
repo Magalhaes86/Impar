@@ -18,7 +18,7 @@ using Google.Apis.Services;
 using Google.Apis.Calendar.v3.Data;
 using System.Net.Http;
 using WindowsFormsCalendar;
-using static Impar.GoogleAgenda;
+using static Impar.FrmAgenda;
 
 namespace Impar
 {

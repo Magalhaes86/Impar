@@ -21,6 +21,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using ComponentFactory.Krypton.Toolkit;
 using static System.Reflection.Metadata.BlobBuilder;
+using System.Linq;
 
 namespace Impar
 {
@@ -305,16 +306,6 @@ namespace Impar
             string updateQuery = "UPDATE marcacoes SET Idcliente = '" + tbcodcliente.Text + "', Horario = '" + tbhorario.Text + "', TipoTratamento = '" + tbtipotratamento.Text + "', Obs = '" + tbobs.Text + "', Descricao = '" + tbdescricao.Text + "', TituloGoogle = '" + tbtitulogoogle.Text + "', Horainicio = '" + tbhorainicio.Text + "', Horafim = '" + tbhorafim.Text + "', Nome = '" + tbnomepaciente.Text + "', telemovel = '" + tbtlmpaciente.Text + "', SmsEnviada = '" + smsEnviada + "', IdTipoTratamento = '" + tbidtipotratamento.Text + "', AgendarSms = '" + agendarSms + "' WHERE IDGoogle = '" + tbidgoogle.Text + "';";
             executeMyQuery(updateQuery);
 
-            ////string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
-            ////string updateQuery = "UPDATE marcacoes SET Idcliente = '" + tbcodcliente.Text + "', Horario = '" + tbhorario.Text + "', TipoTratamento = '" + tbtipotratamento.Text + "', Obs = '" + tbobs.Text + "', Descricao = '" + tbdescricao.Text + "', TituloGoogle = '" + tbtitulogoogle.Text + "', Horainicio = '" + tbhorainicio.Text + "', Horafim = '" + tbhorafim.Text + "', Nome = '" + tbnomepaciente.Text + "', telemovel = '" + tbtlmpaciente.Text + "', SmsEnviada = '" + smsEnviada + "', IdTipoTratamento = '" + tbidtipotratamento.Text + "' WHERE IDGoogle = '" + tbidgoogle.Text + "';";
-            ////executeMyQuery(updateQuery);
-            //string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
-            //string agendarSms = kryptonCheckBox2.Checked ? "1" : "0";
-
-            //string updateQuery = "UPDATE marcacoes SET Idcliente = '" + tbcodcliente.Text + "', Horario = '" + tbhorario.Text + "', TipoTratamento = '" + tbtipotratamento.Text + "', Obs = '" + tbobs.Text + "', Descricao = '" + tbdescricao.Text + "', TituloGoogle = '" + tbtitulogoogle.Text + "', Horainicio = '" + tbhorainicio.Text + "', Horafim = '" + tbhorafim.Text + "', Nome = '" + tbnomepaciente.Text + "', telemovel = '" + tbtlmpaciente.Text + "', SmsEnviada = '" + smsEnviada + "', IdTipoTratamento = '" + tbidtipotratamento.Text + "', AgendarSms = '" + agendarSms + "' WHERE IDGoogle = '" + tbidgoogle.Text + "';";
-            //executeMyQuery(updateQuery);
-
-
         }
 
 
@@ -383,17 +374,6 @@ namespace Impar
             string updateQuery = "UPDATE agendamentos SET Idcliente = '" + tbcodcliente.Text + "', Horario = '" + tbhorario.Text + "', TipoTratamento = '" + tbtipotratamento.Text + "', Obs = '" + tbobs.Text + "', Descricao = '" + tbdescricao.Text + "', TituloGoogle = '" + tbtitulogoogle.Text + "', Horainicio = '" + tbhorainicio.Text + "', Horafim = '" + tbhorafim.Text + "', Nome = '" + tbnomepaciente.Text + "', telemovel = '" + tbtlmpaciente.Text + "', SmsEnviada = '" + smsEnviada + "', IdTipoTratamento = '" + tbidtipotratamento.Text + "', Sms1 = '" + sms1 + "', Sms1Data = '" + kryptonDateTimePicker1.Text + "', Sms1Hora = '" + kryptonDateTimePicker2.Text + "', Sms1CorpoSMS = '" + kryptonTextBox2.Text + "', Sms2 = '" + sms2 + "', Sms2Data = '" + kryptonDateTimePicker3.Text + "', Sms2Hora = '" + kryptonDateTimePicker4.Text + "', Sms2CorpoSMS = '" + kryptonTextBox3.Text + "', Sms3 = '" + sms3 + "', Sms3Data = '" + kryptonDateTimePicker5.Text + "', Sms3Hora = '" + kryptonDateTimePicker6.Text + "', Sms3CorpoSMS = '" + kryptonTextBox5.Text + "', AgendamentoDeSms = '" + agendamentoDeSms + "', Sms1Enviada = '" + sms1Enviada + "', Sms2Enviada = '" + sms2Enviada + "', Sms3Enviada = '" + sms3Enviada + "' WHERE IDGoogle = '" + tbidgoogle.Text + "';";
             executeMyQuery(updateQuery);
 
-            //string smsEnviada = kryptonCheckBox1.Checked ? "1" : "0";
-            //string sms1 = kryptonCheckBox3.Checked ? "1" : "0";
-            //string sms2 = kryptonCheckBox4.Checked ? "1" : "0";
-            //string sms3 = kryptonCheckBox5.Checked ? "1" : "0";
-            //string agendamentoDeSms = kryptonCheckBox2.Checked ? "1" : "0";
-            //string sms1Enviada = kryptonCheckBox8.Checked ? "1" : "0";
-            //string sms2Enviada = kryptonCheckBox7.Checked ? "1" : "0";
-            //string sms3Enviada = kryptonCheckBox6.Checked ? "1" : "0";
-
-            //string updateQuery = "UPDATE agendamentos SET Idcliente = '" + tbcodcliente.Text + "', Horario = '" + tbhorario.Text + "', TipoTratamento = '" + tbtipotratamento.Text + "', Obs = '" + tbobs.Text + "', Descricao = '" + tbdescricao.Text + "', TituloGoogle = '" + tbtitulogoogle.Text + "', Horainicio = '" + tbhorainicio.Text + "', Horafim = '" + tbhorafim.Text + "', Nome = '" + tbnomepaciente.Text + "', telemovel = '" + tbtlmpaciente.Text + "', SmsEnviada = '" + smsEnviada + "', IdTipoTratamento = '" + tbidtipotratamento.Text + "', Sms1 = '" + sms1 + "', Sms1Data = '" + kryptonDateTimePicker1.Text + "', Sms1Hora = '" + kryptonDateTimePicker2.Text + "', Sms1CorpoSMS = '" + kryptonTextBox2.Text + "', Sms2 = '" + sms2 + "', Sms2Data = '" + kryptonDateTimePicker3.Text + "', Sms2Hora = '" + kryptonDateTimePicker4.Text + "', Sms2CorpoSMS = '" + kryptonTextBox3.Text + "', Sms3 = '" + sms3 + "', Sms3Data = '" + kryptonDateTimePicker5.Text + "', Sms3Hora = '" + kryptonDateTimePicker6.Text + "', Sms3CorpoSMS = '" + kryptonTextBox5.Text + "', AgendamentoDeSms = '" + agendamentoDeSms + "', Sms1Enviada = '" + sms1Enviada + "', Sms2Enviada = '" + sms2Enviada + "', Sms3Enviada = '" + sms3Enviada + "' WHERE IDGoogle = '" + tbidgoogle.Text + "';";
-            //executeMyQuery(updateQuery);
         }
 
 
@@ -997,6 +977,200 @@ namespace Impar
         private void kryptonButton11_Click(object sender, EventArgs e)
         {
             PreencherValoresAgendamentos();
+        }
+
+        private void kryptonButton5_Click(object sender, EventArgs e)
+        {
+
+            // Obtém a instância do formulário lsttiposms, se já estiver aberto
+            lsttiposms form = Application.OpenForms.OfType<lsttiposms>().FirstOrDefault();
+
+            if (form == null)
+            {
+                // O formulário lsttiposms não está aberto, cria uma nova instância
+                form = new lsttiposms();
+            }
+
+            // Define a propriedade Checked do kryptonCheckBox3 como true
+            form.kryptonCheckBox3.Checked = true;
+
+            // Exibe o formulário lsttiposms
+            form.Show();
+        }
+
+        private void kryptonButton6_Click(object sender, EventArgs e)
+        { // Obtém a instância do formulário lsttiposms, se já estiver aberto
+            lsttiposms form = Application.OpenForms.OfType<lsttiposms>().FirstOrDefault();
+
+            if (form == null)
+            {
+                // O formulário lsttiposms não está aberto, cria uma nova instância
+                form = new lsttiposms();
+            }
+
+            // Define a propriedade Checked do kryptonCheckBox3 como true
+            form.kryptonCheckBox1.Checked = true;
+
+            // Exibe o formulário lsttiposms
+            form.Show();
+        }
+
+        private void kryptonButton7_Click(object sender, EventArgs e)
+        {
+            // Obtém a instância do formulário lsttiposms, se já estiver aberto
+            lsttiposms form = Application.OpenForms.OfType<lsttiposms>().FirstOrDefault();
+
+            if (form == null)
+            {
+                // O formulário lsttiposms não está aberto, cria uma nova instância
+                form = new lsttiposms();
+            }
+
+            // Define a propriedade Checked do kryptonCheckBox3 como true
+            form.kryptonCheckBox2.Checked = true;
+
+            // Exibe o formulário lsttiposms
+            form.Show();
+        }
+
+
+        private void ExcluirEventoGoogle(string eventId)
+        {
+            GoogleCredential credential;
+
+            using (var stream = new FileStream("C:\\Desenvolvimentos\\EmDesenvolvimento\\IMPAR\\Impar\\bin\\Debug\\keys.json", FileMode.Open, FileAccess.Read))
+            {
+                credential = GoogleCredential.FromStream(stream)
+                    .CreateScoped(CalendarService.Scope.Calendar);
+            }
+
+            // Criando o serviço de calendário
+            var service = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = "GoogleAgenda"
+            });
+
+            try
+            {
+                // Exclui o evento do Google Agenda
+                service.Events.Delete("marcosmagalhaes86@gmail.com", eventId).Execute();
+                MessageBox.Show("Evento excluído com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao excluir evento: {ex.Message}");
+            }
+        }
+
+
+        private void btnExcluirEvento_Click(object sender, EventArgs e)
+        {
+            string eventId = tbidgoogle.Text;
+            ExcluirEventoGoogle(eventId);
+        }
+
+
+
+
+
+        private void ExcluirMarcacoes(string idGoogle)
+        {
+            try
+            {
+                connection.Open();
+
+                string deleteQuery = "DELETE FROM marcacoes WHERE IDGoogle = @IDGoogle";
+                MySqlCommand command = new MySqlCommand(deleteQuery, connection);
+                command.Parameters.AddWithValue("@IDGoogle", tbidgoogle.Text);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao excluir registros da tabela 'marcacoes': " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+
+        private void ExcluirAgendamentos(string idGoogle)
+        {
+            try
+            {
+                connection.Open();
+
+                string deleteQuery = "DELETE FROM agendamentos WHERE IDGoogle = @IDGoogle";
+                MySqlCommand command = new MySqlCommand(deleteQuery, connection);
+                command.Parameters.AddWithValue("@IDGoogle", tbidgoogle.Text);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao excluir registros da tabela 'agendamentos': " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        private void ExcluirEventoCompleto(string eventId, string idGoogle)
+        {
+            ExcluirEventoGoogle(eventId);
+            ExcluirMarcacoes(idGoogle);
+            ExcluirAgendamentos(idGoogle);
+        }
+
+
+        private void LimparCampos()
+        {
+            tbIdMarcacao.Text = "";
+            tbidgoogle.Text = "";
+            tbcodcliente.Text = "";
+            tbnomepaciente.Text = "";
+            tbtlmpaciente.Text = "";
+            tbtitulogoogle.Text = "";
+            tbdescricao.Text = "";
+            tbidtipotratamento.Text = "";
+            tbtipotratamento.Text = "";
+            tbobs.Text = "";
+            kryptonTextBox1.Text = "";
+            kryptonTextBox2.Text = "";
+            kryptonTextBox4.Text = "";
+            kryptonTextBox3.Text = "";
+            kryptonTextBox6.Text = "";
+            kryptonTextBox5.Text = "";
+
+            tbhorario.Value = DateTime.Now;
+            tbhorainicio.Value = DateTime.Now;
+            tbhorafim.Value = DateTime.Now.AddMinutes(30);
+            kryptonDateTimePicker1.Value = DateTime.Now;
+            kryptonDateTimePicker2.Value = DateTime.Now.AddMinutes(3);
+            kryptonDateTimePicker3.Value = DateTime.Now.AddDays(1);
+            kryptonDateTimePicker4.Value = DateTime.Now;
+            kryptonDateTimePicker5.Value = DateTime.Now.AddDays(2);
+            kryptonDateTimePicker6.Value = DateTime.Now;
+
+            kryptonCheckBox1.Checked = false;
+            kryptonCheckBox2.Checked = false;
+            kryptonCheckBox3.Checked = false;
+            kryptonCheckBox4.Checked = false;
+            kryptonCheckBox5.Checked = false;
+            kryptonCheckBox8.Checked = false;
+            kryptonCheckBox7.Checked = false;
+            kryptonCheckBox6.Checked = false;
+        }
+
+
+        private void kryptonButton12_Click(object sender, EventArgs e)
+        {
+            string eventId = tbidgoogle.Text;
+            string idGoogle = tbidgoogle.Text;
+            ExcluirEventoCompleto(eventId, idGoogle);
+            LimparCampos();
         }
     }
 }
